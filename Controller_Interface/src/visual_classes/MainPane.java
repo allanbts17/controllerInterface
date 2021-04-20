@@ -36,20 +36,20 @@ import java.awt.Color;
 public class MainPane extends JPanelBackground {
 	
 	//JPanel classes
-	FirstTimePanel firstPane = new FirstTimePanel();
+	/*FirstTimePanel firstPane = new FirstTimePanel();
 	StartSessionPanel startSessionPane = new StartSessionPanel();
 	PrincipalPanel principalPane = new PrincipalPanel();
-	//ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
+	ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
-	//SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
+	SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
 	SelectDatePanel selectDatePane = new SelectDatePanel();
-	//ScreenSaver screenSaverPane = new ScreenSaver();
-	DateAndHour dateAndHour = new DateAndHour();
+	ScreenSaver screenSaverPane = new ScreenSaver();			
+	DateAndHour dateAndHour = new DateAndHour();				*/	
 	
 	//Buttons
-	CustomButton back_btn = new VisualElements().new CustomButton("back");
+/*	CustomButton back_btn = new VisualElements().new CustomButton("back");
 	CustomButton lock_btn = new VisualElements().new CustomButton("lock");
-	CustomButton screen_btn = new VisualElements().new CustomButton("screen");
+	CustomButton screen_btn = new VisualElements().new CustomButton("screen");*/
 	
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int screenWidth = (int)screenSize.getWidth();
@@ -60,17 +60,18 @@ public class MainPane extends JPanelBackground {
 	int squareButtonVerticalGap = screenHeight - squareButtonHorizontalGap - squareButtonSize;
 	
 	//Other classes
-	Encryption hash = new Encryption();
 	MenuNavegation menuNavegation;
+/*	Encryption hash = new Encryption();
+	
 	MenuAtributes atribute = new MenuAtributes();
 	FileHandler passRead = new FileHandler();
 	
 	MenuOptionsType enumType;
-	MenuOptionsTime enumTime;	
+	MenuOptionsTime enumTime;	*/
 	boolean save_screen_on = false;
 	
 	public MainPane() {
-		add(executionTimePane);
+	/*	add(executionTimePane);
 		add(executionTypePane);
 		add(principalPane);
 		add(firstPane);
@@ -82,30 +83,30 @@ public class MainPane extends JPanelBackground {
 		add(lock_btn);
 		add(screen_btn);
 		add(dateAndHour);
-		menuNavegation = new MenuNavegation(this);
+		menuNavegation = new MenuNavegation(this);	*/
 		
 		setBackgroundImage();
-		setBackButton();
+	/*	setBackButton();
 		setLockButton();
 		setScreenButton();
 		setScreenSaverListenerToDeactivateIt();
-		setInitialPanel();
+		setInitialPanel();		*/
 	
 		//Sending this class to the other class
-		startSessionPane.setMainPane(this);
+	/*	startSessionPane.setMainPane(this);
 		firstPane.setMainPane(this);
 		principalPane.setMainPane(this);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
 		selectDatePane.setMainPane(this);
-		dateAndHour.setMainPane(this);
+		dateAndHour.setMainPane(this);			*/
 		
 		//////////////
-		atribute.time = MenuOptionsTime.PROGRAMADAS;
-		menuNavegation.goTo(atribute,4);
+/*		atribute.time = MenuOptionsTime.PROGRAMADAS;
+		menuNavegation.goTo(atribute,4);		*/
 		/////////////
 		
-		back_btn.addMouseListener(new MouseAdapter() {
+/*		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dateAndHour.update();
@@ -126,10 +127,10 @@ public class MainPane extends JPanelBackground {
 				save_screen_on = true;
 				menuNavegation.screenSaver();
 			}
-		});		
+		});		*/
 	}
 	
-	public void setScreenSaverListenerToDeactivateIt(){
+	/*	public void setScreenSaverListenerToDeactivateIt(){
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -159,17 +160,14 @@ public class MainPane extends JPanelBackground {
 			atribute.first = true;
 			menuNavegation.next(atribute);
 		}
-	}
+	}*/
 	
 	public void setBackgroundImage(){
-		//String imageDir = "C:\\\\Users\\\\Allan\\\\eclipse-workspace\\\\Controller_Interface\\\\src\\\\background\\\\";
-		String imageDir = "/icons/inmediatas_btn_unpressed.png";
-		String imageName = "background.png";
-		String imagePath = imageDir+imageName;
-		setBackground(imagePath);
+		String imageDir = "/files/background.png";
+		setBackground(imageDir);
 		setLayout(null);
 	}
-	public void setBackButton(){
+/*	public void setBackButton(){
 		int backX = squareButtonHorizontalGap;
 		int backY = squareButtonVerticalGap;
 		ImageIcon backU = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/back_btn_unpressed.png"));
@@ -208,7 +206,7 @@ public class MainPane extends JPanelBackground {
 		screen_btn.setBorder(null);
 		screen_btn.setContentAreaFilled(false);
 	}
-
+*/
 	public char[] stringToChar(String str) {
 		
 		// Creating array of string length
