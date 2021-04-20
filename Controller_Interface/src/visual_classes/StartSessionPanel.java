@@ -34,8 +34,8 @@ public class StartSessionPanel extends JPanel {
 	JButton show_password_img;
 	JButton inicio_btn;
 	boolean show_pass = false;
-	ImageIcon conOn = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/ojo_contrasena_on.png"));
-	ImageIcon conOff = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/ojo_contrasena_off.png"));
+	ImageIcon conOn = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_on.png"));
+	ImageIcon conOff = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_off.png"));
 	MainPane main;
 	FileHandler passRead = new FileHandler();
 
@@ -128,7 +128,7 @@ public class StartSessionPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				boolean correct;
-				main.update(main.time);
+				main.dateAndHour.update();
 				
 				//Habilitando la encriptación
 				Encryption hash = new Encryption();
@@ -149,14 +149,14 @@ public class StartSessionPanel extends JPanel {
 		password_fld.addCaretListener(new CaretListener() {
 			@Override
 			public void caretUpdate(CaretEvent e) {
-				main.update(main.time);
+				main.dateAndHour.update();
 			}
 		    });
 		
 		show_password_img.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				main.update(main.time);
+				main.dateAndHour.update();
 				show_pass = !show_pass;
 				showPassword(show_pass,conOn,conOff);
 			}

@@ -23,7 +23,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import useful_classes.*;
-//import visual_classes.VisualElements.*;
+import visual_classes.VisualElements.*;
 
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
@@ -36,20 +36,21 @@ import java.awt.Color;
 public class MainPane extends JPanelBackground {
 	
 	//JPanel classes
-	/*FirstTimePanel firstPane = new FirstTimePanel();
+	FirstTimePanel firstPane = new FirstTimePanel();
 	StartSessionPanel startSessionPane = new StartSessionPanel();
 	PrincipalPanel principalPane = new PrincipalPanel();
 	ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
-	SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
-	SelectDatePanel selectDatePane = new SelectDatePanel();
+	//SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
+	SelectDatePanel selectDatePane = new SelectDatePanel(); 
 	ScreenSaver screenSaverPane = new ScreenSaver();			
-	DateAndHour dateAndHour = new DateAndHour();				*/	
+						
+	DateAndHour dateAndHour = new DateAndHour();
 	
 	//Buttons
-/*	CustomButton back_btn = new VisualElements().new CustomButton("back");
+	CustomButton back_btn = new VisualElements().new CustomButton("back");
 	CustomButton lock_btn = new VisualElements().new CustomButton("lock");
-	CustomButton screen_btn = new VisualElements().new CustomButton("screen");*/
+	CustomButton screen_btn = new VisualElements().new CustomButton("screen");
 	
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int screenWidth = (int)screenSize.getWidth();
@@ -61,52 +62,53 @@ public class MainPane extends JPanelBackground {
 	
 	//Other classes
 	MenuNavegation menuNavegation;
-/*	Encryption hash = new Encryption();
-	
+	Encryption hash = new Encryption();
+
 	MenuAtributes atribute = new MenuAtributes();
 	FileHandler passRead = new FileHandler();
 	
 	MenuOptionsType enumType;
-	MenuOptionsTime enumTime;	*/
+	MenuOptionsTime enumTime;
+	
 	boolean save_screen_on = false;
 	
 	public MainPane() {
-	/*	add(executionTimePane);
+		add(executionTimePane);
 		add(executionTypePane);
 		add(principalPane);
 		add(firstPane);
 		add(startSessionPane);
 		add(screenSaverPane);	
-		add(selectExecutionPane);
-		add(selectDatePane);
+	//	add(selectExecutionPane);
+		add(selectDatePane); 
 		add(back_btn);
 		add(lock_btn);
-		add(screen_btn);
-		add(dateAndHour);
-		menuNavegation = new MenuNavegation(this);	*/
+		add(screen_btn);  
+		add(dateAndHour); 
+		menuNavegation = new MenuNavegation(this);	
 		
 		setBackgroundImage();
-	/*	setBackButton();
+		setBackButton();
 		setLockButton();
 		setScreenButton();
 		setScreenSaverListenerToDeactivateIt();
-		setInitialPanel();		*/
+		setInitialPanel();		
 	
 		//Sending this class to the other class
-	/*	startSessionPane.setMainPane(this);
+		startSessionPane.setMainPane(this);
 		firstPane.setMainPane(this);
 		principalPane.setMainPane(this);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
-		selectDatePane.setMainPane(this);
-		dateAndHour.setMainPane(this);			*/
+		selectDatePane.setMainPane(this);			
+		dateAndHour.setMainPane(this);			
 		
 		//////////////
-/*		atribute.time = MenuOptionsTime.PROGRAMADAS;
-		menuNavegation.goTo(atribute,4);		*/
+		atribute.time = MenuOptionsTime.PROGRAMADAS;
+		menuNavegation.goTo(atribute,4);		
 		/////////////
 		
-/*		back_btn.addMouseListener(new MouseAdapter() {
+		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dateAndHour.update();
@@ -127,10 +129,10 @@ public class MainPane extends JPanelBackground {
 				save_screen_on = true;
 				menuNavegation.screenSaver();
 			}
-		});		*/
+		});		
 	}
 	
-	/*	public void setScreenSaverListenerToDeactivateIt(){
+		public void setScreenSaverListenerToDeactivateIt(){
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -160,18 +162,18 @@ public class MainPane extends JPanelBackground {
 			atribute.first = true;
 			menuNavegation.next(atribute);
 		}
-	}*/
+	}
 	
 	public void setBackgroundImage(){
 		String imageDir = "/files/background.png";
 		setBackground(imageDir);
 		setLayout(null);
 	}
-/*	public void setBackButton(){
+	public void setBackButton(){
 		int backX = squareButtonHorizontalGap;
 		int backY = squareButtonVerticalGap;
-		ImageIcon backU = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/back_btn_unpressed.png"));
-		ImageIcon backP = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/back_btn_pressed.png"));
+		ImageIcon backU = new ImageIcon(this.getClass().getResource("/icons/back_btn_unpressed.png"));
+		ImageIcon backP = new ImageIcon(this.getClass().getResource("/icons/back_btn_pressed.png"));
 		backU = new ImageIcon(backU.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		backP = new ImageIcon(backP.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		back_btn.setBounds(backX,backY,squareButtonSize,squareButtonSize);
@@ -183,8 +185,8 @@ public class MainPane extends JPanelBackground {
 	public void setLockButton() {
 		int lockX = screenWidth - squareButtonHorizontalGap - squareButtonSize;
 		int lockY = squareButtonVerticalGap;
-		ImageIcon lockU = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/lock_btn_unpressed.png"));
-		ImageIcon lockP = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/lock_btn_pressed.png"));
+		ImageIcon lockU = new ImageIcon(this.getClass().getResource("/icons/lock_btn_unpressed.png"));
+		ImageIcon lockP = new ImageIcon(this.getClass().getResource("/icons/lock_btn_pressed.png"));
 		lockU = new ImageIcon(lockU.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		lockP = new ImageIcon(lockP.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		lock_btn.setBounds(lockX,lockY,squareButtonSize,squareButtonSize);
@@ -196,8 +198,8 @@ public class MainPane extends JPanelBackground {
 	public void setScreenButton() {
 		int screenX = screenWidth - squareButtonHorizontalGap - squareButtonSize;
 		int screenY = squareButtonVerticalGap;
-		ImageIcon screenU = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/screen_btn_unpressed.png"));
-		ImageIcon screenP = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/screen_btn_pressed.png"));
+		ImageIcon screenU = new ImageIcon(this.getClass().getResource("/icons/screen_btn_unpressed.png"));
+		ImageIcon screenP = new ImageIcon(this.getClass().getResource("/icons/screen_btn_pressed.png"));
 		screenU = new ImageIcon(screenU.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		screenP = new ImageIcon(screenP.getImage().getScaledInstance( squareButtonSize, squareButtonSize,java.awt.Image.SCALE_SMOOTH));		
 		screen_btn.setBounds(screenX,screenY,squareButtonSize,squareButtonSize);
@@ -206,7 +208,7 @@ public class MainPane extends JPanelBackground {
 		screen_btn.setBorder(null);
 		screen_btn.setContentAreaFilled(false);
 	}
-*/
+
 	public char[] stringToChar(String str) {
 		
 		// Creating array of string length

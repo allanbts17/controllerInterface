@@ -78,12 +78,12 @@ public class SelectDatePanel extends JPanel {
 		setBackground(Color.RED);
 		
 		//Icons and scale
-		ImageIcon calendarBaseIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/calendar_base.png"));
-		ImageIcon calendarDayUnpressedIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/calendar_day_unpressed.png"));
-		ImageIcon calendarDayPressedIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/calendar_day_pressed.png"));
-		ImageIcon calendarDayOtherIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/calendar_day_other.png"));
-		ImageIcon calendarLeftArrowUnpressedIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/left_arrow_unpressed.png"));
-		ImageIcon calendarRightArrowUnpressedIco = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/right_arrow_unpressed.png"));
+		ImageIcon calendarBaseIco = new ImageIcon(this.getClass().getResource("/icons/calendar_base.png"));
+		ImageIcon calendarDayUnpressedIco = new ImageIcon(this.getClass().getResource("/icons/calendar_day_unpressed.png"));
+		ImageIcon calendarDayPressedIco = new ImageIcon(this.getClass().getResource("/icons/calendar_day_pressed.png"));
+		ImageIcon calendarDayOtherIco = new ImageIcon(this.getClass().getResource("/icons/calendar_day_other.png"));
+		ImageIcon calendarLeftArrowUnpressedIco = new ImageIcon(this.getClass().getResource("/icons/left_arrow_unpressed.png"));
+		ImageIcon calendarRightArrowUnpressedIco = new ImageIcon(this.getClass().getResource("/icons/right_arrow_unpressed.png"));
 		
 		
 		int calendarBaseWidth = (int)Math.round(calendarBaseIco.getIconWidth()/scale);

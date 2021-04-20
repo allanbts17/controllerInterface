@@ -44,10 +44,11 @@ public class MenuNavegation {
 		panelSwitch();
 	}
 	
-/*	public MenuLevel test(MenuLevel menu) {
-		menu = MenuLevel.ONE;
-		return menu;
-	}*/
+	public void goTo(MenuAtributes atribute, int level) {
+		menu.setLevel(level);
+		itemName = menu.inLevelItemSelection(atribute);
+		panelSwitch();
+	}
 	
 	public void panelSwitch() {
 
@@ -138,5 +139,7 @@ public class MenuNavegation {
 			componentName = component.getName();
 		return componentName;
 	}
+
+	
 
 }

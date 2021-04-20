@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 
 public class PrincipalPanel extends JPanel {
 	JButton btnNewButton = new JButton("New button");
+	MainPane main;
 	/**
 	 * Create the panel.
 	 */
@@ -32,5 +33,19 @@ public class PrincipalPanel extends JPanel {
 		btnNewButton.setBounds(0, 0, 89, 23);
 		add(btnNewButton);
 
+	}
+	
+	public void setMainPane(MainPane main) {
+		this.main = main;
+		setActions();
+	}
+	
+	private void setActions() {
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				main.menuNavegation.next(main.atribute);
+			}
+		});
 	}
 }

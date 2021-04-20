@@ -41,12 +41,12 @@ public class ExecutionTimePanel extends JPanel {
 		int gap = 60;
 		
 		ImageIcon icon[] = new ImageIcon[6];
-		icon[0] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/inmediatas_btn_unpressed.png"));
-		icon[1] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/programadas_btn_unpressed.png"));
-		icon[2] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/repetitivas_btn_unpressed.png"));
-		icon[3] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/inmediatas_btn_pressed.png"));
-		icon[4] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/programadas_btn_pressed.png"));
-		icon[5] = new ImageIcon(ExecutionTypePanel.class.getResource("/icons/repetitivas_btn_pressed.png"));
+		icon[0] = new ImageIcon(this.getClass().getResource("/icons/inmediatas_btn_unpressed.png"));
+		icon[1] = new ImageIcon(this.getClass().getResource("/icons/programadas_btn_unpressed.png"));
+		icon[2] = new ImageIcon(this.getClass().getResource("/icons/repetitivas_btn_unpressed.png"));
+		icon[3] = new ImageIcon(this.getClass().getResource("/icons/inmediatas_btn_pressed.png"));
+		icon[4] = new ImageIcon(this.getClass().getResource("/icons/programadas_btn_pressed.png"));
+		icon[5] = new ImageIcon(this.getClass().getResource("/icons/repetitivas_btn_pressed.png"));
 		
 		width = (int)(icon[0].getIconWidth()/scale);
 		height = (int)(icon[0].getIconHeight()/scale);
@@ -120,19 +120,19 @@ public class ExecutionTimePanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
 
-				switch(main.atribute.type) {
+			/*	switch(main.atribute.type) {
 				case TOQUES:
-					main.selectionExecutionPane.setType("el toque");
+					main.selectExecutionPane.setType("el toque");
 					break;
 				case CARRILLON:
-					main.selectionExecutionPane.setType("la melodía");
+					main.selectExecutionPane.setType("la melodía");
 					break;
 				case BANDEO:
-					main.selectionExecutionPane.setType("la secuencia");
+					main.selectExecutionPane.setType("la secuencia");
 					break;
 				}
-				main.selectionExecutionPane.cleanScrollText();
-				main.selectionExecutionPane.showSelection();
+				main.selectExecutionPane.cleanScrollText();
+				main.selectExecutionPane.showSelection();		*/
 				main.enumTime = MenuOptionsTime.INMEDIATAS;
 				main.atribute.time = main.enumTime;
 				main.menuNavegation.next(main.atribute);
