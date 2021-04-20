@@ -3,8 +3,6 @@ package useful_classes;
 import java.awt.Component;
 import java.awt.List;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -46,10 +44,10 @@ public class MenuNavegation {
 		panelSwitch();
 	}
 	
-	public MenuLevel test(MenuLevel menu) {
+/*	public MenuLevel test(MenuLevel menu) {
 		menu = MenuLevel.ONE;
 		return menu;
-	}
+	}*/
 	
 	public void panelSwitch() {
 
