@@ -116,14 +116,12 @@ public class FileHandler {
 		  return line;
 	  }
 	  
-	  public String[] searchFiles() {
+	  public String[] searchFiles(String filter) {
 		  String[] nameList = new String[3];
 		  FileFilter filtro = new FileFilter() {
 			    @Override
 			    public boolean accept(File arch) {
-			    	boolean confirm = arch.getName().endsWith(".gif") || arch.getName().endsWith(".png") ||
-			    			 		  arch.getName().endsWith(".jpg") || arch.getName().endsWith(".jpeg") ||
-			    			 		  arch.getName().endsWith(".jpe") || arch.getName().endsWith(".jfif");
+			    	boolean confirm = arch.getName().endsWith(filter);
 			        return confirm; 
 			    }
 			};
@@ -137,9 +135,9 @@ public class FileHandler {
 			else {
 				nameList = new String[listado.length];
 			    for (int i=0; i< listado.length; i++) {
-			    	//String name = listado[i].getName().toString().split("\\.")[0];
-			    	String name = listado[i].getName().toString();
-			        System.out.println(name);
+			    	String name = listado[i].getName().toString().split("\\.")[0];
+			    	//String name = listado[i].getName().toString();
+			        //System.out.println(name);
 			        nameList[i] = name;
 			    }
 			    

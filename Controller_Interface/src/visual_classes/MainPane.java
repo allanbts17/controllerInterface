@@ -41,10 +41,9 @@ public class MainPane extends JPanelBackground {
 	PrincipalPanel principalPane = new PrincipalPanel();
 	ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
-	//SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
+	SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
 	SelectDatePanel selectDatePane = new SelectDatePanel(); 
 	ScreenSaver screenSaverPane = new ScreenSaver();			
-						
 	DateAndHour dateAndHour = new DateAndHour();
 	
 	//Buttons
@@ -79,7 +78,7 @@ public class MainPane extends JPanelBackground {
 		add(firstPane);
 		add(startSessionPane);
 		add(screenSaverPane);	
-	//	add(selectExecutionPane);
+		add(selectExecutionPane);
 		add(selectDatePane); 
 		add(back_btn);
 		add(lock_btn);
@@ -104,8 +103,9 @@ public class MainPane extends JPanelBackground {
 		dateAndHour.setMainPane(this);			
 		
 		//////////////
-		atribute.time = MenuOptionsTime.PROGRAMADAS;
-		menuNavegation.goTo(atribute,4);		
+	/*	atribute.time = MenuOptionsTime.INMEDIATAS;
+		menuNavegation.goTo(atribute,4);	*/
+		
 		/////////////
 		
 		back_btn.addMouseListener(new MouseAdapter() {
@@ -165,7 +165,7 @@ public class MainPane extends JPanelBackground {
 	}
 	
 	public void setBackgroundImage(){
-		String imageDir = "/files/background.png";
+		String imageDir = "/icons/background.png";
 		setBackground(imageDir);
 		setLayout(null);
 	}

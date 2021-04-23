@@ -120,18 +120,23 @@ public class ExecutionTimePanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
 
-			/*	switch(main.atribute.type) {
+				switch(main.atribute.type) {
 				case TOQUES:
 					main.selectExecutionPane.setType("el toque");
+					main.selectExecutionPane.setExtensionNameList(".toc");
 					break;
 				case CARRILLON:
 					main.selectExecutionPane.setType("la melodía");
+					main.selectExecutionPane.setExtensionNameList(".mp3");
 					break;
 				case BANDEO:
 					main.selectExecutionPane.setType("la secuencia");
+					main.selectExecutionPane.setExtensionNameList(".sec");
 					break;
 				}
-				main.selectExecutionPane.cleanScrollText();
+				main.selectExecutionPane.cleanButtonList();
+				main.selectExecutionPane.showButtonListAndSelectionSetting();
+			/*	main.selectExecutionPane.cleanScrollText();
 				main.selectExecutionPane.showSelection();		*/
 				main.enumTime = MenuOptionsTime.INMEDIATAS;
 				main.atribute.time = main.enumTime;
