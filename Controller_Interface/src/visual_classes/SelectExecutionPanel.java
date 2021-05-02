@@ -77,12 +77,12 @@ public class SelectExecutionPanel extends JPanel {
 	int gap = 10;
 	int buttonGap = 0;
 	
-	private String type = "la melodía";
+	private String type = "la melodï¿½a";
 	private String[] nameList;
 	FileHandler fl = new FileHandler();
 	
 	MainPane main;
-	String test = "Selecione la melodía";
+	String test = "Selecione la melodï¿½a";
 	/**
 	 * Create the panel.
 	 */
@@ -123,7 +123,7 @@ public class SelectExecutionPanel extends JPanel {
 	}
 	
 	public void setExtensionNameList(String extension) {
-		fl.setDirection("src\\files");
+		fl.setDirection("src/files");
 		nameList = fl.searchFiles(extension);
 	}
 	

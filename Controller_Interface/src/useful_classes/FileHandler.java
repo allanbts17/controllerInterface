@@ -10,14 +10,14 @@ import java.io.IOException;  // Import the IOException class to handle errors
 public class FileHandler {
 	boolean debug = false;
 	private String filename;
-	private String direction = "src\\sav\\";
+	private String direction = "src/sav/";
 	
 	public void setFilename(String name) {
 		filename = direction+name;
 	}
 	
 	public void setDirection(String name) {
-		direction = name+"\\";
+		direction = name+"/";
 	}
 	
 	public boolean ifExist() {

@@ -42,9 +42,10 @@ public class window extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, screenWidth, screenHeight);
+		System.out.println("Rasp. screen size: "+screenWidth+", "+screenHeight);
 		contentPane = new JPanel();
 		contentPane.setBorder(null);
-		contentPane.setLayout(/*new BorderLayout(0, 0)*/null);
+		contentPane.setLayout(null);
 		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);

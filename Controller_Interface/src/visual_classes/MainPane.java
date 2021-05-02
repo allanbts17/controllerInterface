@@ -147,7 +147,7 @@ public class MainPane extends JPanelBackground {
 	
 	public void setInitialPanel(){
 		passRead.setFilename("main_data.int");
-		
+		System.out.println("main_data: "+passRead.ifExist());
 		if(passRead.ifExist()) {
 			if(passRead.readFile().startsWith("qzr")) {
 				atribute.first = false;
