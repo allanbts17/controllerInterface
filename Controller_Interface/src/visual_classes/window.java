@@ -40,6 +40,9 @@ public class window extends JFrame {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		
+		String operativeSystem = System.getProperty("os.name");
+		System.out.println(operativeSystem);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, screenWidth, screenHeight);
 		System.out.println("Rasp. screen size: "+screenWidth+", "+screenHeight);
