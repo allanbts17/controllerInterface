@@ -83,13 +83,14 @@ public class SelectExecutionPanel extends JPanel {
 	
 	MainPane main;
 	String test = "Selecione la melod�a";
+	osChange os = new osChange();
 	/**
 	 * Create the panel.
 	 */
 	public SelectExecutionPanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel

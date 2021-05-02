@@ -51,13 +51,12 @@ public class MainPane extends JPanelBackground {
 	CustomButton lock_btn = new VisualElements().new CustomButton("lock");
 	CustomButton screen_btn = new VisualElements().new CustomButton("screen");
 	
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	int screenWidth = (int)screenSize.getWidth();
-	int screenHeight = (int)screenSize.getHeight();
+	int screenWidth;
+	int screenHeight;
 	
-	int squareButtonHorizontalGap = 20;
-	int squareButtonSize = (int)(screenWidth * 0.08);
-	int squareButtonVerticalGap = screenHeight - squareButtonHorizontalGap - squareButtonSize;
+	int squareButtonHorizontalGap;
+	int squareButtonSize;
+	int squareButtonVerticalGap;
 	
 	//Other classes
 	MenuNavegation menuNavegation;
@@ -68,10 +67,12 @@ public class MainPane extends JPanelBackground {
 	
 	MenuOptionsType enumType;
 	MenuOptionsTime enumTime;
+	osChange os = new osChange();
 	
 	boolean save_screen_on = false;
 	
 	public MainPane() {
+		sizeSetting();
 		add(executionTimePane);
 		add(executionTypePane);
 		add(principalPane);
@@ -162,6 +163,16 @@ public class MainPane extends JPanelBackground {
 			atribute.first = true;
 			menuNavegation.next(atribute);
 		}
+	}
+	
+	private void sizeSetting(){
+		Dimension screenSize = os.setDimension();
+		screenWidth = (int)screenSize.getWidth();
+		screenHeight = (int)screenSize.getHeight();
+		
+		squareButtonHorizontalGap = 20;
+		squareButtonSize = (int)(screenWidth * 0.08);
+		squareButtonVerticalGap = screenHeight - squareButtonHorizontalGap - squareButtonSize;
 	}
 	
 	public void setBackgroundImage(){

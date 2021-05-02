@@ -1,11 +1,15 @@
 package visual_classes;
 
 import javax.swing.JPanel;
+
+import useful_classes.osChange;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 public class ScreenSaver extends JPanel {
+	osChange os = new osChange();
 
 	/**
 	 * Create the panel.
@@ -13,7 +17,7 @@ public class ScreenSaver extends JPanel {
 	public ScreenSaver() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		

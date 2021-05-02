@@ -14,6 +14,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import useful_classes.osChange;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -55,6 +58,7 @@ public class SelectDatePanel extends JPanel {
 	int dayCount = 1;
 	int otherMonthDayCount = 0;
 	int[] otherMonthDays;
+	osChange os = new osChange();
 
 	/**
 	 * Create the panel.
@@ -62,7 +66,7 @@ public class SelectDatePanel extends JPanel {
 	public SelectDatePanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel

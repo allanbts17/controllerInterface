@@ -38,6 +38,7 @@ public class StartSessionPanel extends JPanel {
 	ImageIcon conOff = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_off.png"));
 	MainPane main;
 	FileHandler passRead = new FileHandler();
+	osChange os = new osChange();
 
 	/**
 	 * Create the panel.
@@ -45,7 +46,7 @@ public class StartSessionPanel extends JPanel {
 	public StartSessionPanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		
@@ -127,6 +128,7 @@ public class StartSessionPanel extends JPanel {
 		inicio_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				System.out.println("clicked");
 				boolean correct;
 				main.dateAndHour.update();
 				
@@ -137,6 +139,7 @@ public class StartSessionPanel extends JPanel {
 				
 				correct = passwordCorrect(stringToChar(passLine[1]),stringToChar(enc_pass));
 				if(correct) {
+					System.out.println("correct");
 					main.atribute.setup = false;
 					main.menuNavegation.next(main.atribute);
 					password_fld.setText("");

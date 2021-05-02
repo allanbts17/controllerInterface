@@ -12,17 +12,19 @@ import javax.swing.JPanel;
 
 import useful_classes.MenuOptionsTime;
 import useful_classes.MenuOptionsType;
+import useful_classes.osChange;
 
 public class ExecutionTypePanel extends JPanel {
 	JButton toques_btn;
 	JButton carrillon_btn;
 	JButton bandeo_btn;
+	osChange os = new osChange();
 	MainPane main;
 	
 	public ExecutionTypePanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel

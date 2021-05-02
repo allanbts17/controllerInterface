@@ -17,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import useful_classes.osChange;
+
 
 
 public class DateAndHour extends JPanel {
@@ -33,12 +35,13 @@ public class DateAndHour extends JPanel {
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
 			"octubre", "noviembre", "diciembre"};
+	osChange os = new osChange();
 	MainPane main;
 	/**
 	 * Create the panel.
 	 */
 	public DateAndHour() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		

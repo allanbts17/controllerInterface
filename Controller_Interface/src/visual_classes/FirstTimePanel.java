@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import useful_classes.Encryption;
 import useful_classes.FileHandler;
+import useful_classes.osChange;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,6 +31,7 @@ public class FirstTimePanel extends JPanel {
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_off.png"));
+	osChange os = new osChange();
 	MainPane main;
 
 	/**
@@ -38,7 +40,7 @@ public class FirstTimePanel extends JPanel {
 	public FirstTimePanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
@@ -155,23 +157,22 @@ public class FirstTimePanel extends JPanel {
 				if(confirmed) {
 					main.atribute.setup = false;
 					main.menuNavegation.next(main.atribute);
-					password_fld.setText("");
-					confirmation_fld.setText("");
+					
 					//Habilitando la encriptación
 					Encryption hash = new Encryption();
 					String enc_pass = hash.sha1(password_fld.getPassword());
-	
+					
 					//Guardando la contraseña
 					FileHandler fl = new FileHandler();
-					fl.setDirection("src\\sav\\");
+					fl.setDirection("src/sav/");
 					fl.setFilename("main_data.int");
 					fl.writeFile("qzr ",false);
 					fl.writeFileln(enc_pass,true);
 				}
-				else {
-					password_fld.setText("");
-					confirmation_fld.setText("");
-				}
+
+				password_fld.setText("");
+				confirmation_fld.setText("");
+				
 			}
 		});
 	}

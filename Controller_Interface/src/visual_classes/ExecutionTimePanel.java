@@ -11,17 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import useful_classes.MenuOptionsTime;
+import useful_classes.osChange;
 
 public class ExecutionTimePanel extends JPanel {
 	JButton inmediatas_btn;
 	JButton programadas_btn;
 	JButton repetitivas_btn;
+	osChange os = new osChange();
 	MainPane main;
 	
 	public ExecutionTimePanel() {
 		//Setting size parameters
 		//Screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
