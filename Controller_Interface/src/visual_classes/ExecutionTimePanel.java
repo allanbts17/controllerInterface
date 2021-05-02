@@ -27,7 +27,7 @@ public class ExecutionTimePanel extends JPanel {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
-		int panelWidth = 800;
+		int panelWidth = 700;
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
@@ -39,8 +39,8 @@ public class ExecutionTimePanel extends JPanel {
 		
 		int width;
 		int height;
-		float scale = 2.8f;
-		int gap = 60;
+		float scale = 3.2f;
+		int gap = 30;
 		
 		ImageIcon icon[] = new ImageIcon[6];
 		icon[0] = new ImageIcon(this.getClass().getResource("/icons/inmediatas_btn_unpressed.png"));
@@ -128,7 +128,7 @@ public class ExecutionTimePanel extends JPanel {
 					main.selectExecutionPane.setExtensionNameList(".toc");
 					break;
 				case CARRILLON:
-					main.selectExecutionPane.setType("la melodía");
+					main.selectExecutionPane.setType("la melodÃ­a");
 					main.selectExecutionPane.setExtensionNameList(".mp3");
 					break;
 				case BANDEO:

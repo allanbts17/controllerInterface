@@ -171,7 +171,7 @@ public class MainPane extends JPanelBackground {
 		screenHeight = (int)screenSize.getHeight();
 		
 		squareButtonHorizontalGap = 20;
-		squareButtonSize = (int)(screenWidth * 0.08);
+		squareButtonSize = (int)(screenWidth * 0.12);
 		squareButtonVerticalGap = screenHeight - squareButtonHorizontalGap - squareButtonSize;
 	}
 	

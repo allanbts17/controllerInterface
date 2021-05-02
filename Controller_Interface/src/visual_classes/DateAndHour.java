@@ -59,13 +59,13 @@ public class DateAndHour extends JPanel {
 		fecha = new JLabel(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]);
 		fecha.setForeground(Color.WHITE);
 		fecha.setHorizontalAlignment(SwingConstants.RIGHT);
-		fecha.setFont(new Font("Source Code Pro Semibold", Font.BOLD, 30));
+		fecha.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 30));
 		fecha.setBounds(0, 0, date_panel_w, label_h);
 		
 		hora = new JLabel(texto_hora);
 		hora.setForeground(Color.WHITE);
 		hora.setHorizontalAlignment(SwingConstants.RIGHT);
-		hora.setFont(new Font("Source Code Pro Semibold", Font.BOLD, 30));
+		hora.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 30));
 		hora.setBounds(0, label_h, date_panel_w, label_h);
 		setLayout(null);
 		add(fecha);
@@ -86,7 +86,7 @@ public class DateAndHour extends JPanel {
 		DateFormat hourFormat = new SimpleDateFormat("h:mm aa");
 		texto_hora = hourFormat.format(date);
 		
-		//Día
+		//Dï¿½a
 		DateFormat dayFormat = new SimpleDateFormat("dd");
 		texto_dia = Integer.parseInt(dayFormat.format(date));
 		
@@ -94,13 +94,13 @@ public class DateAndHour extends JPanel {
 		DateFormat dateFormat = new SimpleDateFormat("MM");
 		texto_mes = dateFormat.format(date);
 		
-		//Año
+		//Aï¿½o
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		texto_ano = yearFormat.format(date);
 		
 		//Hora
 		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd");
-		//Día semana
+		//Dï¿½a semana
 		text_date = diaSemana(texto_dia,
 									Integer.parseInt(texto_mes),
 									Integer.parseInt(texto_ano));
@@ -148,7 +148,7 @@ public class DateAndHour extends JPanel {
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "Sábado";
+            case 7: letraD = "Sï¿½bado";
                 break;
         }
 

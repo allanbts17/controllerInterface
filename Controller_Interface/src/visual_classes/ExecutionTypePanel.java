@@ -28,7 +28,7 @@ public class ExecutionTypePanel extends JPanel {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
-		int panelWidth = 800;
+		int panelWidth = 700;
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
@@ -40,8 +40,8 @@ public class ExecutionTypePanel extends JPanel {
 		
 		int width;
 		int height;
-		float scale = 2.8f;
-		int gap = 60;
+		float scale = 3.2f;
+		int gap = 30;
 		
 		ImageIcon icon[] = new ImageIcon[6];
 		icon[0] = new ImageIcon(this.getClass().getResource("/icons/toques_btn_unpressed.png"));

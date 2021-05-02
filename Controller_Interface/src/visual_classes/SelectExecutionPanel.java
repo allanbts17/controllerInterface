@@ -70,23 +70,23 @@ public class SelectExecutionPanel extends JPanel {
 	ImageIcon executionSelectedIco;
 	
 	//Other
-	float scale = 3.5f;
+	float scale = 3.7f;
 	int size[] = new int[2];
 	int labelMoveX;
 	int moveY;
 	int gap = 10;
 	int buttonGap = 0;
 	
-	private String type = "la melod�a";
+	private String type = "la melodía";
 	private String[] nameList;
 	FileHandler fl = new FileHandler();
 	
 	MainPane main;
 	String test = "Selecione la melod�a";
 	osChange os = new osChange();
-	/**
-	 * Create the panel.
-	 */
+	boolean labelPressed = false;
+	boolean barPressed = false;
+	
 	public SelectExecutionPanel() {
 		//Setting size parameters
 		//Screen
@@ -157,7 +157,7 @@ public class SelectExecutionPanel extends JPanel {
 		windowWidth = windowIco.getIconWidth();
 		windowHeight = windowIco.getIconHeight();
 		windowX = panelWidth/2-windowWidth/2;
-		windowY = panelHeight/2-windowHeight/2;
+		windowY = panelHeight/2-windowHeight/2+30;
 		window.setLayout(null);
 		window.setBounds(windowX,windowY,windowWidth,windowHeight);
 		window.setBackground("/icons/execution_selection.png");
@@ -191,12 +191,12 @@ public class SelectExecutionPanel extends JPanel {
 		
 		
 		executionButtonWidth = scrollButtonsWidth;
-		executionButtonHeight = 45;
+		executionButtonHeight = 55;
 		executionButtonX = 0;
 		executionButtonY = (executionButtonHeight+buttonGap)*iteration;
 		executionButton.setBounds(executionButtonX,executionButtonY,
 				executionButtonWidth,executionButtonHeight);
-		executionButton.setFont(new Font("Tahoma", Font.PLAIN, executionButtonHeight-15));
+		executionButton.setFont(new Font("Quicksand Medium", Font.PLAIN, executionButtonHeight-15));
 		executionButton.setHorizontalAlignment(SwingConstants.LEFT);
 		executionButton.setVerticalAlignment(SwingConstants.CENTER);
 		executionButton.setForeground(Color.WHITE);
@@ -224,10 +224,18 @@ public class SelectExecutionPanel extends JPanel {
 		executionButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				labelPressed = true;
 				moveY = MouseInfo.getPointerInfo().getLocation().y;
+				//System.out.println("Touch pressed: "+ moveY);
 			}
 			@Override
+			public void mouseReleased(MouseEvent e){
+				labelPressed = false;
+				//System.out.println("Touch released: "+MouseInfo.getPointerInfo().getLocation().y);
+			} 
+			@Override
 			public void mouseClicked(MouseEvent e) {
+				//System.out.println("Touch clicked");
 				int relativeMouse = Math.abs(MouseInfo.getPointerInfo().getLocation().y - (scrollButtons.getY()+scrollLabelsContainer.getY()+window.getY()));
 				
 				for(int i=0;i<nameList.length;i++) {
@@ -246,22 +254,25 @@ public class SelectExecutionPanel extends JPanel {
 		executionButton.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				scrollButtonsY = MouseInfo.getPointerInfo().getLocation().y - moveY+scrollButtons.getY();
-				moveY = MouseInfo.getPointerInfo().getLocation().y;
-				executionSelected.setVisible(false);
-				int limit = scrollLabelsContainerHeight - scrollButtonsHeight;
-				scrollButtonsY = Math.max(scrollButtonsY,limit);
-				scrollButtonsY = Math.min(scrollButtonsY,0);
-				scrollButtons.setBounds(scrollButtonsX,scrollButtonsY,scrollButtonsWidth,scrollButtonsHeight);
-				
-				int scrollBarYMin = 0;
-				int scrollBarYMax = scrollLabelsContainerHeight - scrollBarHeight;
-				int scrollButtonsYMin = 0;
-				int scrollButtonsYMax = scrollLabelsContainerHeight - scrollButtonsHeight;
-				scrollBarY = (int)Math.round((scrollButtonsY - scrollButtonsYMin)*1f/
-						(scrollButtonsYMax - scrollButtonsYMin)*
-						(scrollBarYMax - scrollBarYMin) + scrollBarYMin);
-				scrollBar.setBounds(scrollBarX,scrollBarY,scrollBarWidth,scrollBarHeight);
+				if(labelPressed){
+					//System.out.println("Touch dragged: "+MouseInfo.getPointerInfo().getLocation().y);
+					scrollButtonsY = MouseInfo.getPointerInfo().getLocation().y - moveY+scrollButtons.getY();
+					moveY = MouseInfo.getPointerInfo().getLocation().y;
+					executionSelected.setVisible(false);
+					int limit = scrollLabelsContainerHeight - scrollButtonsHeight;
+					scrollButtonsY = Math.max(scrollButtonsY,limit);
+					scrollButtonsY = Math.min(scrollButtonsY,0);
+					scrollButtons.setBounds(scrollButtonsX,scrollButtonsY,scrollButtonsWidth,scrollButtonsHeight);
+					
+					int scrollBarYMin = 0;
+					int scrollBarYMax = scrollLabelsContainerHeight - scrollBarHeight;
+					int scrollButtonsYMin = 0;
+					int scrollButtonsYMax = scrollLabelsContainerHeight - scrollButtonsHeight;
+					scrollBarY = (int)Math.round((scrollButtonsY - scrollButtonsYMin)*1f/
+							(scrollButtonsYMax - scrollButtonsYMin)*
+							(scrollBarYMax - scrollBarYMin) + scrollBarYMin);
+					scrollBar.setBounds(scrollBarX,scrollBarY,scrollBarWidth,scrollBarHeight);
+				}
 			}
 		});
 	}
@@ -270,7 +281,7 @@ public class SelectExecutionPanel extends JPanel {
 		//ScrollBar
 		scrollBarMaxHeight = scrollLabelsContainerHeight;
 		scrollBarMinHeight = (int)Math.round(scrollLabelsContainerHeight*0.2);
-		scrollBarWidth = 30;
+		scrollBarWidth = 50;
 		scrollBarHeight = scrollBarMaxHeight - (scrollButtonsHeight - scrollLabelsContainerHeight);
 		scrollBarHeight = Math.max(scrollBarHeight,scrollBarMinHeight);
 		scrollBarX = scrollLabelsContainerWidth - scrollBarWidth;
@@ -287,28 +298,35 @@ public class SelectExecutionPanel extends JPanel {
 		scrollBar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				barPressed = true;
 				moveY = MouseInfo.getPointerInfo().getLocation().y;
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				barPressed = false;
 			}
 		});
 		scrollBar.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				scrollBarY = MouseInfo.getPointerInfo().getLocation().y - moveY+scrollBar.getY();
-				moveY = MouseInfo.getPointerInfo().getLocation().y;
-				executionSelected.setVisible(false);
-				int limit = scrollLabelsContainerHeight - scrollBarHeight;
-				scrollBarY = Math.min(scrollBarY,limit);
-				scrollBarY = Math.max(scrollBarY,0);
-				scrollBar.setBounds(scrollBarX,scrollBarY,scrollBarWidth,scrollBarHeight);
-				
-				int scrollBarYMin = 0;
-				int scrollBarYMax = limit;
-				int scrollButtonsYMin = 0;
-				int scrollButtonsYMax = scrollLabelsContainerHeight - scrollButtonsHeight;
-				scrollButtonsY = (int)Math.round((scrollBarY - scrollBarYMin)*1f/
-						(scrollBarYMax - scrollBarYMin)*
-						(scrollButtonsYMax - scrollButtonsYMin) + scrollButtonsYMin);
-				scrollButtons.setBounds(scrollButtonsX,scrollButtonsY,scrollButtonsWidth,scrollButtonsHeight);
+				if(barPressed){
+					scrollBarY = MouseInfo.getPointerInfo().getLocation().y - moveY+scrollBar.getY();
+					moveY = MouseInfo.getPointerInfo().getLocation().y;
+					executionSelected.setVisible(false);
+					int limit = scrollLabelsContainerHeight - scrollBarHeight;
+					scrollBarY = Math.min(scrollBarY,limit);
+					scrollBarY = Math.max(scrollBarY,0);
+					scrollBar.setBounds(scrollBarX,scrollBarY,scrollBarWidth,scrollBarHeight);
+					
+					int scrollBarYMin = 0;
+					int scrollBarYMax = limit;
+					int scrollButtonsYMin = 0;
+					int scrollButtonsYMax = scrollLabelsContainerHeight - scrollButtonsHeight;
+					scrollButtonsY = (int)Math.round((scrollBarY - scrollBarYMin)*1f/
+							(scrollBarYMax - scrollBarYMin)*
+							(scrollButtonsYMax - scrollButtonsYMin) + scrollButtonsYMin);
+					scrollButtons.setBounds(scrollButtonsX,scrollButtonsY,scrollButtonsWidth,scrollButtonsHeight);
+				}
 			}
 		});
 	}
@@ -316,13 +334,13 @@ public class SelectExecutionPanel extends JPanel {
 	private void titleSetting(){
 		//Title
 		int titleSpace = (int)Math.round(windowHeight*0.11);
-		titleWidth = 400;
-		titleHeight = 40;
+		titleWidth = 700;
+		titleHeight = 45;
 		titleX = gap;
 		titleY = titleSpace/2 - titleHeight/2;
 		title.setBounds(titleX,titleY,titleWidth,titleHeight);
 		title.setText("Seleccione "+type);
-		title.setFont(new Font("Source Sans Pro", Font.PLAIN, titleHeight));
+		title.setFont(new Font("Alegreya Sans SC", Font.BOLD, titleHeight));
 		title.setForeground(Color.WHITE);
 		title.setBackground(Color.BLACK);
 		title.setOpaque(false);

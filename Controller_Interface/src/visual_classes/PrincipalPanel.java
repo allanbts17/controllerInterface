@@ -34,7 +34,7 @@ public class PrincipalPanel extends JPanel {
 		
 		
 		
-		btnNewButton.setBounds(0, 0, 89, 23);
+		btnNewButton.setBounds(0, 0, 200, 70);
 		add(btnNewButton);
 
 	}

@@ -47,10 +47,11 @@ public class window extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, screenWidth, screenHeight);
-		//setUndecorated(true);
 		
-		if(!os.ifWindows())
+		if(!os.ifWindows()){
 			setExtendedState(MAXIMIZED_BOTH);
+			setUndecorated(true);
+		}
 		else
 			setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2-screenWidth/2,
 					(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2-screenHeight/2,
@@ -61,7 +62,6 @@ public class window extends JFrame {
 		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);
-		
 		
 	}
 
