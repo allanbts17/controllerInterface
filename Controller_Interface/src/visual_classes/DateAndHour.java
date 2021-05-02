@@ -86,7 +86,7 @@ public class DateAndHour extends JPanel {
 		DateFormat hourFormat = new SimpleDateFormat("h:mm aa");
 		texto_hora = hourFormat.format(date);
 		
-		//D�a
+		//Día
 		DateFormat dayFormat = new SimpleDateFormat("dd");
 		texto_dia = Integer.parseInt(dayFormat.format(date));
 		
@@ -100,7 +100,7 @@ public class DateAndHour extends JPanel {
 		
 		//Hora
 		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd");
-		//D�a semana
+		//Día semana
 		text_date = diaSemana(texto_dia,
 									Integer.parseInt(texto_mes),
 									Integer.parseInt(texto_ano));
@@ -148,7 +148,7 @@ public class DateAndHour extends JPanel {
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "S�bado";
+            case 7: letraD = "Sábado";
                 break;
         }
 
