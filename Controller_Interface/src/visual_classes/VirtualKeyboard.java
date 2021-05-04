@@ -84,10 +84,10 @@ public class VirtualKeyboard implements FocusListener {
     // Second key row
     private Key[] row2 = new Key[]{
         TAB_KEY,
-        new Key(KeyEvent.VK_Q, "q"), new Key(KeyEvent.VK_W, "w"),
-        new Key(KeyEvent.VK_E, "e"), new Key(KeyEvent.VK_R, "r"),
-        new Key(KeyEvent.VK_T, "t"), new Key(KeyEvent.VK_Y, "y"),
-        new Key(KeyEvent.VK_U, "u"), new Key(KeyEvent.VK_I, "i"),
+        new Key(KeyEvent.VK_Q, "q","Q"), new Key(KeyEvent.VK_W, "w"),
+        new Key(KeyEvent.VK_E, "e","E"), new Key(KeyEvent.VK_R, "r"),
+        new Key(KeyEvent.VK_T, "t","T"), new Key(KeyEvent.VK_Y, "y"),
+        new Key(KeyEvent.VK_U, "u","U"), new Key(KeyEvent.VK_I, "i"),
         new Key(KeyEvent.VK_O, "o"), new Key(KeyEvent.VK_P, "p"),
         ACUTE_KEY,
         new Key(KeyEvent.VK_BRACELEFT, "[", "{")
@@ -218,6 +218,8 @@ public class VirtualKeyboard implements FocusListener {
             if (k.isLetter() && k.hasShiftValue()) {
                 if (isCapsLockPressed) {
                     b.setText(k.shiftValue);
+                   /* if()
+                    	b.setText(b.getText().toUpperCase());*/
                 } else {
                     b.setText(k.value);
                 }

@@ -18,6 +18,8 @@ public class window extends JFrame {
 	MainPane mainPane = new MainPane();
 	VirtualKeyboard key = new VirtualKeyboard(); 
 	private JPanel contentPane;
+	private JTextField textField;
+	private JPanel PaneWithText;
 
 	/**
 	 * Launch the application.
@@ -48,7 +50,7 @@ public class window extends JFrame {
 		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 136, 358);
+		setBounds(0, 0, 676, 628);
 		
 		if(!os.ifWindows()){
 			setExtendedState(MAXIMIZED_BOTH);
@@ -61,14 +63,28 @@ public class window extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(null);
 		contentPane.setLayout(null);
+		
 		JPanel pan = new JPanel();
 		pan.setBounds(0,0,1000,500);
-		key.show(this,pan);
+		
 		
 		contentPane.add(pan);
 		//contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);
+		
+		key.show(this,pan);
+		
+		PaneWithText = new JPanel();
+		PaneWithText.setBounds(0, 500, 600, 25);
+		contentPane.add(PaneWithText);
+		PaneWithText.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(0, 0, 500, 20);
+		PaneWithText.add(textField);
+		textField.setVisible(true);
+		textField.setColumns(10);
 		
 	}
 
