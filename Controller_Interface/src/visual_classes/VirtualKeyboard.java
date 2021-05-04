@@ -100,7 +100,7 @@ public class VirtualKeyboard implements FocusListener {
         new Key(KeyEvent.VK_D, "d","D"), new Key(KeyEvent.VK_F, "f","F"),
         new Key(KeyEvent.VK_G, "g","G"), new Key(KeyEvent.VK_H, "h","H"),
         new Key(KeyEvent.VK_J, "j","J"), new Key(KeyEvent.VK_K, "k","K"),
-        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç"), //Place the uppercase cedilla on raspian
+        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç","Ç"), //Place the uppercase cedilla on raspian
         TILDE_CIRCUMFLEX_KEY,
         new Key(KeyEvent.VK_BRACERIGHT, "]", "}")
     };
