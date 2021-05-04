@@ -84,11 +84,11 @@ public class VirtualKeyboard implements FocusListener {
     // Second key row
     private Key[] row2 = new Key[]{
         TAB_KEY,
-        new Key(KeyEvent.VK_Q, "q","Q"), new Key(KeyEvent.VK_W, "w"),
-        new Key(KeyEvent.VK_E, "e","E"), new Key(KeyEvent.VK_R, "r"),
-        new Key(KeyEvent.VK_T, "t","T"), new Key(KeyEvent.VK_Y, "y"),
-        new Key(KeyEvent.VK_U, "u","U"), new Key(KeyEvent.VK_I, "i"),
-        new Key(KeyEvent.VK_O, "o"), new Key(KeyEvent.VK_P, "p"),
+        new Key(KeyEvent.VK_Q, "q","Q"), new Key(KeyEvent.VK_W, "w","W"),
+        new Key(KeyEvent.VK_E, "e","E"), new Key(KeyEvent.VK_R, "r","R"),
+        new Key(KeyEvent.VK_T, "t","T"), new Key(KeyEvent.VK_Y, "y","Y"),
+        new Key(KeyEvent.VK_U, "u","U"), new Key(KeyEvent.VK_I, "i","I"),
+        new Key(KeyEvent.VK_O, "o","O"), new Key(KeyEvent.VK_P, "p","P"),
         ACUTE_KEY,
         new Key(KeyEvent.VK_BRACELEFT, "[", "{")
     };
@@ -96,11 +96,11 @@ public class VirtualKeyboard implements FocusListener {
     // Third key row
     private Key[] row3 = new Key[]{
         CAPS_LOCK_KEY,
-        new Key(KeyEvent.VK_A, "a"), new Key(KeyEvent.VK_S, "s"),
-        new Key(KeyEvent.VK_D, "d"), new Key(KeyEvent.VK_F, "f"),
-        new Key(KeyEvent.VK_G, "g"), new Key(KeyEvent.VK_H, "h"),
-        new Key(KeyEvent.VK_J, "j"), new Key(KeyEvent.VK_K, "k"),
-        new Key(KeyEvent.VK_L, "l"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç"),
+        new Key(KeyEvent.VK_A, "a","A"), new Key(KeyEvent.VK_S, "s","S"),
+        new Key(KeyEvent.VK_D, "d","D"), new Key(KeyEvent.VK_F, "f","F"),
+        new Key(KeyEvent.VK_G, "g","G"), new Key(KeyEvent.VK_H, "h","H"),
+        new Key(KeyEvent.VK_J, "j","J"), new Key(KeyEvent.VK_K, "k","K"),
+        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç"), //Place the uppercase cedilla on raspian
         TILDE_CIRCUMFLEX_KEY,
         new Key(KeyEvent.VK_BRACERIGHT, "]", "}")
     };
@@ -109,10 +109,10 @@ public class VirtualKeyboard implements FocusListener {
     private Key[] row4 = new Key[]{
         SHIFT_KEY,
         new Key(KeyEvent.VK_BACK_SLASH, "\\", "|"),
-        new Key(KeyEvent.VK_Z, "z"), new Key(KeyEvent.VK_X, "x"),
-        new Key(KeyEvent.VK_C, "c"), new Key(KeyEvent.VK_V, "v"),
-        new Key(KeyEvent.VK_B, "b"), new Key(KeyEvent.VK_N, "n"),
-        new Key(KeyEvent.VK_M, "m"), new Key(KeyEvent.VK_COMMA, ",", "<"),
+        new Key(KeyEvent.VK_Z, "z","Z"), new Key(KeyEvent.VK_X, "x","X"),
+        new Key(KeyEvent.VK_C, "c","C"), new Key(KeyEvent.VK_V, "v","V"),
+        new Key(KeyEvent.VK_B, "b","B"), new Key(KeyEvent.VK_N, "n","N"),
+        new Key(KeyEvent.VK_M, "m","M"), new Key(KeyEvent.VK_COMMA, ",", "<"),
         new Key(KeyEvent.VK_PERIOD, ".", ">"),
         new Key(KeyEvent.VK_SEMICOLON, ";", ":"),
         new Key(KeyEvent.VK_SLASH, "/", "?")

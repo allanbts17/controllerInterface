@@ -86,6 +86,7 @@ public class window extends JFrame {
 		textField.setVisible(true);
 		textField.setColumns(10);
 		
+		//Incluir: & % # $ !¡?¿ * -> ; : Tab SpaceBar no son muy necesarios
 	}
 
 }
