@@ -61,7 +61,8 @@ public class VirtualKeyboard implements FocusListener {
     }
 
     // Special keys definition
-    private final Key TAB_KEY = new Key(KeyEvent.VK_TAB, "Tab");
+    //private final Key TAB_KEY = new Key(KeyEvent.VK_TAB, "Tab");
+    private final Key PARENTHESIS_KEY = new Key(KeyEvent.VK_LEFT_PARENTHESIS,"(",")");
     private final Key CAPS_LOCK_KEY = new Key(KeyEvent.VK_CAPS_LOCK, "Caps Lock");
     private final Key SHIFT_KEY = new Key(KeyEvent.VK_SHIFT, "Shift");
     private final Key ACUTE_KEY = new Key(KeyEvent.VK_DEAD_ACUTE, "´", "`");
@@ -83,7 +84,7 @@ public class VirtualKeyboard implements FocusListener {
 
     // Second key row
     private Key[] row2 = new Key[]{
-        TAB_KEY,
+        PARENTHESIS_KEY,
         new Key(KeyEvent.VK_Q, "q","Q"), new Key(KeyEvent.VK_W, "w","W"),
         new Key(KeyEvent.VK_E, "e","E"), new Key(KeyEvent.VK_R, "r","R"),
         new Key(KeyEvent.VK_T, "t","T"), new Key(KeyEvent.VK_Y, "y","Y"),
@@ -100,7 +101,7 @@ public class VirtualKeyboard implements FocusListener {
         new Key(KeyEvent.VK_D, "d","D"), new Key(KeyEvent.VK_F, "f","F"),
         new Key(KeyEvent.VK_G, "g","G"), new Key(KeyEvent.VK_H, "h","H"),
         new Key(KeyEvent.VK_J, "j","J"), new Key(KeyEvent.VK_K, "k","K"),
-        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç","Ç"), //Place the uppercase cedilla on raspian
+        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç","Ç"),
         TILDE_CIRCUMFLEX_KEY,
         new Key(KeyEvent.VK_BRACERIGHT, "]", "}")
     };
@@ -119,9 +120,9 @@ public class VirtualKeyboard implements FocusListener {
     };
 
     // Fifth key row (spacebar only)
-    private Key[] row5 = new Key[]{
+  /*  private Key[] row5 = new Key[]{
         new Key(KeyEvent.VK_SPACE, " ")
-    };
+    }; */
 
     private final Map<Key, JButton> buttons;
     private Component currentComponent;
@@ -155,7 +156,7 @@ public class VirtualKeyboard implements FocusListener {
         keyboardPanel.add(initRow(row2, keyboardPanel.getSize()));
         keyboardPanel.add(initRow(row3, keyboardPanel.getSize()));
         keyboardPanel.add(initRow(row4, keyboardPanel.getSize()));
-        keyboardPanel.add(initRow(row5, keyboardPanel.getSize()));
+    //    keyboardPanel.add(initRow(row5, keyboardPanel.getSize()));
 
         frame.pack();
     }
@@ -163,7 +164,7 @@ public class VirtualKeyboard implements FocusListener {
     private JPanel initRow(Key[] keys, Dimension dimensions) {
         JPanel p = new JPanel(new GridLayout(1, keys.length));
         int buttonWidth = dimensions.width / keys.length;
-        int buttonHeight = dimensions.height / 5; // number of rows
+        int buttonHeight = dimensions.height / 4; // number of rows
         for (int i = 0; i < keys.length; ++i) {
             Key key = keys[i];
             JButton button;
@@ -199,9 +200,6 @@ public class VirtualKeyboard implements FocusListener {
                     return;
                 }
                 backspacePressed(currentTextComponent);
-                break;
-            case KeyEvent.VK_TAB:
-                tabPressed();
                 break;
             default:
                 if (currentTextComponent == null) {
@@ -267,16 +265,6 @@ public class VirtualKeyboard implements FocusListener {
                 } catch (BadLocationException ex) {
                 }
                 component.setCaretPosition(caretPosition - 1);
-            }
-        }
-    }
-
-    private void tabPressed() {
-        if (currentComponent != null && currentComponent instanceof JComponent) {
-            Component nextComponent = ((JComponent) currentComponent).getNextFocusableComponent();
-            if (nextComponent != null) {
-                nextComponent.requestFocus();
-                this.currentComponent = nextComponent;
             }
         }
     }
