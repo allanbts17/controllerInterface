@@ -78,7 +78,7 @@ public class window extends JFrame {
 		JPanel pan = new JPanel();
 		pan.setBackground(Color.BLACK);
 		//pan.setOpaque(false);
-		pan.setBounds(10,10,1000,400);
+		pan.setBounds(10,10,1000,350);
 		//pan.setBackground(Color.BLUE);
 		
 		contentPane.add(pan);
@@ -110,6 +110,6 @@ public class window extends JFrame {
 		
 		//contentPane.add(panCon);
 		
-		//Incluir: & % # $ !¡?¿ * -> ; : Tab SpaceBar no son muy necesarios
+		//Incluir: & % # $ !ï¿½?ï¿½ * -> ; : Tab SpaceBar no son muy necesarios
 	}
 }
