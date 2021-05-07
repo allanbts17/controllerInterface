@@ -1,5 +1,6 @@
 package visual_classes;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,10 +18,12 @@ import javax.swing.JButton;
 import javax.swing.border.MatteBorder;
 import java.awt.GridLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class window extends JFrame {
 	osChange os = new osChange();
-	MainPane mainPane = new MainPane();
+	MainPane mainPane;
 	VirtualKeyboard key = new VirtualKeyboard(); 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -70,25 +73,17 @@ public class window extends JFrame {
 		contentPane.setBorder(null);
 		contentPane.setLayout(null);
 		
-		//JPanel panCon = new JPanel();
-		//panCon.setBounds(10, 10, 1020, 420);
-		//panCon.setLayout(null);
-		//panCon.setBackground(Color.BLACK);
+
+		mainPane = new MainPane(this);
 		
-		JPanel pan = new JPanel();
-		pan.setBackground(Color.BLACK);
-		//pan.setOpaque(false);
-		pan.setBounds(10,10,1000,350);
-		//pan.setBackground(Color.BLUE);
-		
-		contentPane.add(pan);
-		//contentPane.add(mainPane);
+
+		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);
 		
-		key.show(this,pan);
 		
-		btnNewButton = new JButton("New button");
+		
+	/*	btnNewButton = new JButton("New button");
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNewButton.setBorder(new MatteBorder(2, 2, 2, 2, (Color) Color.WHITE));
 		btnNewButton.setForeground(Color.WHITE);
@@ -105,7 +100,9 @@ public class window extends JFrame {
 		textField = new JTextField();
 		PaneWithText.add(textField);
 		textField.setVisible(true);
-		textField.setColumns(10);
+		textField.setColumns(10);*/
+		
+		
 		
 		
 		//contentPane.add(panCon);

@@ -30,6 +30,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class StartSessionPanel extends JPanel {
+	JLabel password_lbl;
 	JPasswordField password_fld;
 	JButton show_password_img;
 	JButton inicio_btn;
@@ -39,7 +40,28 @@ public class StartSessionPanel extends JPanel {
 	MainPane main;
 	FileHandler passRead = new FileHandler();
 	osChange os = new osChange();
-
+	
+	//Position and size parameters
+	int componentsX;
+	int passlblY;
+	int passfldY;
+	int buttonsY;
+	int passFieldLimit;
+	
+	int scale = 15;
+	int conOffWidth = (int)(conOff.getIconWidth()/scale);
+	int conOffHeight = (int)(conOff.getIconHeight()/scale);
+	int conOnWidth = (int)(conOn.getIconWidth()/scale);
+	int conOnHeight = (int)(conOn.getIconHeight()/scale);
+	
+	int inicioBtnWidth;
+	int inicioBtnX;
+	
+	int componentsWidth = 300;
+	int componentsHeight = 40;
+	int gap = 10;
+	
+	private boolean componentsUp = false;
 	/**
 	 * Create the panel.
 	 */
@@ -55,11 +77,7 @@ public class StartSessionPanel extends JPanel {
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
-		
-		int componentsWidth = 300;
-		int componentsHeight = 40;
-		int gap = 10;
-				
+			
 		//Setting this panel
 		setOpaque(false);
 		setBounds(panelX, panelY, panelWidth, panelHeight);
@@ -67,14 +85,14 @@ public class StartSessionPanel extends JPanel {
 		
 
 		//Position and size parameters
-		int componentsX = (panelWidth/2)-(componentsWidth/2);
-		int passlblY = (getHeight()/2)-(componentsHeight*3+gap)/2;
-		int passfldY = passlblY + componentsHeight;
-		int buttonsY = passfldY + componentsHeight+gap;
-		int passFieldLimit = 16;
+		componentsX = (panelWidth/2)-(componentsWidth/2);
+		passlblY = (getHeight()/2)-(componentsHeight*3+gap)/2;
+		passfldY = passlblY + componentsHeight;
+		buttonsY = passfldY + componentsHeight+gap;
+		passFieldLimit = 16;
 		
 		//Password label
-		JLabel password_lbl = new JLabel("Ingrese la contrase\u00F1a");
+		password_lbl = new JLabel("Ingrese la contrase\u00F1a");
 		password_lbl.setForeground(Color.WHITE);
 		password_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 30));
 		password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
@@ -89,13 +107,6 @@ public class StartSessionPanel extends JPanel {
 		password_fld.setBorder(new LineBorder(Color.WHITE, 2, true));
 		password_fld.setBounds(componentsX, passfldY, componentsWidth, componentsHeight);
 		add(password_fld);
-			
-		//Image icon and button parameters
-		int scale = 15;
-		int conOffWidth = (int)(conOff.getIconWidth()/scale);
-		int conOffHeight = (int)(conOff.getIconHeight()/scale);
-		int conOnWidth = (int)(conOn.getIconWidth()/scale);
-		int conOnHeight = (int)(conOn.getIconHeight()/scale);
 		
 		conOn = new ImageIcon(conOn.getImage().getScaledInstance(conOnWidth, conOnHeight,java.awt.Image.SCALE_SMOOTH));
 		conOff = new ImageIcon(conOff.getImage().getScaledInstance(conOffWidth, conOffHeight,java.awt.Image.SCALE_SMOOTH));
@@ -111,8 +122,8 @@ public class StartSessionPanel extends JPanel {
 		//Start button
 		inicio_btn = new JButton("Inicio");		
 		inicio_btn.setFont(new Font("Alegreya Sans SC", Font.PLAIN, 25));
-		int inicioBtnWidth = 150;
-		int inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
+		inicioBtnWidth = 150;
+		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
 		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
 		add(inicio_btn);		
 	}
@@ -123,6 +134,15 @@ public class StartSessionPanel extends JPanel {
 		setActions();
 	}
 	
+	public void moveComponents() {
+		componentsUp = !componentsUp;
+		int move = (componentsUp)? -200:0;
+		
+		password_lbl.setBounds(componentsX, passlblY+move, componentsWidth, componentsHeight);
+		password_fld.setBounds(componentsX, passfldY+move, componentsWidth, componentsHeight);
+		show_password_img.setBounds(componentsX, buttonsY+move, conOffWidth, conOffHeight);
+		inicio_btn.setBounds(inicioBtnX, buttonsY+move, inicioBtnWidth, componentsHeight);
+	}
 	
 	private void setActions() {
 		inicio_btn.addMouseListener(new MouseAdapter() {
@@ -187,7 +207,7 @@ public class StartSessionPanel extends JPanel {
 		   return correct;
 		}
 	
-public char[] stringToChar(String str) {
+	public char[] stringToChar(String str) {
 		
 		// Creating array of string length
         char[] ch = new char[str.length()];

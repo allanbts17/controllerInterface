@@ -1,13 +1,18 @@
 package visual_classes;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
@@ -33,6 +38,7 @@ import javax.swing.text.JTextComponent;
  */
 public class VirtualKeyboard implements FocusListener {
 	private int rowY = 0;
+	private int alpha = 255;
     /**
      * Private class for storing key specification.
      */
@@ -146,16 +152,29 @@ public class VirtualKeyboard implements FocusListener {
         if (currentComponent == null) {
             currentComponent = frame.getFocusTraversalPolicy().getFirstComponent(frame);
         }
-
+        
         keyboardPanel.setLayout(null);
-
-        keyboardPanel.add(initRow(row1, keyboardPanel.getSize(), keyboardPanel.getBackground()));
-        keyboardPanel.add(initRow(row2, keyboardPanel.getSize(), keyboardPanel.getBackground()));
-        keyboardPanel.add(initRow(row3, keyboardPanel.getSize(), keyboardPanel.getBackground()));
-        keyboardPanel.add(initRow(row4, keyboardPanel.getSize(), keyboardPanel.getBackground()));
+        Color keyColor = keyboardPanel.getBackground();
+        //keyColor = new Color(0,0,0,);
+        keyboardPanel.add(initRow(row1, keyboardPanel.getSize(),keyColor));
+        keyboardPanel.add(initRow(row2, keyboardPanel.getSize(),keyColor));
+        keyboardPanel.add(initRow(row3, keyboardPanel.getSize(),keyColor));
+        keyboardPanel.add(initRow(row4, keyboardPanel.getSize(),keyColor));
     //    keyboardPanel.add(initRow(row5, keyboardPanel.getSize()));
 
-        frame.pack();
+        //frame.pack();
+    }
+    
+    public void setAlpha(int alpha) {
+    	alpha = Math.max(0,alpha);
+    	alpha = Math.min(255,alpha);
+    	this.alpha = alpha;
+    }
+    
+    public Color getColorWithAlpha(Color color) {
+    	Color colorWithAlpha;
+    	colorWithAlpha = new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha);
+    	return colorWithAlpha;
     }
 
     private JPanel initRow(Key[] keys, Dimension dimensions, Color panelColor) {
@@ -181,9 +200,30 @@ public class VirtualKeyboard implements FocusListener {
                 button = new JButton(key.value);
                 //button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
                 int lineThickness = 2;
+                
+                Color btnLineColor = getColorWithAlpha(Color.WHITE);
+                Color btnColor = getColorWithAlpha(Color.BLACK);
+                Color btnTextColor = getColorWithAlpha(Color.WHITE);
+                /*
+                button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) btnLineColor));
+                button.setForeground(btnTextColor);
+                button.setBackground(btnColor);*/
                 button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
                 button.setForeground(Color.WHITE);
-                button.setBackground(Color.BLACK);
+                button.setBackground(new Color(0,0,0,255));
+                //button.setContentAreaFilled(true);
+                //button.setOpaque(false);
+                button.addMouseListener(new MouseAdapter() {
+        			@Override
+        			public void mousePressed(MouseEvent e) {
+        				button.setBackground(new Color(255,255,255,100));
+        			}
+        			@Override
+        			public void mouseReleased(MouseEvent e) {
+        				button.setBackground(new Color(0,0,0,255));
+        			}
+        		});
+                
                 button.setFont(new Font("Tahoma", Font.PLAIN, 20));
                 int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
                 button.setBounds(buttonX,0,buttonWidth, buttonHeight);
@@ -191,6 +231,7 @@ public class VirtualKeyboard implements FocusListener {
                 buttons.put(key, button);
                 button.addActionListener(e -> actionListener(key));
             }
+  
             p.add(button);
         }
         int pX = outerButtonsGap;
@@ -198,7 +239,8 @@ public class VirtualKeyboard implements FocusListener {
         int pWidth = dimensions.width-outerButtonsGap*2;
         int pHeight = buttonHeight;
         p.setBounds(pX,pY,pWidth,pHeight);
-        p.setBackground(panelColor);
+       // p.setBackground(panelColor);
+        p.setOpaque(false);
         rowY += pHeight + innerButtonsGap;
         return p;
     }
@@ -416,4 +458,5 @@ public class VirtualKeyboard implements FocusListener {
     @Override
     public void focusLost(FocusEvent e) {
     }
+    
 }

@@ -17,6 +17,7 @@ import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.CaretEvent;
@@ -31,6 +32,8 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Color;
 
 public class MainPane extends JPanelBackground {
@@ -71,7 +74,11 @@ public class MainPane extends JPanelBackground {
 	
 	boolean save_screen_on = false;
 	
-	public MainPane() {
+	VirtualKeyboard key = new VirtualKeyboard();
+	private boolean keyboardOn = true;
+	
+	public MainPane(JFrame f) {
+		JFrame frame = f;
 		sizeSetting();
 		add(executionTimePane);
 		add(executionTypePane);
@@ -130,7 +137,29 @@ public class MainPane extends JPanelBackground {
 				save_screen_on = true;
 				menuNavegation.screenSaver();
 			}
-		});		
+		});	
+		
+		
+		
+		JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		JFrame f4 = (JFrame) SwingUtilities.getRoot((JPanel) SwingUtilities.getRoot(this));
+		JPanel pp = (JPanel) SwingUtilities.getRoot(this);
+		System.out.println("Parent: "+SwingUtilities.getRoot(this));
+		JPanel keyPan = new JPanel();
+//		keyPan.setBackground(Color.BLACK);
+		keyPan.setBackground(new Color(0,0,0,200));
+		
+		//pan.setOpaque(false);
+		int keyPanWidth = 1000;
+		int keyPanHeight = 350;
+		int keyPanX = screenWidth/2 - keyPanWidth/2;
+		int keyPanY = screenHeight/2 - keyPanHeight/2+100;
+		keyPan.setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
+		add(keyPan);
+		key.show(frame,keyPan);
+		screen_btn.setVisible(false);
+		startSessionPane.moveComponents();
+		
 	}
 	
 		public void setScreenSaverListenerToDeactivateIt(){
