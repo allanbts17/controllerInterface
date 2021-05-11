@@ -37,6 +37,9 @@ public class StartSessionPanel extends JPanel {
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_off.png"));
+	ImageIcon inicioIconUnpressed = new ImageIcon(this.getClass().getResource("/icons/inicio_big_btn_unpressed.png"));
+	ImageIcon inicioIconPressed = new ImageIcon(this.getClass().getResource("/icons/inicio_big_btn_pressed.png"));
+	
 	MainPane main;
 	FileHandler passRead = new FileHandler();
 	osChange os = new osChange();
@@ -127,6 +130,12 @@ public class StartSessionPanel extends JPanel {
 		inicioBtnWidth = 150;
 		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
 		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
+		inicioIconUnpressed = new ImageIcon(inicioIconUnpressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
+		inicioIconPressed = new ImageIcon(inicioIconPressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
+		inicio_btn.setIcon(inicioIconUnpressed);
+		inicio_btn.setPressedIcon(inicioIconPressed);
+		inicio_btn.setBorder(null);
+		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);		
 	}
 	
@@ -156,10 +165,6 @@ public class StartSessionPanel extends JPanel {
 					main.startSessionPane.moveComponents();
 					moveOnce = true;
 				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-		//		main.keyPan.setVisible(false);
 			}
 		});	
 		inicio_btn.addMouseListener(new MouseAdapter() {
