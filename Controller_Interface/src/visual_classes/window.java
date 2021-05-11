@@ -4,9 +4,11 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.border.MatteBorder;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -57,6 +60,8 @@ public class window extends JFrame {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		
+		
+		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 676, 628);
@@ -64,6 +69,10 @@ public class window extends JFrame {
 		if(!os.ifWindows()){
 			setExtendedState(MAXIMIZED_BOTH);
 			setUndecorated(true);
+			//Cursor hiding
+			setCursor(getToolkit().createCustomCursor(
+		            new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
+		            "null"));
 		}
 		else
 			setBounds((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2-screenWidth/2,
