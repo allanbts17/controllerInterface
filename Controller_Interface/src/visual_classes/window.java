@@ -80,33 +80,5 @@ public class window extends JFrame {
 		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);
-		
-		
-		
-	/*	btnNewButton = new JButton("New button");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton.setBorder(new MatteBorder(2, 2, 2, 2, (Color) Color.WHITE));
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBackground(Color.BLACK);
-		btnNewButton.setLocation(20, 440);
-		btnNewButton.setSize(100, 30);
-		contentPane.add(btnNewButton);
-		
-		PaneWithText = new JPanel();
-		PaneWithText.setBounds(0, 500, 600, 25);
-		contentPane.add(PaneWithText);
-		PaneWithText.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		textField = new JTextField();
-		PaneWithText.add(textField);
-		textField.setVisible(true);
-		textField.setColumns(10);*/
-		
-		
-		
-		
-		//contentPane.add(panCon);
-		
-		//Incluir: & % # $ !�?� * -> ; : Tab SpaceBar no son muy necesarios
 	}
 }

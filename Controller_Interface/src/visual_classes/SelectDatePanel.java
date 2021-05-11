@@ -37,7 +37,7 @@ public class SelectDatePanel extends JPanel {
 	ArrayList<JPanel> calendarDays = new ArrayList<JPanel>();
 	
 	//CalendarDayConfig
-	float scale = 3f;
+	float scale = 5f;
 	int sideGap = (int)Math.round(60/scale);
 	int upperGap = (int)Math.round(403/scale);
 	int horizontalGap = (int)Math.round(24/scale);
