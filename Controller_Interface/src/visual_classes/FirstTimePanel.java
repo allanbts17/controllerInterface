@@ -46,6 +46,8 @@ public class FirstTimePanel extends JPanel {
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_off.png"));
+	ImageIcon inicioIconUnpressed = new ImageIcon(this.getClass().getResource("/icons/inicio_big_btn_unpressed.png"));
+	ImageIcon inicioIconPressed = new ImageIcon(this.getClass().getResource("/icons/inicio_big_btn_pressed.png"));
 	osChange os = new osChange();
 	private boolean componentsUp = false;
 	private boolean moveOnce = false;
@@ -150,11 +152,17 @@ public class FirstTimePanel extends JPanel {
 		add(show_password_img);
 		
 		//Start button
-		inicio_btn = new JButton("Inicio");
+		inicio_btn = new JButton();
 		inicio_btn.setFont(new Font("Alegreya Sans SC", Font.PLAIN, 25));
 		int inicioBtnWidth = 150;
 		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
 		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
+		inicioIconUnpressed = new ImageIcon(inicioIconUnpressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
+		inicioIconPressed = new ImageIcon(inicioIconPressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
+		inicio_btn.setIcon(inicioIconUnpressed);
+		inicio_btn.setPressedIcon(inicioIconPressed);
+		inicio_btn.setBorder(null);
+		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);
 	}
 	public void setMainPane(MainPane main) {
@@ -186,10 +194,6 @@ public class FirstTimePanel extends JPanel {
 					moveOnce = true;
 				}
 			}
-			@Override
-			public void focusLost(FocusEvent e) {
-		//		main.keyPan.setVisible(false);
-			}
 		});	
 		
 		confirmation_fld.addFocusListener(new FocusAdapter() {
@@ -202,7 +206,6 @@ public class FirstTimePanel extends JPanel {
 					moveOnce = true;
 				}
 			}
-
 		});	
 		
 		inicio_btn.addMouseListener(new MouseAdapter() {
@@ -212,7 +215,7 @@ public class FirstTimePanel extends JPanel {
 				main.dateAndHour.update();
 				
 				confirmed = passwordConfirmed(password_fld.getPassword(),confirmation_fld.getPassword());
-				if(confirmed) {
+				if(confirmed && !(password_fld.getPassword().length == 0)) {
 					main.atribute.setup = false;
 					main.menuNavegation.next(main.atribute);
 					

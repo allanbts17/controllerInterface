@@ -1,6 +1,7 @@
 package visual_classes;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -135,7 +136,8 @@ public class SelectExecutionPanel extends JPanel {
 	public void cleanButtonList() {
 		title.setText("Seleccione "+type);
 		scrollButtons.removeAll();
-	//	scrollLabelsContainer.removeAll();
+		scrollLabelsContainer.removeAll();
+		
 	}
 	
 	public void showButtonListAndSelectionSetting(){
@@ -144,12 +146,19 @@ public class SelectExecutionPanel extends JPanel {
 			executionSelectedSetting();
 			executionButtonActionListener();
 		}
+		scrollButtons.add(executionSelected);
 		scrollButtons.setBounds(scrollButtonsX,scrollButtonsY,scrollButtonsWidth,scrollButtonsHeight);
 		scrollBarSetting();
 		scrollLabelsContainer.add(scrollBar);
 		scrollLabelsContainer.add(scrollButtons);
-	//	scrollLabelsContainer.repaint();
-	//	scrollLabelsContainer.revalidate();
+		
+		scrollButtons.setLocation(0,0);
+		//scrollButtons.revalidate();
+		Component[] comp = scrollButtons.getComponents();
+		System.out.println("Inner components: ");
+		for(Component c: comp) {
+			System.out.println(((JLabel) c).getText()+", scrollBtn X,Y: "+scrollButtons.getX()+", "+scrollButtons.getY()+", scrollBar X,Y: "+scrollBar.getX()+", "+scrollBar.getY());
+		}
 	}
 	
 	private void windowSetting(int panelWidth, int panelHeight) {
@@ -189,7 +198,6 @@ public class SelectExecutionPanel extends JPanel {
 		executionButton = new JLabel();
 		executionButton.setText(nameList[iteration]);
 		
-		
 		executionButtonWidth = scrollButtonsWidth;
 		executionButtonHeight = 55;
 		executionButtonX = 0;
@@ -216,7 +224,7 @@ public class SelectExecutionPanel extends JPanel {
 		executionSelected.setVisible(false);
 		executionSelected.setOpaque(false);
 		scrollButtons.add(executionButton);
-		scrollButtons.add(executionSelected);
+		//scrollButtons.add(executionSelected);
 		scrollButtonsHeight = (executionButtonHeight+buttonGap)*nameList.length;
 	}
 	

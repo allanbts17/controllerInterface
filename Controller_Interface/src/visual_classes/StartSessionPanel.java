@@ -105,7 +105,6 @@ public class StartSessionPanel extends JPanel {
 					
 		//Password field
 		password_fld = new JPasswordField(passFieldLimit);											
-		
 		password_fld.setForeground(Color.WHITE);
 		password_fld.setOpaque(false);
 		password_fld.setFont(new Font("Tahoma", Font.PLAIN, 40));
@@ -125,13 +124,13 @@ public class StartSessionPanel extends JPanel {
 		add(show_password_img);
 		
 		//Start button
-		inicio_btn = new JButton("Inicio");		
+		inicio_btn = new JButton();		
 		inicio_btn.setFont(new Font("Alegreya Sans SC", Font.PLAIN, 25));
 		inicioBtnWidth = 150;
 		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
-		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
 		inicioIconUnpressed = new ImageIcon(inicioIconUnpressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
 		inicioIconPressed = new ImageIcon(inicioIconPressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
+		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
 		inicio_btn.setIcon(inicioIconUnpressed);
 		inicio_btn.setPressedIcon(inicioIconPressed);
 		inicio_btn.setBorder(null);
