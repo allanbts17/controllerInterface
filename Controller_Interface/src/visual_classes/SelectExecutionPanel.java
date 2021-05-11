@@ -137,7 +137,6 @@ public class SelectExecutionPanel extends JPanel {
 		title.setText("Seleccione "+type);
 		scrollButtons.removeAll();
 		scrollLabelsContainer.removeAll();
-		
 	}
 	
 	public void showButtonListAndSelectionSetting(){
@@ -153,12 +152,6 @@ public class SelectExecutionPanel extends JPanel {
 		scrollLabelsContainer.add(scrollButtons);
 		
 		scrollButtons.setLocation(0,0);
-		//scrollButtons.revalidate();
-		Component[] comp = scrollButtons.getComponents();
-		System.out.println("Inner components: ");
-		for(Component c: comp) {
-			System.out.println(((JLabel) c).getText()+", scrollBtn X,Y: "+scrollButtons.getX()+", "+scrollButtons.getY()+", scrollBar X,Y: "+scrollBar.getX()+", "+scrollBar.getY());
-		}
 	}
 	
 	private void windowSetting(int panelWidth, int panelHeight) {
