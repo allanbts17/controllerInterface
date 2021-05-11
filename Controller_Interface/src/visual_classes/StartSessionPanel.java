@@ -62,6 +62,7 @@ public class StartSessionPanel extends JPanel {
 	int gap = 10;
 	
 	private boolean componentsUp = false;
+	private boolean moveOnce = false;
 	/**
 	 * Create the panel.
 	 */
@@ -101,6 +102,7 @@ public class StartSessionPanel extends JPanel {
 					
 		//Password field
 		password_fld = new JPasswordField(passFieldLimit);											
+		
 		password_fld.setForeground(Color.WHITE);
 		password_fld.setOpaque(false);
 		password_fld.setFont(new Font("Tahoma", Font.PLAIN, 40));
@@ -145,12 +147,28 @@ public class StartSessionPanel extends JPanel {
 	}
 	
 	private void setActions() {
+		password_fld.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(!moveOnce) {
+					main.virtualKeyboard.setVisible(true);
+					main.screen_btn.setVisible(false);
+					main.startSessionPane.moveComponents();
+					moveOnce = true;
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+		//		main.keyPan.setVisible(false);
+			}
+		});	
 		inicio_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("clicked");
 				boolean correct;
 				main.dateAndHour.update();
+				
 				
 				//Habilitando la encriptación
 				Encryption hash = new Encryption();
@@ -163,9 +181,15 @@ public class StartSessionPanel extends JPanel {
 					main.atribute.setup = false;
 					main.menuNavegation.next(main.atribute);
 					password_fld.setText("");
+					
+					main.virtualKeyboard.setVisible(false);
+					main.startSessionPane.moveComponents();
+					moveOnce = false;
 				}
-				else
-					password_fld.setText("");					
+				else {
+					password_fld.setText("");
+					password_fld.requestFocus();
+				}
 			}
 		});
 		

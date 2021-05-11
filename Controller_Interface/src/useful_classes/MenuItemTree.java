@@ -9,6 +9,10 @@ public class MenuItemTree {
 		this.level = level;
 	}
 	
+	public int getLevel() {
+		return this.level;
+	}
+	
 	public void nextLevel(){
 		level++;
 		if(level == 7)

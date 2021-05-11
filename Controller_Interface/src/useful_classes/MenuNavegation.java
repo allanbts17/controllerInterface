@@ -57,6 +57,7 @@ public class MenuNavegation {
 		hideAllComponents(true);
 		selectedComponent = componentSearch(itemName);
 		selectedComponent.setVisible(true);
+		
 	}
 	
 	public void screenSaver() {
@@ -76,7 +77,7 @@ public class MenuNavegation {
 		for (int i = 0; i < components.length; i++)
 		{
 			String componentName = getComponentName(components[i]);
-			System.out.println(componentName);
+			//System.out.println(componentName); //*******************************************************************************************//
 			if(name.equals(componentName))
 				selectedComponent = components[i];
 		}
@@ -89,12 +90,12 @@ public class MenuNavegation {
 	}
 	
 	private void removeIfListContains(String panel) {
-		if(hideExceptions.contains(panel))
+		if(hideExceptions.contains(panel)) {
 			hideExceptions.remove(panel);
+		}
 	}
 	
 	private void panelExceptionHandler() {
-		
 		if(itemName.equals("StartSessionPanel") || itemName.equals("FirstTimePanel")) {
 			removeIfListContains("back");
 			removeIfListContains("lock");

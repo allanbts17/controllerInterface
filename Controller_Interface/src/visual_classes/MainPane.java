@@ -49,6 +49,9 @@ public class MainPane extends JPanelBackground {
 	ScreenSaver screenSaverPane = new ScreenSaver();			
 	DateAndHour dateAndHour = new DateAndHour();
 	
+	//Keyboard
+	JPanel keyPan = new JPanel();
+	
 	//Buttons
 	CustomButton back_btn = new VisualElements().new CustomButton("back");
 	CustomButton lock_btn = new VisualElements().new CustomButton("lock");
@@ -74,7 +77,7 @@ public class MainPane extends JPanelBackground {
 	
 	boolean save_screen_on = false;
 	
-	VirtualKeyboard key = new VirtualKeyboard();
+	VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
 	private boolean keyboardOn = true;
 	
 	public MainPane(JFrame f) {
@@ -91,7 +94,8 @@ public class MainPane extends JPanelBackground {
 		add(back_btn);
 		add(lock_btn);
 		add(screen_btn);  
-		add(dateAndHour); 
+		add(dateAndHour);
+		add(virtualKeyboard);
 		menuNavegation = new MenuNavegation(this);	
 		
 		setBackgroundImage();
@@ -108,7 +112,8 @@ public class MainPane extends JPanelBackground {
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
 		selectDatePane.setMainPane(this);			
-		dateAndHour.setMainPane(this);			
+		dateAndHour.setMainPane(this);
+		virtualKeyboard.setFrame(frame);
 		
 		//////////////
 	/*	atribute.time = MenuOptionsTime.INMEDIATAS;
@@ -141,24 +146,24 @@ public class MainPane extends JPanelBackground {
 		
 		
 		
-		JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		JFrame f4 = (JFrame) SwingUtilities.getRoot((JPanel) SwingUtilities.getRoot(this));
-		JPanel pp = (JPanel) SwingUtilities.getRoot(this);
-		System.out.println("Parent: "+SwingUtilities.getRoot(this));
-		JPanel keyPan = new JPanel();
+		
+	/*	
 //		keyPan.setBackground(Color.BLACK);
 		keyPan.setBackground(new Color(0,0,0,200));
 		
 		//pan.setOpaque(false);
-		int keyPanWidth = 1000;
+		int keyPanWidth = screenWidth;
 		int keyPanHeight = 350;
 		int keyPanX = screenWidth/2 - keyPanWidth/2;
-		int keyPanY = screenHeight/2 - keyPanHeight/2+100;
+		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
+		int keyPanY = screenHeight - keyPanHeight;
 		keyPan.setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
 		add(keyPan);
-		key.show(frame,keyPan);
-		screen_btn.setVisible(false);
+		key.show(frame,keyPan);*/
+		
+		/*screen_btn.setVisible(false);
 		startSessionPane.moveComponents();
+		firstPane.moveComponents();*/
 		
 	}
 	

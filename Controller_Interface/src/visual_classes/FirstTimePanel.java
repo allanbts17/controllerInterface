@@ -19,19 +19,36 @@ import useful_classes.Encryption;
 import useful_classes.FileHandler;
 import useful_classes.osChange;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 public class FirstTimePanel extends JPanel {
+	JLabel password_lbl;
+	JLabel password_confirmation_lbl;
 	JPasswordField password_fld;
 	JPasswordField confirmation_fld;
 	JButton show_password_img;
 	JButton inicio_btn;
+	
+	int componentsX;
+	int passlblY;
+	int passfldY;
+	int conflblY;
+	int conffldY;
+	int buttonsY;
+	int passFieldLimit;
+	int inicioBtnX;
+	
+	
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_off.png"));
 	osChange os = new osChange();
+	private boolean componentsUp = false;
+	private boolean moveOnce = false;
 	MainPane main;
 
 	/**
@@ -61,16 +78,16 @@ public class FirstTimePanel extends JPanel {
 		
 
 		//Position and size parameters
-		int componentsX = (panelWidth/2)-(componentsWidth/2);
-		int passlblY = (getHeight()/2)-(componentsHeight*5+gap*2)/2;
-		int passfldY = passlblY + componentsHeight;
-		int conflblY = passfldY + componentsHeight + gap;
-		int conffldY = conflblY + componentsHeight;
-		int buttonsY = conffldY + componentsHeight+gap;
-		int passFieldLimit = 16;
+		componentsX = (panelWidth/2)-(componentsWidth/2);
+		passlblY = (getHeight()/2)-(componentsHeight*5+gap*2)/2;
+		passfldY = passlblY + componentsHeight;
+		conflblY = passfldY + componentsHeight + gap;
+		conffldY = conflblY + componentsHeight;
+		buttonsY = conffldY + componentsHeight+gap;
+		passFieldLimit = 16;
 		
 		//Password label
-		JLabel password_lbl = new JLabel("Nueva contrase\u00F1a");
+		password_lbl = new JLabel("Nueva contrase\u00F1a");
 		password_lbl.setForeground(Color.WHITE);
 		password_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 35));
 		password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
@@ -79,7 +96,7 @@ public class FirstTimePanel extends JPanel {
 		add(password_lbl);
 		
 		//Password confirmation label
-		JLabel password_confirmation_lbl = new JLabel("Confirmaci\u00F3n");
+		password_confirmation_lbl = new JLabel("Confirmaci\u00F3n");
 		password_confirmation_lbl.setForeground(Color.WHITE);
 		password_confirmation_lbl.setHorizontalAlignment(SwingConstants.LEFT);
 		password_confirmation_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 35));
@@ -136,7 +153,7 @@ public class FirstTimePanel extends JPanel {
 		inicio_btn = new JButton("Inicio");
 		inicio_btn.setFont(new Font("Alegreya Sans SC", Font.PLAIN, 25));
 		int inicioBtnWidth = 150;
-		int inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
+		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
 		inicio_btn.setBounds(inicioBtnX, buttonsY, inicioBtnWidth, componentsHeight);
 		add(inicio_btn);
 	}
@@ -145,13 +162,54 @@ public class FirstTimePanel extends JPanel {
 		setActions();
 	}
 	
+	public void moveComponents() {
+		componentsUp = !componentsUp;
+		int move = (componentsUp)? -180:0;
+		
+		password_lbl.setLocation(componentsX, passlblY+move);
+		password_confirmation_lbl.setLocation(componentsX, conflblY+move);
+		password_fld.setLocation(componentsX, passfldY+move);
+		confirmation_fld.setLocation(componentsX, conffldY+move);
+		show_password_img.setLocation(componentsX, buttonsY+move);
+		inicio_btn.setLocation(inicioBtnX, buttonsY+move);
+
+	}
 	
 	public void setActions() {
+		password_fld.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(!moveOnce) {
+					main.virtualKeyboard.setVisible(true);
+					main.screen_btn.setVisible(false);
+					main.firstPane.moveComponents();
+					moveOnce = true;
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+		//		main.keyPan.setVisible(false);
+			}
+		});	
+		
+		confirmation_fld.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(!moveOnce) {
+					main.virtualKeyboard.setVisible(true);
+					main.screen_btn.setVisible(false);
+					main.firstPane.moveComponents();
+					moveOnce = true;
+				}
+			}
+
+		});	
+		
 		inicio_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				boolean confirmed;
-				main.dateAndHour.update();   //Originalmente estaba así: main.update(main.time);
+				main.dateAndHour.update();
 				
 				confirmed = passwordConfirmed(password_fld.getPassword(),confirmation_fld.getPassword());
 				if(confirmed) {
@@ -168,6 +226,11 @@ public class FirstTimePanel extends JPanel {
 					fl.setFilename("main_data.int");
 					fl.writeFile("qzr ",false);
 					fl.writeFileln(enc_pass,true);
+					
+					main.atribute.first = false;
+					main.virtualKeyboard.setVisible(false);
+					main.firstPane.moveComponents();
+					moveOnce = false;
 				}
 
 				password_fld.setText("");
