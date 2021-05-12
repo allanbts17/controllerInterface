@@ -116,8 +116,8 @@ public class MainPane extends JPanelBackground {
 		virtualKeyboard.setFrame(frame);
 		
 		//////////////
-	/*	atribute.time = MenuOptionsTime.PROGRAMADAS;
-		menuNavegation.goTo(atribute,4);	*/
+		atribute.time = MenuOptionsTime.PROGRAMADAS;
+		menuNavegation.goTo(atribute,4);	
 		
 		/////////////
 		

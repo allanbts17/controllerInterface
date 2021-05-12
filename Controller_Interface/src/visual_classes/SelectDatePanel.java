@@ -14,6 +14,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.GroupLayout.Alignment;
 
 import useful_classes.osChange;
 
@@ -29,6 +31,7 @@ public class SelectDatePanel extends JPanel {
 	JLabel calendarMonthYear = new JLabel();
 	JLabel leftArrow = new JLabel();
 	JLabel rightArrow = new JLabel();
+	int calendarY = 100;
 	int actualMonth;
 	int actualDay;
 	String actualYear;
@@ -37,7 +40,7 @@ public class SelectDatePanel extends JPanel {
 	ArrayList<JPanel> calendarDays = new ArrayList<JPanel>();
 	
 	//CalendarDayConfig
-	float scale = 5f;
+	float scale = 4f;
 	int sideGap = (int)Math.round(60/scale);
 	int upperGap = (int)Math.round(403/scale);
 	int horizontalGap = (int)Math.round(24/scale);
@@ -59,7 +62,6 @@ public class SelectDatePanel extends JPanel {
 	int otherMonthDayCount = 0;
 	int[] otherMonthDays;
 	osChange os = new osChange();
-
 	/**
 	 * Create the panel.
 	 */
@@ -121,24 +123,32 @@ public class SelectDatePanel extends JPanel {
 		//Update date info
 		getActualDate();
 		setDateTitleText();
+
 		//Title config
-		int titleElementsY = 15;
-		int firstX=13;
-		int secondX = firstX+calendarLeftArrowUnpressedWidth+12;
-		int thirdX = secondX+220+12;
+		int calendarMonthYearWidth = 190;
+		int calendarMonthYearHeight = 50;
+		int titleIconsGap = 5;
+		int arrowsY = 15;
+		int calendarMonthYearY = arrowsY-7;
+		int leftArrowX = 13;
+		int calendarMonthYearX = leftArrowX+calendarLeftArrowUnpressedWidth+titleIconsGap;
+		int rightArrowX = calendarMonthYearX + calendarMonthYearWidth + titleIconsGap;
+		
+		//Arrow's icon
 		leftArrow.setIcon(calendarLeftArrowUnpressedIco);
 		rightArrow.setIcon(calendarRightArrowUnpressedIco);
-		leftArrow.setBounds(firstX,titleElementsY,calendarLeftArrowUnpressedWidth,calendarLeftArrowUnpressedHeight);		
-		rightArrow.setBounds(thirdX,titleElementsY,calendarRightArrowUnpressedWidth,calendarRightArrowUnpressedHeight);
-		calendarMonthYear.setBounds(secondX,titleElementsY,220,50);
+		//Arrow's bounds
+		leftArrow.setBounds(leftArrowX,arrowsY,calendarLeftArrowUnpressedWidth,calendarLeftArrowUnpressedHeight);		
+		rightArrow.setBounds(rightArrowX,arrowsY,calendarRightArrowUnpressedWidth,calendarRightArrowUnpressedHeight);
+		//Calendar title setting
+		calendarMonthYear.setBounds(calendarMonthYearX,calendarMonthYearY,calendarMonthYearWidth,calendarMonthYearHeight);
 		calendarMonthYear.setText(DateTitleText);
-		calendarMonthYear.setFont(new Font("Source Sans Pro", Font.BOLD, 50));
+		calendarMonthYear.setFont(new Font("Alegreya Sans SC", Font.BOLD, 45));
 		//calendarMonthYear.setFont(new Font("Bebas", Font.PLAIN, 60));
 		//calendarMonthYear.setOpaque(true);
 		calendarMonthYear.setBackground(Color.BLUE);
-		
-		
-		
+		calendarMonthYear.setHorizontalAlignment(SwingConstants.CENTER);
+				
 		calendarTitle.add(leftArrow);
 		calendarTitle.add(rightArrow);
 		calendarTitle.add(calendarMonthYear);
@@ -170,7 +180,9 @@ public class SelectDatePanel extends JPanel {
 				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
 				//calendarDayLabel.setBackground(Color.WHITE);
 				//calendarDayLabel.setOpaque(true);
-				calendarDayLabel.setBounds(8,50,30,20);
+				int calendarDayLabelX = 5;
+				int calendarDayLabelY = 5;
+				calendarDayLabel.setBounds(calendarDayLabelX,calendarDayLabelY,30,20);
 				
 				if(row==0 && column == startingWeekDay-1) startToWriteDay = true; 
 				else if (dayCount > numberOfDays) startToWriteDay = false;
@@ -211,7 +223,7 @@ public class SelectDatePanel extends JPanel {
 		calendar.add(calendarTitle);
 		calendar.add(calendarBase);
 		
-		calendar.setBounds((panelWidth/2)-(calendarBaseWidth/2),130,calendarBaseWidth,calendarBaseHeight);
+		calendar.setBounds((panelWidth/2)-(calendarBaseWidth/2),calendarY,calendarBaseWidth,calendarBaseHeight);
 		add(calendar);
 		
 	}
@@ -264,40 +276,40 @@ public class SelectDatePanel extends JPanel {
 		String month = "";
 		switch(actualMonth) {
 		case 1:
-			month = "ENE.";
+			month = "Ene.";
 			break;
 		case 2:
-			month = "FEB.";
+			month = "Feb.";
 			break;
 		case 3:
-			month = "MAR.";
+			month = "Mar.";
 			break;
 		case 4:
-			month = "ABR.";
+			month = "Abr.";
 			break;
 		case 5:
-			month = "MAY.";
+			month = "Mar."; //cambiar a May.
 			break;
 		case 6:
-			month = "JUN.";
+			month = "Jun.";
 			break;
 		case 7:
-			month = "JUL.";
+			month = "Jul.";
 			break;
 		case 8:
-			month = "AGO.";
+			month = "Ago.";
 			break;
 		case 9:
-			month = "SEP.";
+			month = "Sep.";
 			break;
 		case 10:
-			month = "OCT.";
+			month = "Oct.";
 			break;
 		case 11:
-			month = "NOV.";
+			month = "Nov.";
 			break;
 		case 12:
-			month = "DIC.";
+			month = "Dic.";
 			break;
 		default:
 			month="MES";
