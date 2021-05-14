@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.AbstractButton;
 import javax.swing.GroupLayout.Alignment;
 
 import useful_classes.osChange;
@@ -35,8 +36,10 @@ public class SelectDatePanel extends JPanel {
 	JLabel rightArrow = new JLabel();
 	int calendarY = 100;
 	int actualMonth;
+	int selectedMonth=0;
 	int actualDay;
 	String actualYear;
+	String selectedYear="";
 	
 	//JLabel calendarDayLabel = new JLabel();
 	ArrayList<JPanel> calendarDays = new ArrayList<JPanel>();
@@ -60,19 +63,33 @@ public class SelectDatePanel extends JPanel {
 	ImageIcon calendarLeftArrowPressedIco = new ImageIcon(this.getClass().getResource("/icons/left_arrow_unpressed.png"));
 	ImageIcon calendarRightArrowPressedIco = new ImageIcon(this.getClass().getResource("/icons/right_arrow_unpressed.png"));
 	
+	//
+	int calendarDayWidth;
+	int calendarDayHeight;
+	
 	//Days
-	int day = 15;
-	int month = 1;
-	int year = 2021;
-	int numberOfDays = daysInAMonth(month,year);
-	int lastMonthNumberOfDays = daysInAMonth(previousMonth(month),year);
-	int startingWeekDay = weekDay(1,month,year);
-	int endingWeekDay = weekDay(daysInAMonth(month,year),month,year);
-	int daysBeforeMonth = startingWeekDay-1;
-	int daysAfterMonth = 7-endingWeekDay;
-	int dayCount = 1;
-	int otherMonthDayCount = 0;
+	int day;
+	int month;
+	int year;
+	int numberOfDays;
+	int lastMonthNumberOfDays;
+	int startingWeekDay;
+	int endingWeekDay;
+	int daysBeforeMonth;
+	int daysAfterMonth;
+	int dayCount;
+	int otherMonthDayCount;
 	int[] otherMonthDays;
+	
+	int calendarMonthYearWidth;
+	int calendarMonthYearHeight;
+	int titleIconsGap;
+	int arrowsY;
+	int calendarMonthYearY;
+	int leftArrowX;
+	int calendarMonthYearX;
+	int rightArrowX;
+	boolean startToWriteDay;
 	osChange os = new osChange();
 	/**
 	 * Create the panel.
@@ -101,8 +118,8 @@ public class SelectDatePanel extends JPanel {
 		calendarBaseIco = new ImageIcon(calendarBaseIco.getImage()
 				.getScaledInstance(calendarBaseWidth, calendarBaseHeight,java.awt.Image.SCALE_SMOOTH));
 		
-		int calendarDayWidth = (int)Math.round(calendarDayUnpressedIco.getIconWidth()/scale);
-		int calendarDayHeight = (int)Math.round(calendarDayUnpressedIco.getIconHeight()/scale);
+		calendarDayWidth = (int)Math.round(calendarDayUnpressedIco.getIconWidth()/scale);
+		calendarDayHeight = (int)Math.round(calendarDayUnpressedIco.getIconHeight()/scale);
 		calendarDayUnpressedIco = new ImageIcon(calendarDayUnpressedIco.getImage()
 				.getScaledInstance(calendarDayWidth, calendarDayHeight,java.awt.Image.SCALE_SMOOTH));
 		calendarDayPressedIco = new ImageIcon(calendarDayPressedIco.getImage()
@@ -137,21 +154,28 @@ public class SelectDatePanel extends JPanel {
 		
 		//Update date info
 		getActualDate();
-		setDateTitleText();
+		setDateTitleText(true); //boolean useActual
 
 		//Title config
-		int calendarMonthYearWidth = 190;
-		int calendarMonthYearHeight = 50;
-		int titleIconsGap = 5;
-		int arrowsY = 15;
-		int calendarMonthYearY = arrowsY-7;
-		int leftArrowX = 13;
-		int calendarMonthYearX = leftArrowX+calendarLeftArrowUnpressedWidth+titleIconsGap;
-		int rightArrowX = calendarMonthYearX + calendarMonthYearWidth + titleIconsGap;
+		calendarMonthYearWidth = 190;
+		calendarMonthYearHeight = 50;
+		titleIconsGap = 5;
+		arrowsY = 15;
+		calendarMonthYearY = arrowsY-7;
+		leftArrowX = 13;
+		calendarMonthYearX = leftArrowX+calendarLeftArrowUnpressedWidth+titleIconsGap;
+		rightArrowX = calendarMonthYearX + calendarMonthYearWidth + titleIconsGap;
 		
 		leftArrow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				selectedMonth = previousMonth(selectedMonth,false);
+				setDateTitleText(false);
+				calendarMonthYear.setText(DateTitleText);
+				startToWriteDay = false;
+				monthCalendarDataSetting();	
+				otherMonthDaysFill();
+				fillCalendar();
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -168,6 +192,13 @@ public class SelectDatePanel extends JPanel {
 		rightArrow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				selectedMonth = nextMonth(selectedMonth);
+				setDateTitleText(false); //boolean useActual
+				calendarMonthYear.setText(DateTitleText);
+				startToWriteDay = false;
+				monthCalendarDataSetting();	
+				otherMonthDaysFill();
+				fillCalendar();
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -218,59 +249,13 @@ public class SelectDatePanel extends JPanel {
 		System.out.println("daysBeforeMonth: "+daysBeforeMonth);
 		System.out.println("daysAfterMonth: "+daysAfterMonth);*/
 		
-		boolean startToWriteDay = false;
+		startToWriteDay = false;
 		monthCalendarDataSetting();	
 		otherMonthDaysFill();
-			
-		for(int row=0;row<5;row++) {
-			for(int column=0;column<7;column++) {
-				JButton dayBtn = new JButton();
-				dayBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
-				
-				dayBtn.setBorder(null);
-				dayBtn.setContentAreaFilled(false);
-				
-				JLabel calendarDayLabel = new JLabel();
-				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
-				//calendarDayLabel.setBackground(Color.WHITE);
-				//calendarDayLabel.setOpaque(true);
-				int calendarDayLabelX = 5;
-				int calendarDayLabelY = 5;
-				calendarDayLabel.setBounds(calendarDayLabelX,calendarDayLabelY,30,20);
-				
-				if(row==0 && column == startingWeekDay-1) startToWriteDay = true; 
-				else if (dayCount > numberOfDays) startToWriteDay = false;
-				
-				if(startToWriteDay) {
-					dayBtn.setIcon(calendarDayUnpressedIco);
-					dayBtn.setPressedIcon(calendarDayPressedIco);
-					calendarDayLabel.setText(Integer.toString(dayCount));
-					dayCount++;
-				}
-				else {
-					dayBtn.setIcon(calendarDayOtherIco);
-					calendarDayLabel.setText(Integer.toString(otherMonthDays[otherMonthDayCount]));
-					calendarDayLabel.setForeground(Color.WHITE);
-					otherMonthDayCount++;
-				}
-				
-				JPanel dayPane = new JPanel();
-				int x = sideGap+column*(calendarDayWidth+horizontalGap);
-				int y = upperGap+row*(calendarDayHeight+verticalGap);
-				dayPane.setBounds(x,y,calendarDayWidth,calendarDayHeight);
-				dayPane.setLayout(null);
-				dayPane.setOpaque(false);
-				
-				dayPane.add(calendarDayLabel);
-				dayPane.add(dayBtn);
-				
-				
-				calendarDays.add(dayPane);
-				calendar.add(dayPane);
-				
-				
-			}
-		}
+		fillCalendar();
+		
+		System.out.println("list: "+(calendarDays.get(0).getComponents()[1]));
+		
 		calendar.setBackground(Color.BLUE);
 		calendar.setLayout(null);
 		calendar.setOpaque(false);
@@ -290,14 +275,16 @@ public class SelectDatePanel extends JPanel {
 	public void setActions() {
 		
 	}
+	
 	private void monthCalendarDataSetting() {
-		numberOfDays = daysInAMonth(actualMonth,Integer.parseInt(actualYear));
-		lastMonthNumberOfDays = daysInAMonth(previousMonth(actualMonth),Integer.parseInt(actualYear));
-		startingWeekDay = weekDay(1,actualMonth,Integer.parseInt(actualYear));
-		endingWeekDay = weekDay(daysInAMonth(actualMonth,year),actualMonth,Integer.parseInt(actualYear));
+		System.out.println("Selected month: "+selectedMonth);
+		numberOfDays = daysInAMonth(selectedMonth,Integer.parseInt(selectedYear));
+		lastMonthNumberOfDays = daysInAMonth(previousMonth(selectedMonth,true),Integer.parseInt(selectedYear));
+		startingWeekDay = weekDay(1,selectedMonth,Integer.parseInt(selectedYear));
+		endingWeekDay = weekDay(daysInAMonth(selectedMonth,Integer.parseInt(selectedYear)),selectedMonth,Integer.parseInt(selectedYear));
 		daysBeforeMonth = startingWeekDay-1;
 		daysAfterMonth = 7-endingWeekDay;
-		dayCount = 1;
+		dayCount = 1; ////////////////////////////////******
 		otherMonthDayCount = 0;
 	}
 	private void otherMonthDaysFill() {
@@ -323,12 +310,18 @@ public class SelectDatePanel extends JPanel {
 		//A�o
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		actualYear = yearFormat.format(date);
+		
+		selectedMonth = actualMonth;
+		selectedYear = actualYear;
 
 	}
-	
-	private void setDateTitleText() {
+		
+	private void setDateTitleText(boolean useActual) {
+		int monthNum;
+		monthNum = useActual? actualMonth:selectedMonth;
 		String month = "";
-		switch(actualMonth) {
+		String year= "";
+		switch(monthNum) {
 		case 1:
 			month = "Ene.";
 			break;
@@ -342,7 +335,7 @@ public class SelectDatePanel extends JPanel {
 			month = "Abr.";
 			break;
 		case 5:
-			month = "Mar."; //cambiar a May.
+			month = "May."; //cambiar a May.
 			break;
 		case 6:
 			month = "Jun.";
@@ -368,15 +361,90 @@ public class SelectDatePanel extends JPanel {
 		default:
 			month="MES";
 		}
-		DateTitleText = month+" "+actualYear;
+		year = useActual? actualYear:selectedYear;
+		DateTitleText = month+" "+ year;
 	}
 	
-	int previousMonth(int month) {
+	int previousMonth(int month,boolean forCalendarSetting) {
 		int prevMonth = month-1;
-		if(prevMonth == 0)
+		if(prevMonth == 0) {
 			prevMonth = 12;
+			if(!forCalendarSetting) selectedYear=Integer.toString(Integer.parseInt(selectedYear)-1);
+			}
 		return prevMonth;
 	}
+	int nextMonth(int month) {
+		int nextMonth = month+1;
+		if (nextMonth == 13) {
+			nextMonth = 1;
+			selectedYear=Integer.toString(Integer.parseInt(selectedYear)+1);
+		}
+		return nextMonth;
+	}
+	
+	private void fillCalendar(){
+		int count=0;
+		boolean calendarDaysFilled = calendarDays.size() > 0;
+		for(int row=0;row<5;row++) {
+			for(int column=0;column<7;column++) {
+				JButton dayBtn;
+				JLabel calendarDayLabel;
+				JPanel dayPane;
+				if(calendarDaysFilled) {
+					dayBtn = (JButton) calendarDays.get(count).getComponents()[1];
+					calendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[0];
+					dayPane = calendarDays.get(count);
+				}
+				else {
+					dayBtn = new JButton();
+					calendarDayLabel = new JLabel();
+					dayPane = new JPanel();
+					dayPane.add(calendarDayLabel);
+					dayPane.add(dayBtn);
+					calendarDays.add(dayPane);
+					calendar.add(dayPane);
+				}
+				
+				dayBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
+				
+				dayBtn.setBorder(null);
+				dayBtn.setContentAreaFilled(false);
+				
+				
+				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
+				//calendarDayLabel.setBackground(Color.WHITE);
+				//calendarDayLabel.setOpaque(true);
+				int calendarDayLabelX = 5;
+				int calendarDayLabelY = 5;
+				calendarDayLabel.setBounds(calendarDayLabelX,calendarDayLabelY,30,20);
+				
+				if(row==0 && column == startingWeekDay-1) startToWriteDay = true; 
+				else if (dayCount > numberOfDays) startToWriteDay = false;
+				
+				if(startToWriteDay) {
+					dayBtn.setIcon(calendarDayUnpressedIco);
+					dayBtn.setPressedIcon(calendarDayPressedIco);
+					calendarDayLabel.setText(Integer.toString(dayCount));
+					calendarDayLabel.setForeground(Color.BLACK);
+					dayCount++;
+				}
+				else {
+					dayBtn.setIcon(calendarDayOtherIco);
+					calendarDayLabel.setText(Integer.toString(otherMonthDays[otherMonthDayCount]));
+					calendarDayLabel.setForeground(Color.WHITE);
+					otherMonthDayCount++;
+				}
+				
+				int x = sideGap+column*(calendarDayWidth+horizontalGap);
+				int y = upperGap+row*(calendarDayHeight+verticalGap);
+				dayPane.setBounds(x,y,calendarDayWidth,calendarDayHeight);
+				dayPane.setLayout(null);
+				dayPane.setOpaque(false);		
+				count++;			
+			}
+		}
+	}
+	
 	int weekDay (int dia, int mes, int ano)
     {
         String letraD="";
