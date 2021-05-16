@@ -138,8 +138,6 @@ public class ExecutionTimePanel extends JPanel {
 				}
 				main.selectExecutionPane.cleanButtonList();
 				main.selectExecutionPane.showButtonListAndSelectionSetting();
-			/*	main.selectExecutionPane.cleanScrollText();
-				main.selectExecutionPane.showSelection();		*/
 				main.enumTime = MenuOptionsTime.INMEDIATAS;
 				main.atribute.time = main.enumTime;
 				main.menuNavegation.next(main.atribute);
@@ -149,7 +147,9 @@ public class ExecutionTimePanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
-				//panelSwitch("exeTime",2);
+				main.selectDatePane.showCalendar();
+				main.atribute.time = MenuOptionsTime.PROGRAMADAS;
+				main.menuNavegation.next(main.atribute);
 			}
 		});
 		repetitivas_btn.addMouseListener(new MouseAdapter() {

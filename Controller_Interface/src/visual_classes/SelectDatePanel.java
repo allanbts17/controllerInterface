@@ -66,6 +66,20 @@ public class SelectDatePanel extends JPanel {
 	ImageIcon calendarRightArrowUnpressedIco = new ImageIcon(this.getClass().getResource("/icons/right_arrow_unpressed.png"));
 	ImageIcon calendarLeftArrowPressedIco = new ImageIcon(this.getClass().getResource("/icons/left_arrow_unpressed.png"));
 	ImageIcon calendarRightArrowPressedIco = new ImageIcon(this.getClass().getResource("/icons/right_arrow_unpressed.png"));
+	ImageIcon calendarLeftArrowBloquedIco = new ImageIcon(this.getClass().getResource("/icons/left_arrow_bloqued.png"));
+	
+	int calendarBaseWidth;
+	int calendarBaseHeight;
+	
+	int reDimensionAdd;
+	int calendarLeftArrowUnpressedWidth;
+	int calendarLeftArrowUnpressedHeight;
+	int calendarRightArrowUnpressedWidth;
+	int calendarRightArrowUnpressedHeight;
+	int calendarLeftArrowPressedWidth;
+	int calendarLeftArrowPressedHeight;
+	int calendarRightArrowPressedWidth;
+	int calendarRightArrowPressedHeight;
 	
 	//
 	int calendarDayWidth;
@@ -97,6 +111,7 @@ public class SelectDatePanel extends JPanel {
 	int calendarMonthYearX;
 	int rightArrowX;
 	boolean startToWriteDay;
+	boolean blockPreviousMonths = true;
 	osChange os = new osChange();
 	/**
 	 * Create the panel.
@@ -119,12 +134,108 @@ public class SelectDatePanel extends JPanel {
 		setLayout(null);
 		setBackground(Color.RED);
 		
-		//Icons and scale
-		int calendarBaseWidth = (int)Math.round(calendarBaseIco.getIconWidth()/scale);
-		int calendarBaseHeight = (int)Math.round(calendarBaseIco.getIconHeight()/scale);
+		setIcons();
+		setCalendarTitle();
+		setCalendarBase();
+			
+		calendar.setBackground(Color.BLUE);
+		calendar.setLayout(null);
+		calendar.setOpaque(false);
+		
+		calendar.add(calendarTitle);
+		showCalendar();
+		calendar.add(calendarBase);
+		calendar.setBounds((panelWidth/2)-(calendarBaseWidth/2),calendarY,calendarBaseWidth,calendarBaseHeight);
+		add(calendar);
+	}
+	
+	public void setMainPane(MainPane main) {
+		this.main = main;
+		setActions();
+	}
+	
+	public void setActions() {
+		leftArrow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(!blockPreviousMonths) {
+					selectedMonth = previousMonth(selectedMonth,false);
+					setDateTitleText(false);
+					calendarMonthYear.setText(DateTitleText);
+					startToWriteDay = false;
+					monthCalendarDataSetting();	
+					otherMonthDaysFill();
+					fillCalendar();
+				}
+				updatePreviousMonthBlocking();
+				if(blockPreviousMonths)
+					leftArrow.setIcon(calendarLeftArrowBloquedIco);
+				else
+					leftArrow.setIcon(calendarLeftArrowUnpressedIco);
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int reLocate = (int)Math.round((reDimensionAdd*1f)/(2*1f));
+				leftArrow.setBounds(leftArrowX-reLocate,arrowsY-reLocate,calendarLeftArrowPressedWidth,calendarLeftArrowPressedHeight);
+				if(!blockPreviousMonths)
+					leftArrow.setIcon(calendarLeftArrowPressedIco);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				leftArrow.setBounds(leftArrowX,arrowsY,calendarLeftArrowUnpressedWidth,calendarLeftArrowUnpressedHeight);
+				if(!blockPreviousMonths)
+					leftArrow.setIcon(calendarLeftArrowUnpressedIco);
+			}
+		});
+		rightArrow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				selectedMonth = nextMonth(selectedMonth);
+				setDateTitleText(false); //boolean useActual
+				calendarMonthYear.setText(DateTitleText);
+				startToWriteDay = false;
+				monthCalendarDataSetting();	
+				otherMonthDaysFill();
+				fillCalendar();
+				updatePreviousMonthBlocking();
+				if(blockPreviousMonths)
+					leftArrow.setIcon(calendarLeftArrowBloquedIco);
+				else
+					leftArrow.setIcon(calendarLeftArrowUnpressedIco);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int reLocate = (int)Math.round((reDimensionAdd*1f)/(2*1f));
+				rightArrow.setBounds(rightArrowX-reLocate,arrowsY-reLocate,calendarRightArrowPressedWidth,calendarRightArrowPressedHeight);
+				rightArrow.setIcon(calendarRightArrowPressedIco);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				rightArrow.setBounds(rightArrowX,arrowsY,calendarRightArrowUnpressedWidth,calendarRightArrowUnpressedHeight);
+				rightArrow.setIcon(calendarRightArrowUnpressedIco);
+			}
+		});
+	}
+	public void clean() {
+		
+	}
+	public void showCalendar() {
+		//Update date info
+		getActualDate();
+		setDateTitleText(true); //boolean useActual
+		calendarMonthYear.setText(DateTitleText);
+		
+		startToWriteDay = false;
+		monthCalendarDataSetting();	
+		otherMonthDaysFill();
+		fillCalendar();
+	}
+	private void setIcons(){
+		calendarBaseWidth = (int)Math.round(calendarBaseIco.getIconWidth()/scale);
+		calendarBaseHeight = (int)Math.round(calendarBaseIco.getIconHeight()/scale);
 		calendarBaseIco = new ImageIcon(calendarBaseIco.getImage()
 				.getScaledInstance(calendarBaseWidth, calendarBaseHeight,java.awt.Image.SCALE_SMOOTH));
-		
 		calendarDayWidth = (int)Math.round(calendarDayUnpressedIco.getIconWidth()/scale);
 		calendarDayHeight = (int)Math.round(calendarDayUnpressedIco.getIconHeight()/scale);
 		calendarDayUnpressedIco = new ImageIcon(calendarDayUnpressedIco.getImage()
@@ -141,37 +252,32 @@ public class SelectDatePanel extends JPanel {
 				.getScaledInstance(calendarDayWidth, calendarDayHeight,java.awt.Image.SCALE_SMOOTH));
 		calendarDownDaySelectedIco = new ImageIcon(calendarDownDaySelectedIco.getImage()
 				.getScaledInstance(calendarDayWidth, calendarDayHeight,java.awt.Image.SCALE_SMOOTH));
-		
-		/******************************************************************************************************************************/
-		int calendarLeftArrowUnpressedWidth = (int)Math.round(calendarLeftArrowUnpressedIco.getIconWidth()/scale);
-		int calendarLeftArrowUnpressedHeight = (int)Math.round(calendarLeftArrowUnpressedIco.getIconHeight()/scale);
+		calendarLeftArrowUnpressedWidth = (int)Math.round(calendarLeftArrowUnpressedIco.getIconWidth()/scale);
+		calendarLeftArrowUnpressedHeight = (int)Math.round(calendarLeftArrowUnpressedIco.getIconHeight()/scale);
 		calendarLeftArrowUnpressedIco = new ImageIcon(calendarLeftArrowUnpressedIco.getImage()
 				.getScaledInstance(calendarLeftArrowUnpressedWidth, calendarLeftArrowUnpressedHeight,java.awt.Image.SCALE_SMOOTH));
-		int calendarRightArrowUnpressedWidth = (int)Math.round(calendarRightArrowUnpressedIco.getIconWidth()/scale);
-		int calendarRightArrowUnpressedHeight = (int)Math.round(calendarRightArrowUnpressedIco.getIconHeight()/scale);
+		calendarRightArrowUnpressedWidth = (int)Math.round(calendarRightArrowUnpressedIco.getIconWidth()/scale);
+		calendarRightArrowUnpressedHeight = (int)Math.round(calendarRightArrowUnpressedIco.getIconHeight()/scale);
 		calendarRightArrowUnpressedIco = new ImageIcon(calendarRightArrowUnpressedIco.getImage()
 				.getScaledInstance(calendarRightArrowUnpressedWidth, calendarRightArrowUnpressedHeight,java.awt.Image.SCALE_SMOOTH));
-		//******************************************************************************************************************************
-		int reDimensionAdd = 10;
-		int calendarLeftArrowPressedWidth = reDimensionAdd+(int)Math.round(calendarLeftArrowPressedIco.getIconWidth()/scale);
-		int calendarLeftArrowPressedHeight = reDimensionAdd+(int)Math.round(calendarLeftArrowPressedIco.getIconHeight()/scale);
+		reDimensionAdd = 10;
+		calendarLeftArrowPressedWidth = reDimensionAdd+(int)Math.round(calendarLeftArrowPressedIco.getIconWidth()/scale);
+		calendarLeftArrowPressedHeight = reDimensionAdd+(int)Math.round(calendarLeftArrowPressedIco.getIconHeight()/scale);
 		calendarLeftArrowPressedIco = new ImageIcon(calendarLeftArrowPressedIco.getImage()
 				.getScaledInstance(calendarLeftArrowPressedWidth, calendarLeftArrowPressedHeight,java.awt.Image.SCALE_SMOOTH));
-		int calendarRightArrowPressedWidth = reDimensionAdd+(int)Math.round(calendarRightArrowPressedIco.getIconWidth()/scale);
-		int calendarRightArrowPressedHeight = reDimensionAdd+(int)Math.round(calendarRightArrowPressedIco.getIconHeight()/scale);
+		calendarRightArrowPressedWidth = reDimensionAdd+(int)Math.round(calendarRightArrowPressedIco.getIconWidth()/scale);
+		calendarRightArrowPressedHeight = reDimensionAdd+(int)Math.round(calendarRightArrowPressedIco.getIconHeight()/scale);
 		calendarRightArrowPressedIco = new ImageIcon(calendarRightArrowPressedIco.getImage()
 				.getScaledInstance(calendarRightArrowPressedWidth, calendarRightArrowPressedHeight,java.awt.Image.SCALE_SMOOTH));
-		
-		
-		
-		//CalendarBase config
+		calendarLeftArrowBloquedIco = new ImageIcon(calendarLeftArrowBloquedIco.getImage()
+				.getScaledInstance(calendarLeftArrowUnpressedWidth, calendarLeftArrowUnpressedHeight,java.awt.Image.SCALE_SMOOTH));
+	}
+	private void setCalendarBase(){
 		calendarBase.setIcon(calendarBaseIco);
 		calendarBase.setBounds(0,0,calendarBaseWidth,calendarBaseHeight);
-		
-		//Update date info
-		getActualDate();
-		setDateTitleText(true); //boolean useActual
-
+	}
+	
+	private void setCalendarTitle(){
 		//Title config
 		calendarMonthYearWidth = 190;
 		calendarMonthYearHeight = 50;
@@ -182,115 +288,32 @@ public class SelectDatePanel extends JPanel {
 		calendarMonthYearX = leftArrowX+calendarLeftArrowUnpressedWidth+titleIconsGap;
 		rightArrowX = calendarMonthYearX + calendarMonthYearWidth + titleIconsGap;
 		
-		leftArrow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				selectedMonth = previousMonth(selectedMonth,false);
-				setDateTitleText(false);
-				calendarMonthYear.setText(DateTitleText);
-				startToWriteDay = false;
-				monthCalendarDataSetting();	
-				otherMonthDaysFill();
-				fillCalendar();
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-				int reLocate = (int)Math.round((reDimensionAdd*1f)/(2*1f));
-				leftArrow.setBounds(leftArrowX-reLocate,arrowsY-reLocate,calendarLeftArrowPressedWidth,calendarLeftArrowPressedHeight);
-				leftArrow.setIcon(calendarLeftArrowPressedIco);
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				leftArrow.setBounds(leftArrowX,arrowsY,calendarLeftArrowUnpressedWidth,calendarLeftArrowUnpressedHeight);
-				leftArrow.setIcon(calendarLeftArrowUnpressedIco);
-			}
-		});
-		rightArrow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				selectedMonth = nextMonth(selectedMonth);
-				setDateTitleText(false); //boolean useActual
-				calendarMonthYear.setText(DateTitleText);
-				startToWriteDay = false;
-				monthCalendarDataSetting();	
-				otherMonthDaysFill();
-				fillCalendar();
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-				int reLocate = (int)Math.round((reDimensionAdd*1f)/(2*1f));
-				rightArrow.setBounds(rightArrowX-reLocate,arrowsY-reLocate,calendarRightArrowPressedWidth,calendarRightArrowPressedHeight);
-				rightArrow.setIcon(calendarRightArrowPressedIco);
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				rightArrow.setBounds(rightArrowX,arrowsY,calendarRightArrowUnpressedWidth,calendarRightArrowUnpressedHeight);
-				rightArrow.setIcon(calendarRightArrowUnpressedIco);
-			}
-		});
-		
 		//Arrow's icon
-		leftArrow.setIcon(calendarLeftArrowUnpressedIco);
+		if(blockPreviousMonths)
+			leftArrow.setIcon(calendarLeftArrowBloquedIco);
+		else
+			leftArrow.setIcon(calendarLeftArrowPressedIco);
 		rightArrow.setIcon(calendarRightArrowUnpressedIco);
 		
 		//Arrow's bounds
 		leftArrow.setBounds(leftArrowX,arrowsY,calendarLeftArrowUnpressedWidth,calendarLeftArrowUnpressedHeight);		
 		rightArrow.setBounds(rightArrowX,arrowsY,calendarRightArrowUnpressedWidth,calendarRightArrowUnpressedHeight);
-		//Arrow's setting
-		//leftArrow.setOpaque(true);
-		//rightArrow.setOpaque(true);
+
 		//Calendar title setting
 		calendarMonthYear.setBounds(calendarMonthYearX,calendarMonthYearY,calendarMonthYearWidth,calendarMonthYearHeight);
-		calendarMonthYear.setText(DateTitleText);
+		
 		calendarMonthYear.setFont(new Font("Alegreya Sans SC", Font.BOLD, 45));
-		//calendarMonthYear.setFont(new Font("Bebas", Font.PLAIN, 60));
-		//calendarMonthYear.setOpaque(true);
 		calendarMonthYear.setBackground(Color.BLUE);
 		calendarMonthYear.setHorizontalAlignment(SwingConstants.CENTER);
 				
 		calendarTitle.add(leftArrow);
 		calendarTitle.add(rightArrow);
 		calendarTitle.add(calendarMonthYear);
-		
 		calendarTitle.setBounds(0,0,400,80);
 		calendarTitle.setBackground(Color.YELLOW);
 		calendarTitle.setLayout(null);
 		calendarTitle.setOpaque(false);
-		
-		//Days
-		/*System.out.println("last month number of days: "+lastMonthNumberOfDays);
-		System.out.println("starting week day: "+startingWeekDay);
-		System.out.println("endingWeekDay: "+endingWeekDay);
-		System.out.println("daysBeforeMonth: "+daysBeforeMonth);
-		System.out.println("daysAfterMonth: "+daysAfterMonth);*/
-		
-		startToWriteDay = false;
-		monthCalendarDataSetting();	
-		otherMonthDaysFill();
-		fillCalendar();
-		
-		System.out.println("list: "+(calendarDays.get(0).getComponents()[1]));
-		
-		calendar.setBackground(Color.BLUE);
-		calendar.setLayout(null);
-		calendar.setOpaque(false);
-		calendar.add(calendarTitle);
-		calendar.add(calendarBase);
-		
-		calendar.setBounds((panelWidth/2)-(calendarBaseWidth/2),calendarY,calendarBaseWidth,calendarBaseHeight);
-		add(calendar);
-		
 	}
-	
-	public void setMainPane(MainPane main) {
-		this.main = main;
-		setActions();
-	}
-	
-	public void setActions() {
-		
-	}
-	
 	private void monthCalendarDataSetting() {
 		System.out.println("Selected month: "+selectedMonth);
 		numberOfDays = daysInAMonth(selectedMonth,Integer.parseInt(selectedYear));
@@ -415,10 +438,8 @@ public class SelectDatePanel extends JPanel {
 				
 				if(calendarDaysFilled) {
 					dayBtn = (JLabel) calendarDays.get(count).getComponents()[3];
-					/*if(row==4) {*/
-						multiBtn = (JLabel) calendarDays.get(count).getComponents()[2];
-						overlapedCalendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[1];	
-				/*	}*/
+					multiBtn = (JLabel) calendarDays.get(count).getComponents()[2];
+					overlapedCalendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[1];	
 					calendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[0];
 					dayPane = calendarDays.get(count);
 				}
@@ -438,29 +459,15 @@ public class SelectDatePanel extends JPanel {
 				}
 				
 				dayBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
-				
 				dayBtn.setBorder(null);
 				dayBtn.setOpaque(false);
 				
 				
 				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
-				//calendarDayLabel.setBackground(Color.WHITE);
-				//calendarDayLabel.setOpaque(true);
 				int calendarDayLabelX = 5;
 				int calendarDayLabelY = 5;
 				calendarDayLabel.setBounds(calendarDayLabelX,calendarDayLabelY,30,20);
-				
-			/*	if(row==4) {
-					calendarUpDay.setBounds(dayBtn.getBounds());
-					calendarUpDay.setIcon(calendarUpDaySelectedIco);
-					calendarUpDay.setVisible(false);
-					
-					calendarDownDay.setBounds(dayBtn.getBounds());
-					calendarDownDay.setIcon(calendarDownDaySelectedIco);
-					calendarDownDay.setVisible(false);
-				}*/
-				
-				
+								
 				//To define if write the actual month days or last/next month days
 				if(row==0 && column == startingWeekDay-1) startToWriteDay = true; 
 				else if (dayCount > numberOfDays) startToWriteDay = false;
@@ -470,6 +477,7 @@ public class SelectDatePanel extends JPanel {
 					
 				if(startToWriteDay) {
 					if(overlapedDays > 0 && row == 4 && column < overlapedDays) {
+						//Switch to see multibtn
 						dayBtn.setVisible(false);
 						multiBtn.setVisible(true);
 						multiBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
@@ -501,17 +509,22 @@ public class SelectDatePanel extends JPanel {
 								multiBtn.setIcon(calendarDoubleDayUnpressedIco);
 							}
 						});
-
 						calendarDayLabel.setText(Integer.toString(dayCount));
 						calendarDayLabel.setForeground(Color.BLACK);
 						overlapedDayCount--;
 					}
 					else {
-						//dayBtn.setVisible(true);
-						//multiBtn.setVisible(false);
+						Color dayColor;
+						dayBtn.setVisible(true);
+						multiBtn.setVisible(false);
 						dayBtn.setIcon(calendarDayUnpressedIco);
 						calendarDayLabel.setText(Integer.toString(dayCount));
-						calendarDayLabel.setForeground(Color.BLACK);
+						if(isToday(dayCount))
+							dayColor = Color.RED;
+						else
+							dayColor = Color.BLACK;
+						calendarDayLabel.setForeground(dayColor);
+						
 						dayBtn.addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
@@ -531,6 +544,20 @@ public class SelectDatePanel extends JPanel {
 				}
 				else {
 					dayBtn.setIcon(calendarDayOtherIco);
+					dayBtn.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							//System.out.println(calendarDayLabel.getText());
+						}
+						@Override
+						public void mousePressed(MouseEvent e) {
+							dayBtn.setIcon(calendarDayOtherIco);
+						}
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							dayBtn.setIcon(calendarDayOtherIco);
+						}
+					});
 					calendarDayLabel.setText(Integer.toString(otherMonthDays[otherMonthDayCount]));
 					calendarDayLabel.setForeground(new Color(0,0,0,120));
 					otherMonthDayCount++;
@@ -545,7 +572,14 @@ public class SelectDatePanel extends JPanel {
 			}
 		}
 	}
-	
+	private boolean isToday(int day) {
+		boolean today;
+		today = selectedYear == actualYear && selectedMonth == actualMonth && day == actualDay;
+		return today;
+	}
+	private void updatePreviousMonthBlocking() {
+		blockPreviousMonths = selectedYear == actualYear && selectedMonth == actualMonth;
+	}
 	int weekDay (int dia, int mes, int ano)
     {
         String letraD="";
