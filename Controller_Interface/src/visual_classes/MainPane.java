@@ -46,6 +46,7 @@ public class MainPane extends JPanelBackground {
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
 	SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
 	SelectDatePanel selectDatePane = new SelectDatePanel(); 
+	SelectHourPanel selectHourPane = new SelectHourPanel();
 	ScreenSaver screenSaverPane = new ScreenSaver();			
 	DateAndHour dateAndHour = new DateAndHour();
 	
@@ -91,6 +92,7 @@ public class MainPane extends JPanelBackground {
 		add(screenSaverPane);	
 		add(selectExecutionPane);
 		add(selectDatePane); 
+		add(selectHourPane);
 		add(back_btn);
 		add(lock_btn);
 		add(screen_btn);  
@@ -116,7 +118,8 @@ public class MainPane extends JPanelBackground {
 		virtualKeyboard.setFrame(frame);
 		
 		//////////////
-			
+		atribute.time = MenuOptionsTime.PROGRAMADAS;
+		menuNavegation.goTo(atribute,5);	
 		
 		/////////////
 		
