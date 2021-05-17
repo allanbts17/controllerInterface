@@ -40,6 +40,12 @@ import useful_classes.osChange;
  * @author Wilson de Carvalho
  */
 public class VirtualNumberKeyboard  extends JPanel{
+    int screenWidth;
+    int screenHeight;
+    int keyPanWidth;
+    int keyPanHeight;
+    int keyPanX;
+    int keyPanY;
 	private int rowY = 0;
 	private int alpha = 255;
 	private JPanel keyPanel;
@@ -51,12 +57,12 @@ public class VirtualNumberKeyboard  extends JPanel{
      * Private class for storing key specification.
      */
 	//Special keys
-	private final String LEFT_ARROW = "<";
-	private final String RIGHT_ARROW = ">";
-	private final String UP_ARROW = "^";
-	private final String DOWN_ARROW = "v";
-	private final String CLEAR = "X";
-	private final String READY = "Ok";
+	private final String LEFT_ARROW = "🢀";
+	private final String RIGHT_ARROW = "🢂";
+	private final String UP_ARROW = "🢁";
+	private final String DOWN_ARROW = "🢃";
+	private final String CLEAR = "✘";
+	private final String READY = "✔";
 	
     // First key row
     private String[] row1 = new String[]{
@@ -78,24 +84,17 @@ public class VirtualNumberKeyboard  extends JPanel{
     		LEFT_ARROW,"0",RIGHT_ARROW,READY
     };
 
-    private Component currentComponent;
-    private JTextComponent lastFocusedTextComponent;
-    private JFrame frame;
-    private boolean isCapsLockPressed = false;
-    private boolean isShiftPressed = false;
     private Color defaultColor;
 
 
     public VirtualNumberKeyboard() {
     	Dimension screenSize = os.setDimension();
-		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
-		int keyPanWidth = 400;
-		int keyPanHeight = 350;
-		int keyPanX = screenWidth/2 - keyPanWidth/2;
-		int keyPanY = screenHeight - keyPanHeight;
+		screenWidth = (int)screenSize.getWidth();
+		screenHeight = (int)screenSize.getHeight();
+		keyPanWidth = 400;
+		keyPanHeight = 350;
+		keyPanY = screenHeight - keyPanHeight;
 		setBackground(new Color(0,0,0,200));
-		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);	
 		setLayout(null);
     }
 
@@ -106,15 +105,17 @@ public class VirtualNumberKeyboard  extends JPanel{
      * @param keyboardPanel The panel where this keyboard will be held.
      * 
      */
-    public void setParent(JLabel[] hourData) {
-    	this.hourData = hourData;
+    public void setParent(SelectHourPanel parent) {
+    	this.hourData = parent.hourData;
+        keyPanX = parent.getWidth()/2 - keyPanWidth/2;
+        setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
         Color keyColor = getBackground();
         select=0;
-        //keyColor = new Color(0,0,0,);
         add(initRow(row1, getSize(),keyColor));
         add(initRow(row2, getSize(),keyColor));
         add(initRow(row3, getSize(),keyColor));
         add(initRow(row4, getSize(),keyColor));
+        
     }
         
     public void setAlpha(int alpha) {
@@ -168,7 +169,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     			}
     		});
             
-            button.setFont(new Font("Tahoma", Font.PLAIN, 20));
+            button.setFont(new Font("Tahoma", Font.PLAIN, 50));
             int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
             button.setBounds(buttonX,0,buttonWidth, buttonHeight);
             //button.addFocusListener(this);

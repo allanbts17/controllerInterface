@@ -26,7 +26,7 @@ public class SelectHourPanel extends JPanel {
 	int baseHeight;
 	int baseY;
 	int scale = 4;
-	JLabel[] hourData = new JLabel[] {
+	public JLabel[] hourData = new JLabel[] {
 			hour,minute,section
 	};
 	
@@ -110,7 +110,7 @@ public class SelectHourPanel extends JPanel {
 		hourData[2].setBackground(Color.RED);
 		basePane.add(hourData[2]);
 		
-		numKey.setParent(hourData);
+		numKey.setParent(this);
 		add(basePane);
 		add(numKey);
 	}
