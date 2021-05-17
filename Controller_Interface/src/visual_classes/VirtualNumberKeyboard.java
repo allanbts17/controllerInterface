@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.BadLocationException;
@@ -38,110 +39,64 @@ import useful_classes.osChange;
  *
  * @author Wilson de Carvalho
  */
-public class VirtualNumberKeyboard  extends JPanel implements FocusListener{
+public class VirtualNumberKeyboard  extends JPanel{
 	private int rowY = 0;
 	private int alpha = 255;
 	private JPanel keyPanel;
+	private JLabel[] hourData = new JLabel[3];
+	private int select=0;
+	private String dataBuffer="";
 	osChange os = new osChange();
     /**
      * Private class for storing key specification.
      */
-    private class Key {
-
-        public final int keyCode;
-        public final String value;
-        public final String shiftValue;
-
-        public Key(int keyCode, String value, String shiftValue) {
-            this.keyCode = keyCode;
-            this.value = value;
-            this.shiftValue = shiftValue;
-        }
-
-        public Key(int keyCode, String value) {
-            this(keyCode, value, value);
-        }
-
-        public boolean hasShiftValue() {
-            return !this.value.equals(this.shiftValue);
-        }
-
-        public boolean isLetter() {
-            return value.length() == 1
-                    && Character.isLetter(value.toCharArray()[0]);
-        }
-    }
-
-    // Special keys definition
-    //private final Key TAB_KEY = new Key(KeyEvent.VK_TAB, "Tab");
-    private final Key PARENTHESIS_KEY = new Key(KeyEvent.VK_LEFT_PARENTHESIS,"(",")");
-    private final Key CAPS_LOCK_KEY = new Key(KeyEvent.VK_CAPS_LOCK, "Caps");
-    private final Key SHIFT_KEY = new Key(KeyEvent.VK_SHIFT, "⬆");
-    private final Key ACUTE_KEY = new Key(KeyEvent.VK_DEAD_ACUTE, "´", "`");
-    private final Key GRAVE_KEY = new Key(KeyEvent.VK_DEAD_GRAVE, "`");
-    private final Key TILDE_CIRCUMFLEX_KEY = new Key(KeyEvent.VK_DEAD_TILDE, "~", "^");
-    private final Key CIRCUMFLEX_KEY = new Key(KeyEvent.VK_DEAD_TILDE, "^");
-
+	//Special keys
+	private final String LEFT_ARROW = "<";
+	private final String RIGHT_ARROW = ">";
+	private final String UP_ARROW = "^";
+	private final String DOWN_ARROW = "v";
+	private final String CLEAR = "X";
+	private final String READY = "Ok";
+	
     // First key row
-    private Key[] row1 = new Key[]{
-        new Key(KeyEvent.VK_QUOTE, "'", "\""),
-        new Key(KeyEvent.VK_1, "1"), new Key(KeyEvent.VK_2, "2"),
-        new Key(KeyEvent.VK_3, "3"), new Key(KeyEvent.VK_4, "4"),
-        new Key(KeyEvent.VK_5, "5"), new Key(KeyEvent.VK_6, "6"),
-        new Key(KeyEvent.VK_7, "7"), new Key(KeyEvent.VK_8, "8"),
-        new Key(KeyEvent.VK_9, "9"), new Key(KeyEvent.VK_0, "0"),
-        new Key(KeyEvent.VK_MINUS, "-", "_"),
-        new Key(KeyEvent.VK_BACK_SPACE, "⟵")
+    private String[] row1 = new String[]{
+        "7","8","9",UP_ARROW
     };
-
+    
     // Second key row
-    private Key[] row2 = new Key[]{
-        PARENTHESIS_KEY,
-        new Key(KeyEvent.VK_Q, "q","Q"), new Key(KeyEvent.VK_W, "w","W"),
-        new Key(KeyEvent.VK_E, "e","E"), new Key(KeyEvent.VK_R, "r","R"),
-        new Key(KeyEvent.VK_T, "t","T"), new Key(KeyEvent.VK_Y, "y","Y"),
-        new Key(KeyEvent.VK_U, "u","U"), new Key(KeyEvent.VK_I, "i","I"),
-        new Key(KeyEvent.VK_O, "o","O"), new Key(KeyEvent.VK_P, "p","P"),
-        ACUTE_KEY,
-        new Key(KeyEvent.VK_BRACELEFT, "[", "{")
+    private String[] row2 = new String[]{
+            "4","5","6",DOWN_ARROW
     };
 
     // Third key row
-    private Key[] row3 = new Key[]{
-        CAPS_LOCK_KEY,
-        new Key(KeyEvent.VK_A, "a","A"), new Key(KeyEvent.VK_S, "s","S"),
-        new Key(KeyEvent.VK_D, "d","D"), new Key(KeyEvent.VK_F, "f","F"),
-        new Key(KeyEvent.VK_G, "g","G"), new Key(KeyEvent.VK_H, "h","H"),
-        new Key(KeyEvent.VK_J, "j","J"), new Key(KeyEvent.VK_K, "k","K"),
-        new Key(KeyEvent.VK_L, "l","L"), new Key(KeyEvent.VK_DEAD_CEDILLA, "ç","Ç"),
-        TILDE_CIRCUMFLEX_KEY,
-        new Key(KeyEvent.VK_BRACERIGHT, "]", "}")
+    private String[] row3 = new String[]{
+            "1","2","3",CLEAR
     };
 
     // Fourth key row
-    private Key[] row4 = new Key[]{
-        SHIFT_KEY,
-        new Key(KeyEvent.VK_BACK_SLASH, "\\", "|"),
-        new Key(KeyEvent.VK_Z, "z","Z"), new Key(KeyEvent.VK_X, "x","X"),
-        new Key(KeyEvent.VK_C, "c","C"), new Key(KeyEvent.VK_V, "v","V"),
-        new Key(KeyEvent.VK_B, "b","B"), new Key(KeyEvent.VK_N, "n","N"),
-        new Key(KeyEvent.VK_M, "m","M"), new Key(KeyEvent.VK_COMMA, ",", "<"),
-        new Key(KeyEvent.VK_PERIOD, ".", ">"),
-        new Key(KeyEvent.VK_SEMICOLON, ";", ":"),
-        new Key(KeyEvent.VK_SLASH, "/", "?")
+    private String[] row4 = new String[]{
+    		LEFT_ARROW,"0",RIGHT_ARROW,READY
     };
 
-    private final Map<Key, JButton> buttons;
     private Component currentComponent;
     private JTextComponent lastFocusedTextComponent;
     private JFrame frame;
     private boolean isCapsLockPressed = false;
     private boolean isShiftPressed = false;
     private Color defaultColor;
-    private Key accentuationBuffer;
+
 
     public VirtualNumberKeyboard() {
-        this.buttons = new HashMap<>();
+    	Dimension screenSize = os.setDimension();
+		int screenWidth = (int)screenSize.getWidth();
+		int screenHeight = (int)screenSize.getHeight();
+		int keyPanWidth = 400;
+		int keyPanHeight = 350;
+		int keyPanX = screenWidth/2 - keyPanWidth/2;
+		int keyPanY = screenHeight - keyPanHeight;
+		setBackground(new Color(0,0,0,200));
+		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);	
+		setLayout(null);
     }
 
     /**
@@ -151,45 +106,17 @@ public class VirtualNumberKeyboard  extends JPanel implements FocusListener{
      * @param keyboardPanel The panel where this keyboard will be held.
      * 
      */
-    public void setFrame(JFrame frame) {
-    	setPanel();
-        this.frame = frame;
-        currentComponent = frame.getFocusOwner();
-        if (currentComponent == null) {
-            currentComponent = frame.getFocusTraversalPolicy().getFirstComponent(frame);
-        }
-        
-        
+    public void setParent(JLabel[] hourData) {
+    	this.hourData = hourData;
         Color keyColor = getBackground();
+        select=0;
         //keyColor = new Color(0,0,0,);
         add(initRow(row1, getSize(),keyColor));
         add(initRow(row2, getSize(),keyColor));
         add(initRow(row3, getSize(),keyColor));
         add(initRow(row4, getSize(),keyColor));
     }
-    
-    private void setPanel() {
-    	Dimension screenSize = os.setDimension();
-		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
-    	
-//		keyPan.setBackground(Color.BLACK);
-		setBackground(new Color(0,0,0,200));
-		
-		//pan.setOpaque(false);
-		int keyPanWidth = screenWidth;
-		int keyPanHeight = 350;
-		int keyPanX = screenWidth/2 - keyPanWidth/2;
-		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
-		int keyPanY = screenHeight - keyPanHeight;
-		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
-		//add(keyPan);
-		//key.show(frame,keyPan);
-		//screen_btn.setVisible(false);
-		
-		setLayout(null);
-    }
-    
+        
     public void setAlpha(int alpha) {
     	alpha = Math.max(0,alpha);
     	alpha = Math.min(255,alpha);
@@ -202,7 +129,7 @@ public class VirtualNumberKeyboard  extends JPanel implements FocusListener{
     	return colorWithAlpha;
     }
 
-    private JPanel initRow(Key[] keys, Dimension dimensions, Color panelColor) {
+    private JPanel initRow(String[] keys, Dimension dimensions, Color panelColor) {
     	int outerButtonsGap = 10;
     	int innerButtonsGap = 10;
     	
@@ -213,44 +140,40 @@ public class VirtualNumberKeyboard  extends JPanel implements FocusListener{
                 
         int compensationButtonX = Math.round(dimensions.width-outerButtonsGap*2)/2-(buttonWidth*keys.length+innerButtonsGap*(keys.length-1))/2;
         for (int i = 0; i < keys.length; ++i) {
-            Key key = keys[i];
+            String key = keys[i];
             JButton button;
-            if (buttons.containsKey(key)) {
-                button = buttons.get(key);
-            } else {
-                button = new JButton(key.value);
-                int lineThickness = 2;
-                
-                Color btnLineColor = getColorWithAlpha(Color.WHITE);
-                Color btnColor = getColorWithAlpha(Color.BLACK);
-                Color btnTextColor = getColorWithAlpha(Color.WHITE);
-                /*
-                button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) btnLineColor));
-                button.setForeground(btnTextColor);
-                button.setBackground(btnColor);*/
-                button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
-                button.setForeground(Color.WHITE);
-                button.setBackground(new Color(0,0,0,255));
-                //button.setContentAreaFilled(true);
-                //button.setOpaque(false);
-                button.addMouseListener(new MouseAdapter() {
-        			@Override
-        			public void mousePressed(MouseEvent e) {
-        				button.setBackground(new Color(255,255,255));
-        			}
-        			@Override
-        			public void mouseReleased(MouseEvent e) {
-        				button.setBackground(new Color(0,0,0));
-        			}
-        		});
-                
-                button.setFont(new Font("Tahoma", Font.PLAIN, 20));
-                int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
-                button.setBounds(buttonX,0,buttonWidth, buttonHeight);
-                button.addFocusListener(this);
-                buttons.put(key, button);
-                button.addActionListener(e -> actionListener(key));
-            }
+            button = new JButton(key);
+            int lineThickness = 2;
+            
+            Color btnLineColor = getColorWithAlpha(Color.WHITE);
+            Color btnColor = getColorWithAlpha(Color.BLACK);
+            Color btnTextColor = getColorWithAlpha(Color.WHITE);
+            /*
+            button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) btnLineColor));
+            button.setForeground(btnTextColor);
+            button.setBackground(btnColor);*/
+            button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
+            button.setForeground(Color.WHITE);
+            button.setBackground(new Color(0,0,0,255));
+            //button.setContentAreaFilled(true);
+            //button.setOpaque(false);
+            button.addMouseListener(new MouseAdapter() {
+    			@Override
+    			public void mousePressed(MouseEvent e) {
+    				button.setBackground(new Color(255,255,255));
+    			}
+    			@Override
+    			public void mouseReleased(MouseEvent e) {
+    				button.setBackground(new Color(0,0,0));
+    			}
+    		});
+            
+            button.setFont(new Font("Tahoma", Font.PLAIN, 20));
+            int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
+            button.setBounds(buttonX,0,buttonWidth, buttonHeight);
+            //button.addFocusListener(this);
+            button.addActionListener(e -> actionListener(key));
+            
   
             p.add(button);
         }
@@ -265,226 +188,80 @@ public class VirtualNumberKeyboard  extends JPanel implements FocusListener{
         return p;
     }
 
-    private void actionListener(Key key) {
-        if (currentComponent == null || !(currentComponent instanceof JComponent)) {
-            return;
-        }
-        ((JComponent) currentComponent).requestFocus();
-        JTextComponent currentTextComponent = getCurrentTextComponent();
-        switch (key.keyCode) {
-            case KeyEvent.VK_CAPS_LOCK:
-                capsLockPressed();
-                break;
-            case KeyEvent.VK_SHIFT:
-                shiftPressed();
-                break;
-            case KeyEvent.VK_BACK_SPACE:
-                if (currentTextComponent == null) {
-                    return;
-                }
-                backspacePressed(currentTextComponent);
-                break;
-            default:
-                if (currentTextComponent == null) {
-                    return;
-                }
-                otherKeyPressed(key, currentTextComponent);
-                break;
-        }
+    private void actionListener(String key) {
+    	int numData;
+    	if(isNumeric(key)) {
+	    	dataBuffer += key;
+	    	writeData();
+    	}
+    	else {
+    		switch(key) {
+    		case UP_ARROW:
+    			numData= Integer.parseInt(hourData[select].getText());
+    			dataBuffer = String.valueOf(numData+1);
+    			writeData();
+    			break;
+    		case DOWN_ARROW:
+    			numData = Integer.parseInt(hourData[select].getText());
+    			dataBuffer = String.valueOf(numData-1);
+    			writeData();
+    			break;
+    		case LEFT_ARROW:
+    			select=Math.max(select--,0);
+    			dataBuffer="";
+    			selectChange();
+    			break;
+    		case RIGHT_ARROW:
+    			select=Math.min(select++,2);
+    			dataBuffer="";
+    			selectChange();
+    			break;
+    		case CLEAR:
+    			hourData[select].setText("00");
+    			dataBuffer="";
+    			break;
+    		case READY:
+    			break;
+    		}
+    	}
     }
-
-    private void capsLockPressed() {
-        isCapsLockPressed = !isCapsLockPressed;
-        buttons.forEach((k, b) -> {
-            if (k.isLetter() && k.hasShiftValue()) {
-                if (isCapsLockPressed) {
-                    b.setText(k.shiftValue);
-                } else {
-                    b.setText(k.value);
-                }
-            }
-        });
-        if (isCapsLockPressed) {
-            if (defaultColor == null) {
-                defaultColor = buttons.get(SHIFT_KEY).getBackground();
-            }
-            buttons.get(CAPS_LOCK_KEY).setBackground(Color.orange);
-        } else {
-            buttons.get(CAPS_LOCK_KEY).setBackground(defaultColor);
-        }
-    }
-
-    private void shiftPressed() {
-        isShiftPressed = !isShiftPressed;
-        buttons.forEach((k, b) -> {
-            if (k.hasShiftValue()) {
-                if (isShiftPressed) {
-                    b.setText(k.shiftValue);
-                } else {
-                    b.setText(k.value);
-                }
-            }
-        });
-        if (isShiftPressed) {
-            if (defaultColor == null) {
-                defaultColor = buttons.get(SHIFT_KEY).getBackground();
-            }
-            buttons.get(SHIFT_KEY).setBackground(Color.orange);
-        } else {
-            buttons.get(SHIFT_KEY).setBackground(defaultColor);
-        }
-    }
-
-    private void backspacePressed(JTextComponent component) {
-        if (currentComponent instanceof JTextComponent) {
-            int caretPosition = component.getCaretPosition();
-            if (!component.getText().isEmpty() && caretPosition > 0) {
-                try {
-                    component.setText(component.getText(0, caretPosition - 1)
-                            + component.getText(caretPosition,
-                                    component.getText().length() - caretPosition));
-                } catch (BadLocationException ex) {
-                }
-                component.setCaretPosition(caretPosition - 1);
-            }
-        }
-    }
-
-    private void otherKeyPressed(Key key, JTextComponent currentTextComponent) {
-        if (key.isLetter()) {
-            String keyString;
-            if (accentuationBuffer == null) {
-                keyString = key.value;
-            } else {
-                switch (key.keyCode) {
-                    case KeyEvent.VK_A:
-                        keyString = accentuationBuffer
-                                == ACUTE_KEY ? "á"
-                                        : accentuationBuffer == GRAVE_KEY ? "à"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "ã"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "â" : key.value;
-                        break;
-                    case KeyEvent.VK_E:
-                        keyString = accentuationBuffer
-                                == ACUTE_KEY ? "é"
-                                        : accentuationBuffer == GRAVE_KEY ? "è"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~e"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "ê" : key.value;
-                        break;
-                    case KeyEvent.VK_I:
-                        keyString = accentuationBuffer
-                                == ACUTE_KEY ? "í"
-                                        : accentuationBuffer == GRAVE_KEY ? "ì"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~i"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "î" : key.value;
-                        break;
-                    case KeyEvent.VK_O:
-                        keyString = accentuationBuffer
-                                == ACUTE_KEY ? "ó"
-                                        : accentuationBuffer == GRAVE_KEY ? "ò"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "õ"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "ô" : key.value;
-                        break;
-                    case KeyEvent.VK_U:
-                        keyString = accentuationBuffer
-                                == ACUTE_KEY ? "ú"
-                                        : accentuationBuffer == GRAVE_KEY ? "ù"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~u"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "û" : key.value;
-                    default:
-                        keyString = key.value;
-                        break;
-                }
-                accentuationBuffer = null;
-            }
-            if (isCapsLockPressed) {
-                keyString = keyString.toUpperCase();
-                if (isShiftPressed) {
-                    shiftPressed();
-                }
-            } else if (isShiftPressed) {
-                keyString = keyString.toUpperCase();
-                shiftPressed();
-            }
-            addText(currentTextComponent, keyString);
-        } else if (key == ACUTE_KEY || key == TILDE_CIRCUMFLEX_KEY) {
-            if (key == ACUTE_KEY) {
-                if (!isShiftPressed) {
-                    accentuationBuffer = key;
-                } else {
-                    accentuationBuffer = GRAVE_KEY;
-                }
-            } else if (key == TILDE_CIRCUMFLEX_KEY) {
-                if (!isShiftPressed) {
-                    accentuationBuffer = key;
-                } else {
-                    accentuationBuffer = CIRCUMFLEX_KEY;
-                }
-            }
-            if (isShiftPressed) {
-                shiftPressed();
-            }
-        } else {
-            String keyString;
-            if (isCapsLockPressed) {
-                keyString = key.value.toUpperCase();
-                if (isShiftPressed) {
-                    shiftPressed();
-                }
-            } else if (isShiftPressed) {
-                keyString = key.shiftValue;
-                shiftPressed();
-            } else {
-                keyString = key.value;
-            }
-            addText(currentTextComponent, keyString);
-        }
-    }
-
-    private JTextComponent getCurrentTextComponent() {
-        if (currentComponent != null && currentComponent instanceof JTextComponent) {
-            return (JTextComponent) currentComponent;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Adds text considering the caret position.
-     *
-     * @param component Text component.
-     * @param text Text that will be added.
-     */
-    private void addText(JTextComponent component, String text) {
-        int caretPosition = component.getCaretPosition();
-        try {
-            component.setText(component.getText(0, caretPosition)
-                    + text + component.getText(caretPosition,
-                            component.getText().length() - caretPosition));
-            component.setCaretPosition(caretPosition + 1);
-        } catch (BadLocationException ex) {
-        }
-    }
-
-    @Override
-    public void focusGained(FocusEvent e) {
-    	System.out.println(e.getOppositeComponent());
-        Component previousComponent = e.getOppositeComponent();
-        if (previousComponent != null && !(previousComponent instanceof JButton
-                && buttons.values().contains((JButton) previousComponent))) {
-            this.currentComponent = previousComponent;
-        }
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-    /*	System.out.println("lost");
-    	System.out.println(e.getOppositeComponent());
-    	Component focusComponent = e.getOppositeComponent();
-        if (focusComponent != null && !(focusComponent instanceof JTextComponent)) {
-            this.keyPanel.setVisible(false);
-            System.out.println("if lost");
-        }*/
+    private void writeData() {
+    	int numData;
+    	switch(select) {
+    	case 0:
+    		numData = Math.min(Integer.parseInt(dataBuffer),12);
+        	numData = dataBuffer.length() > 1? Math.max(numData,1):Math.max(numData,0);
+        	dataBuffer = String.valueOf(numData);
+        	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
+        	hourData[select].setText(dataBuffer);
+    		break;
+    	case 1:
+    		numData = Math.min(Integer.parseInt(dataBuffer),30);
+        	numData = Math.max(numData,0);
+        	dataBuffer = String.valueOf(numData);
+        	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
+        	hourData[select].setText(dataBuffer);
+    		break;
+    	case 2:
+    		break;	
+    	}
     }
     
+    private boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+    
+    private void selectChange() {
+		
+	}
+
+
 }

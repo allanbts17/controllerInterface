@@ -19,12 +19,16 @@ public class SelectHourPanel extends JPanel {
 	JLabel section = new JLabel();
 	JLabel colon = new JLabel(":");
 	JPanelBackground basePane = new JPanelBackground();
+	VirtualNumberKeyboard numKey = new VirtualNumberKeyboard();
 	
 	ImageIcon baseIco = new ImageIcon(this.getClass().getResource("/icons/select_hour_base.png"));
 	int baseWidth;
 	int baseHeight;
 	int baseY;
 	int scale = 4;
+	JLabel[] hourData = new JLabel[] {
+			hour,minute,section
+	};
 	
 	osChange os = new osChange();
 	
@@ -75,13 +79,13 @@ public class SelectHourPanel extends JPanel {
 		int componentsX = (baseWidth/2)-(numberWidth+gap+colonWidth+gap+numberWidth+sectionGap+sectionWidth)/2;
 		int componentsY = 70;
 		//Hour
-		hour.setText("12");
-		hour.setBounds(componentsX,componentsY,numberWidth,componentHeight);
-		hour.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
-		hour.setOpaque(debugOpaque);
-		hour.setBackground(Color.RED);
-		hour.setHorizontalAlignment(SwingConstants.RIGHT);
-		basePane.add(hour);
+		hourData[0].setText("12");
+		hourData[0].setBounds(componentsX,componentsY,numberWidth,componentHeight);
+		hourData[0].setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
+		hourData[0].setOpaque(debugOpaque);
+		hourData[0].setBackground(Color.RED);
+		hourData[0].setHorizontalAlignment(SwingConstants.RIGHT);
+		basePane.add(hourData[0]);
 		//colon
 		colon.setBounds(hour.getLocation().x+numberWidth+gap,componentsY,colonWidth,componentHeight);
 		colon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -90,24 +94,27 @@ public class SelectHourPanel extends JPanel {
 		colon.setBackground(Color.RED);
 		basePane.add(colon);
 		//minutes
-		minute.setText("30");
-		minute.setBounds(colon.getLocation().x+colonWidth+gap,componentsY,numberWidth,componentHeight);
-		minute.setHorizontalAlignment(SwingConstants.LEFT);
-		minute.setOpaque(debugOpaque);
-		minute.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
-		minute.setBackground(Color.RED);
-		basePane.add(minute);
+		hourData[1].setText("30");
+		hourData[1].setBounds(colon.getLocation().x+colonWidth+gap,componentsY,numberWidth,componentHeight);
+		hourData[1].setHorizontalAlignment(SwingConstants.LEFT);
+		hourData[1].setOpaque(debugOpaque);
+		hourData[1].setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
+		hourData[1].setBackground(Color.RED);
+		basePane.add(hourData[1]);
 		//section
-		section.setText("p.m.");
-		section.setBounds(minute.getLocation().x+numberWidth+sectionGap,componentsY,sectionWidth,componentHeight);
-		section.setHorizontalAlignment(SwingConstants.LEFT);
-		section.setOpaque(debugOpaque);
-		section.setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
-		section.setBackground(Color.RED);
-		basePane.add(section);
+		hourData[2].setText("p.m.");
+		hourData[2].setBounds(minute.getLocation().x+numberWidth+sectionGap,componentsY,sectionWidth,componentHeight);
+		hourData[2].setHorizontalAlignment(SwingConstants.LEFT);
+		hourData[2].setOpaque(debugOpaque);
+		hourData[2].setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
+		hourData[2].setBackground(Color.RED);
+		basePane.add(hourData[2]);
 		
-		
+		numKey.setParent(hourData);
 		add(basePane);
+		add(numKey);
 	}
+	
+	
 
 }
