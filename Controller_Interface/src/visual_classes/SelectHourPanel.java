@@ -10,6 +10,12 @@ import javax.swing.JPanel;
 
 import useful_classes.osChange;
 import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SelectHourPanel extends JPanel {
 	//JPanel basePane = new JPanel();
@@ -29,7 +35,7 @@ public class SelectHourPanel extends JPanel {
 	public JLabel[] hourData = new JLabel[] {
 			hour,minute,section
 	};
-	
+	MatteBorder border = new MatteBorder(3, 0, 4, 0, new Color(14,160,250,200));
 	osChange os = new osChange();
 	
 	public SelectHourPanel() {
@@ -70,7 +76,7 @@ public class SelectHourPanel extends JPanel {
 		
 		//Hour setting
 		boolean debugOpaque = false;
-		int numberWidth = 100;
+		int numberWidth = 102;
 		int sectionWidth = 195;
 		int sectionGap = 10;
 		int colonWidth = 50;
@@ -110,11 +116,44 @@ public class SelectHourPanel extends JPanel {
 		hourData[2].setBackground(Color.RED);
 		basePane.add(hourData[2]);
 		
+		hourData[0].setBorder(border);
 		numKey.setParent(this);
 		add(basePane);
+		
+		/*JLabel lblNewLabel = new JLabel("holaa");
+		lblNewLabel.setBorder(new MatteBorder(3, 0, 3, 0, (Color) Color.BLUE));
+		lblNewLabel.setOpaque(true);
+		lblNewLabel.setBounds(0, 0, 46, 14);
+		basePane.add(lblNewLabel);*/
 		add(numKey);
+		
+		for(JLabel data: hourData) {
+			data.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					for(int i=0;i<3;i++) {
+						if(data.equals(hourData[i])) {
+							numKey.select=i;
+							selectChange();
+							break;
+						}
+					}
+				}
+			});
+		}
 	}
 	
+	void selectChange() {
+		for(int i=0;i<3;i++) {
+			if(i==numKey.select) {
+				hourData[i].setBorder(border);
+			}
+			else
+				hourData[i].setBorder(null);
+		}
+	}
 	
-
+	void ready() {
+		System.out.println("READY!: "+hourData[0].getText()+":"+hourData[1].getText()+" "+hourData[2].getText());
+	}
 }

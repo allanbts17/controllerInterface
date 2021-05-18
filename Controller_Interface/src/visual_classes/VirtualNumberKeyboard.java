@@ -50,19 +50,23 @@ public class VirtualNumberKeyboard  extends JPanel{
 	private int alpha = 255;
 	private JPanel keyPanel;
 	private JLabel[] hourData = new JLabel[3];
-	private int select=0;
+	int select=0;
 	private String dataBuffer="";
+	private JPanel parent;
+	private String[] section = new String[] {
+			"a.m","p.m."
+	};
 	osChange os = new osChange();
     /**
      * Private class for storing key specification.
      */
 	//Special keys
-	private final String LEFT_ARROW = "🢀";
-	private final String RIGHT_ARROW = "🢂";
-	private final String UP_ARROW = "🢁";
-	private final String DOWN_ARROW = "🢃";
-	private final String CLEAR = "✘";
-	private final String READY = "✔";
+	private final String LEFT_ARROW = "ðŸ¢€";
+	private final String RIGHT_ARROW ="ðŸ¢‚";
+	private final String UP_ARROW ="ðŸ¢�";
+	private final String DOWN_ARROW ="ðŸ¢ƒ";
+	private final String CLEAR ="âœ˜";
+	private final String READY ="âœ”";
 	
     // First key row
     private String[] row1 = new String[]{
@@ -86,26 +90,19 @@ public class VirtualNumberKeyboard  extends JPanel{
 
     private Color defaultColor;
 
-
     public VirtualNumberKeyboard() {
     	Dimension screenSize = os.setDimension();
 		screenWidth = (int)screenSize.getWidth();
 		screenHeight = (int)screenSize.getHeight();
 		keyPanWidth = 400;
-		keyPanHeight = 350;
+		keyPanHeight = 355;
 		keyPanY = screenHeight - keyPanHeight;
 		setBackground(new Color(0,0,0,200));
 		setLayout(null);
     }
 
-    /**
-     * Initializes the virtual keyboard and shows in the informed JFrame.
-     *
-     * @param frame JFrame that will be used to show the virtual keyboard.
-     * @param keyboardPanel The panel where this keyboard will be held.
-     * 
-     */
     public void setParent(SelectHourPanel parent) {
+    	this.parent = parent;
     	this.hourData = parent.hourData;
         keyPanX = parent.getWidth()/2 - keyPanWidth/2;
         setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
@@ -138,26 +135,18 @@ public class VirtualNumberKeyboard  extends JPanel{
         p.setLayout(null);
         int buttonWidth = (dimensions.width - outerButtonsGap*2 - innerButtonsGap*(keys.length-1) ) / keys.length;
         int buttonHeight = (dimensions.height - outerButtonsGap*2 - innerButtonsGap*3) / 4; // number of rows
-                
         int compensationButtonX = Math.round(dimensions.width-outerButtonsGap*2)/2-(buttonWidth*keys.length+innerButtonsGap*(keys.length-1))/2;
         for (int i = 0; i < keys.length; ++i) {
             String key = keys[i];
             JButton button;
             button = new JButton(key);
             int lineThickness = 2;
-            
             Color btnLineColor = getColorWithAlpha(Color.WHITE);
             Color btnColor = getColorWithAlpha(Color.BLACK);
             Color btnTextColor = getColorWithAlpha(Color.WHITE);
-            /*
-            button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) btnLineColor));
-            button.setForeground(btnTextColor);
-            button.setBackground(btnColor);*/
             button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
             button.setForeground(Color.WHITE);
             button.setBackground(new Color(0,0,0,255));
-            //button.setContentAreaFilled(true);
-            //button.setOpaque(false);
             button.addMouseListener(new MouseAdapter() {
     			@Override
     			public void mousePressed(MouseEvent e) {
@@ -172,7 +161,6 @@ public class VirtualNumberKeyboard  extends JPanel{
             button.setFont(new Font("Tahoma", Font.PLAIN, 50));
             int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
             button.setBounds(buttonX,0,buttonWidth, buttonHeight);
-            //button.addFocusListener(this);
             button.addActionListener(e -> actionListener(key));
             
   
@@ -198,56 +186,128 @@ public class VirtualNumberKeyboard  extends JPanel{
     	else {
     		switch(key) {
     		case UP_ARROW:
-    			numData= Integer.parseInt(hourData[select].getText());
-    			dataBuffer = String.valueOf(numData+1);
-    			writeData();
+    			numData= select<2? Integer.parseInt(hourData[select].getText()):0;
+    			stepWrite(numData,true);
     			break;
     		case DOWN_ARROW:
-    			numData = Integer.parseInt(hourData[select].getText());
-    			dataBuffer = String.valueOf(numData-1);
-    			writeData();
+    			numData = select<2? Integer.parseInt(hourData[select].getText()):0;
+    			stepWrite(numData,false);
     			break;
     		case LEFT_ARROW:
-    			select=Math.max(select--,0);
+    			select=Math.max(select-1,0);
     			dataBuffer="";
-    			selectChange();
+    			((SelectHourPanel) parent).selectChange();
     			break;
     		case RIGHT_ARROW:
-    			select=Math.min(select++,2);
+    			select=Math.min(select+1,2);
     			dataBuffer="";
-    			selectChange();
+    			((SelectHourPanel) parent).selectChange();
     			break;
     		case CLEAR:
-    			hourData[select].setText("00");
+    			if(select < 2)
+    				hourData[select].setText("00");
+    			if(select == 0)
+    				hourData[select].setText("01");
     			dataBuffer="";
     			break;
     		case READY:
+    			((SelectHourPanel) parent).ready();
     			break;
     		}
     	}
     }
-    private void writeData() {
-    	int numData;
+    
+    private void stepWrite(int numData,boolean up) {
+    	numData = up? numData+1:numData-1;
     	switch(select) {
     	case 0:
-    		numData = Math.min(Integer.parseInt(dataBuffer),12);
-        	numData = dataBuffer.length() > 1? Math.max(numData,1):Math.max(numData,0);
-        	dataBuffer = String.valueOf(numData);
-        	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
-        	hourData[select].setText(dataBuffer);
+    		if(numData == 13)
+        		numData = 1;
+        	else if(numData == 0)
+        		numData = 12;
     		break;
     	case 1:
-    		numData = Math.min(Integer.parseInt(dataBuffer),30);
-        	numData = Math.max(numData,0);
-        	dataBuffer = String.valueOf(numData);
-        	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
-        	hourData[select].setText(dataBuffer);
+    		if(numData == 60)
+        		numData = 0;
+        	else if(numData == -1)
+        		numData = 59;
+    		break;
+    	case 2:
+    		String oppositeSection = hourData[2].getText().equals("a.m.")? "p.m.":"a.m.";
+    		hourData[2].setText(oppositeSection);
+    		break;
+    	}
+    	if(select < 2) {
+	    	dataBuffer = String.valueOf(numData);
+	    	forceTwoDigit(numData);
+	    	dataBuffer="";
+	    	((SelectHourPanel) parent).selectChange();
+    	}
+    }
+    
+    private void writeData() {
+    	int numData = Integer.parseInt(dataBuffer);
+    	switch(select) {
+    	case 0:
+    		if(dataBuffer.length() == 1) {
+    			//On first digit, if it add a second, the number will be higher than 12
+    			if(numData > 1) {
+    				forceTwoDigit(numData);
+    	        	select++;
+    	        	dataBuffer="";
+    	        	((SelectHourPanel) parent).selectChange();
+    			}
+    			//First digit as 1 is available
+    			else {
+    				forceTwoDigit(numData);
+    			}
+    		}
+			else {
+				if(numData <= 12) {
+					forceTwoDigit(numData); 
+    	        	select++;
+    	        	dataBuffer="";
+    	        	((SelectHourPanel) parent).selectChange();
+				}
+				else {
+					numData = 1;
+					forceTwoDigit(numData); 
+    	        	select++;
+    	        	dataBuffer="";
+    	        	((SelectHourPanel) parent).selectChange();
+				}
+			}
+    		break;
+    	case 1:
+    		if(dataBuffer.length() == 1) {
+    			//On first digit, if it add a second, the number will be higher than 59
+    			if(numData > 5) {
+    				forceTwoDigit(numData);
+    	        	select++;
+    	        	dataBuffer="";
+    	        	((SelectHourPanel) parent).selectChange();
+    			}
+    			//First digit as 1 is available
+    			else {
+    				forceTwoDigit(numData);
+    			}
+    		}
+			else {
+				forceTwoDigit(numData); 
+	        	select++;
+	        	dataBuffer="";
+	        	((SelectHourPanel) parent).selectChange();
+			}
     		break;
     	case 2:
     		break;	
     	}
     }
-    
+    private void forceTwoDigit(int numData) {
+    	dataBuffer = String.valueOf(numData);
+    	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
+    	hourData[select].setText(dataBuffer);
+    }
     private boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
@@ -259,10 +319,6 @@ public class VirtualNumberKeyboard  extends JPanel{
         }
         return true;
     }
-    
-    private void selectChange() {
-		
-	}
 
 
 }
