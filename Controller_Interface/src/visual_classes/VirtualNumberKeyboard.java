@@ -46,6 +46,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     int keyPanHeight;
     int keyPanX;
     int keyPanY;
+    int textSize = 50;
 	private int rowY = 0;
 	private int alpha = 255;
 	private JPanel keyPanel;
@@ -100,8 +101,34 @@ public class VirtualNumberKeyboard  extends JPanel{
 		setBackground(new Color(0,0,0,200));
 		setLayout(null);
     }
+    
+    public VirtualNumberKeyboard(int width,int height,int text) {
+    	Dimension screenSize = os.setDimension();
+		screenWidth = (int)screenSize.getWidth();
+		screenHeight = (int)screenSize.getHeight();
+		keyPanWidth = width;
+		keyPanHeight = height;
+		textSize = text;
+		keyPanY = screenHeight - keyPanHeight;
+		setBackground(new Color(0,0,0,200));
+		setLayout(null);
+    }
 
     public void setParent(SelectHourPanel parent) {
+    	this.parent = parent;
+    	this.hourData = parent.hourData;
+        keyPanX = parent.getWidth()/2 - keyPanWidth/2;
+        setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
+        Color keyColor = getBackground();
+        select=0;
+        add(initRow(row1, getSize(),keyColor));
+        add(initRow(row2, getSize(),keyColor));
+        add(initRow(row3, getSize(),keyColor));
+        add(initRow(row4, getSize(),keyColor));
+        
+    }
+    
+    public void setParent(SelectDayHourPanel parent) {
     	this.parent = parent;
     	this.hourData = parent.hourData;
         keyPanX = parent.getWidth()/2 - keyPanWidth/2;
@@ -158,12 +185,10 @@ public class VirtualNumberKeyboard  extends JPanel{
     			}
     		});
             
-            button.setFont(new Font("Tahoma", Font.PLAIN, 50));
+            button.setFont(new Font("Tahoma", Font.PLAIN, textSize));
             int buttonX = compensationButtonX+i*(buttonWidth+innerButtonsGap);
             button.setBounds(buttonX,0,buttonWidth, buttonHeight);
             button.addActionListener(e -> actionListener(key));
-            
-  
             p.add(button);
         }
         int pX = outerButtonsGap;
@@ -196,12 +221,12 @@ public class VirtualNumberKeyboard  extends JPanel{
     		case LEFT_ARROW:
     			select=Math.max(select-1,0);
     			dataBuffer="";
-    			((SelectHourPanel) parent).selectChange();
+    			multiCastSelectChange();
     			break;
     		case RIGHT_ARROW:
     			select=Math.min(select+1,2);
     			dataBuffer="";
-    			((SelectHourPanel) parent).selectChange();
+    			multiCastSelectChange();
     			break;
     		case CLEAR:
     			if(select < 2)
@@ -211,7 +236,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     			dataBuffer="";
     			break;
     		case READY:
-    			((SelectHourPanel) parent).ready();
+    			((SelectHourPanel) parent).ready(); //// multi cast
     			break;
     		}
     	}
@@ -241,7 +266,7 @@ public class VirtualNumberKeyboard  extends JPanel{
 	    	dataBuffer = String.valueOf(numData);
 	    	forceTwoDigit(numData);
 	    	dataBuffer="";
-	    	((SelectHourPanel) parent).selectChange();
+	    	multiCastSelectChange();
     	}
     }
     
@@ -255,7 +280,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     				forceTwoDigit(numData);
     	        	select++;
     	        	dataBuffer="";
-    	        	((SelectHourPanel) parent).selectChange();
+    	        	multiCastSelectChange();
     			}
     			//First digit as 1 is available
     			else {
@@ -267,14 +292,14 @@ public class VirtualNumberKeyboard  extends JPanel{
 					forceTwoDigit(numData); 
     	        	select++;
     	        	dataBuffer="";
-    	        	((SelectHourPanel) parent).selectChange();
+    	        	multiCastSelectChange();
 				}
 				else {
 					numData = 1;
 					forceTwoDigit(numData); 
     	        	select++;
     	        	dataBuffer="";
-    	        	((SelectHourPanel) parent).selectChange();
+    	        	multiCastSelectChange();
 				}
 			}
     		break;
@@ -285,7 +310,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     				forceTwoDigit(numData);
     	        	select++;
     	        	dataBuffer="";
-    	        	((SelectHourPanel) parent).selectChange();
+    	        	multiCastSelectChange();
     			}
     			//First digit as 1 is available
     			else {
@@ -296,13 +321,28 @@ public class VirtualNumberKeyboard  extends JPanel{
 				forceTwoDigit(numData); 
 	        	select++;
 	        	dataBuffer="";
-	        	((SelectHourPanel) parent).selectChange();
+	        	multiCastSelectChange();
 			}
     		break;
     	case 2:
     		break;	
     	}
     }
+    
+    private void multiCastSelectChange() {
+    	if(parent instanceof SelectHourPanel)
+    		((SelectHourPanel) parent).selectChange();
+    	else
+    		((SelectDayHourPanel) parent).selectChange();
+    }
+    
+    private void multiCastReady() { ///////??????
+    	if(parent instanceof SelectHourPanel)
+    		((SelectHourPanel) parent).selectChange();
+    	else
+    		((SelectDayHourPanel) parent).selectChange();
+    }
+    
     private void forceTwoDigit(int numData) {
     	dataBuffer = String.valueOf(numData);
     	dataBuffer = dataBuffer.length() < 2? "0"+dataBuffer:dataBuffer;
