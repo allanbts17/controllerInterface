@@ -22,13 +22,13 @@ public class SelectDayHourPanel extends JPanel {
 	JLabel section = new JLabel();
 	JLabel colon = new JLabel(":");
 	JPanelBackground basePane = new JPanelBackground();
-	VirtualNumberKeyboard numKey = new VirtualNumberKeyboard(400,290,40);
+	VirtualNumberKeyboard numKey = new VirtualNumberKeyboard(400,305,40);
 	
 	ImageIcon baseIco = new ImageIcon(this.getClass().getResource("/icons/select_day_hour_base.png"));
 	int baseWidth;
 	int baseHeight;
 	int baseY;
-	int scale = 4;
+	int scale = 2;
 	public JLabel[] hourData = new JLabel[] {
 			hour,minute,section
 	};
@@ -41,22 +41,38 @@ public class SelectDayHourPanel extends JPanel {
 		private int width;
 		private int height;
 		private int textSize = 30;
-		private Color unpressedColor = new Color(37,103,174,178);
-		private Color pressedColor = new Color(37,103,174,89);
+		private boolean selected = false;
+		private Color pressedColor = new Color(37,103,174,250);
+		private Color unpressedColor = new Color(37,103,174,89);
+		private JLabel pressedLabel = new JLabel();
+		private JLabel unpressedLabel = new JLabel();
 		private JLabel text = new JLabel();
 		
 		public void setText(String text) {
 			this.text.setText(text);
 		}
 		
+		public boolean getSelected() {
+			return selected;
+		}
+		
+		private void changeBackground() {
+			if(selected) {
+				unpressedLabel.setVisible(false);
+				pressedLabel.setVisible(true);
+			}
+			else{
+				unpressedLabel.setVisible(true);
+				pressedLabel.setVisible(false);
+			}
+		}
 		public DayButton(int x, int y, int width, int height){
 			this.x = x;
 			this.y = y;
 			this.width = width;
 			this.height = height;
 			setBounds(x,y,width,height);
-			setBackground(unpressedColor);
-			setOpaque(true);
+			setOpaque(false);
 			setBorder(null);
 			setLayout(null);
 			//text setting
@@ -65,12 +81,33 @@ public class SelectDayHourPanel extends JPanel {
 			text.setVerticalAlignment(SwingConstants.CENTER);
 			text.setForeground(Color.WHITE);
 			text.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, textSize));
+			//Color labels
+			pressedLabel.setBackground(pressedColor);
+			pressedLabel.setVisible(false);
+			pressedLabel.setBounds(text.getBounds());
+			pressedLabel.setOpaque(true);
+			unpressedLabel.setBackground(unpressedColor);
+			unpressedLabel.setVisible(true);
+			unpressedLabel.setBounds(text.getBounds());
+			unpressedLabel.setOpaque(true);
+			
 			add(text);
+			add(pressedLabel);
+			add(unpressedLabel);
+			
+			addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					selected = !selected;
+					changeBackground();
+				}
+				
+			});
 		}
 	}
 	DayButton[] days = new DayButton[7];
 	String[] dayNames = new String[] {
-		"Dom","Lun","Mar","Mie","Jue","Vie","Sáb"	
+		"Dom","Lun","Mar","Mie","Jue","Vie","Sáb"
 	};
 	public SelectDayHourPanel() {
 		//Setting size parameters
@@ -91,9 +128,9 @@ public class SelectDayHourPanel extends JPanel {
 				setBackground(Color.RED);
 				
 				//Base setting
-				baseWidth = (int)Math.round(100+baseIco.getIconWidth()/scale);
-				baseHeight = (int)Math.round(-50+baseIco.getIconHeight()/scale);
-				baseY = (panelHeight/2) - (baseHeight/2)-90;
+				baseWidth = (int)Math.round(baseIco.getIconWidth()/scale);
+				baseHeight = (int)Math.round(baseIco.getIconHeight()/scale);
+				baseY = (panelHeight/2) - (baseHeight/2)-110;
 				//baseIco = new ImageIcon(baseIco.getImage()
 				//		.getScaledInstance(baseWidth, baseHeight,java.awt.Image.SCALE_SMOOTH));
 				basePane.setBounds((panelWidth/2)-(baseWidth/2),baseY,baseWidth,baseHeight);
@@ -102,7 +139,7 @@ public class SelectDayHourPanel extends JPanel {
 				basePane.setLayout(null);
 				
 				//Title setting
-				title.setBounds(30,15,450,35);
+				title.setBounds(10,10,450,35);
 				//title.setOpaque(true);
 				title.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 40));
 				title.setForeground(Color.BLACK);
@@ -132,8 +169,7 @@ public class SelectDayHourPanel extends JPanel {
 				int gap = 0;
 				int componentHeight = 70;
 				int componentsX = (baseWidth/2)-(numberWidth+gap+colonWidth+gap+numberWidth+sectionGap+sectionWidth)/2;
-				int componentsY = 120;
-				
+				int componentsY = 125;
 				int hourSize = 60;
 				//Hour
 				hourData[0].setText("12");
@@ -170,11 +206,13 @@ public class SelectDayHourPanel extends JPanel {
 				hourData[0].setBorder(border);
 				numKey.setParent(this);
 				
-				/*int KeyWidth = (int) numKey.getSize().getWidth();
-				int KeyHeight = (int) numKey.getSize().getHeight()-50;
-				numKey.setSize(KeyWidth,KeyHeight);*/
 				add(basePane);
 				add(numKey);
+				
+				JLabel lblNewLabel = new JLabel("New label");
+				lblNewLabel.setBackground(Color.BLUE);
+				lblNewLabel.setBounds(20, 20, 100, 40);
+				add(lblNewLabel);
 				
 				for(JLabel data: hourData) {
 					data.addMouseListener(new MouseAdapter() {
@@ -205,5 +243,4 @@ public class SelectDayHourPanel extends JPanel {
 	void ready() {
 		System.out.println("READY!: "+hourData[0].getText()+":"+hourData[1].getText()+" "+hourData[2].getText());
 	}
-
 }

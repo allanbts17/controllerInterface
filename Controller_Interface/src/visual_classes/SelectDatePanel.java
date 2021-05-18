@@ -315,7 +315,7 @@ public class SelectDatePanel extends JPanel {
 		calendarTitle.setOpaque(false);
 	}
 	private void monthCalendarDataSetting() {
-		System.out.println("Selected month: "+selectedMonth);
+		//System.out.println("Selected month: "+selectedMonth);
 		numberOfDays = daysInAMonth(selectedMonth,Integer.parseInt(selectedYear));
 		lastMonthNumberOfDays = daysInAMonth(previousMonth(selectedMonth,true),Integer.parseInt(selectedYear));
 		startingWeekDay = weekDay(1,selectedMonth,Integer.parseInt(selectedYear));

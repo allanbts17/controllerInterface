@@ -62,10 +62,10 @@ public class VirtualNumberKeyboard  extends JPanel{
      * Private class for storing key specification.
      */
 	//Special keys
-	private final String LEFT_ARROW = "ðŸ¢€";
-	private final String RIGHT_ARROW ="ðŸ¢‚";
-	private final String UP_ARROW ="ðŸ¢�";
-	private final String DOWN_ARROW ="ðŸ¢ƒ";
+	private final String LEFT_ARROW = "🡄";
+	private final String RIGHT_ARROW ="🡆";
+	private final String UP_ARROW ="🡅";
+	private final String DOWN_ARROW ="🡇";
 	private final String CLEAR ="âœ˜";
 	private final String READY ="âœ”";
 	
