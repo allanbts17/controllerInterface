@@ -35,13 +35,19 @@ public class SelectDatePanel extends JPanel {
 	JLabel calendarMonthYear = new JLabel();
 	JLabel leftArrow = new JLabel();
 	JLabel rightArrow = new JLabel();
-	int calendarY = 100;
+	JLabel lastPressed;
+	JButton siguienteBtn = new JButton();
+	int calendarY = 90;
 	int actualMonth;
 	int selectedMonth=0;
 	int actualDay;
 	String actualYear;
 	String selectedYear="";
 	
+	ImageIcon siguienteIconUnpressed = new ImageIcon(this.getClass().getResource("/icons/siguiente_btn_unpressed.png"));
+	ImageIcon siguienteIconPressed = new ImageIcon(this.getClass().getResource("/icons/siguiente_btn_pressed.png"));
+	int siguienteBtnWidth;
+	int siguienteBtnHeight;
 	//JLabel calendarDayLabel = new JLabel();
 	ArrayList<JPanel> calendarDays = new ArrayList<JPanel>();
 	
@@ -160,6 +166,20 @@ public class SelectDatePanel extends JPanel {
 		createCalendar();
 		setActionsToCalendar();
 		calendar.add(calendarBase);
+		
+		float scale = 1.5f;
+		siguienteBtnWidth = Math.round(150f*scale);
+		siguienteBtnHeight = Math.round(40f*scale);
+		int siguienteBtnX = (panelWidth/2)-(siguienteBtnWidth/2);
+		int siguenteBtnY = calendar.getY()+calendar.getHeight()+15;
+		siguienteIconUnpressed = new ImageIcon(siguienteIconUnpressed.getImage().getScaledInstance(siguienteBtnWidth, siguienteBtnHeight,java.awt.Image.SCALE_SMOOTH));
+		siguienteIconPressed = new ImageIcon(siguienteIconPressed.getImage().getScaledInstance(siguienteBtnWidth, siguienteBtnHeight,java.awt.Image.SCALE_SMOOTH));
+		siguienteBtn.setBounds(siguienteBtnX, siguenteBtnY, siguienteBtnWidth, siguienteBtnHeight);
+		siguienteBtn.setIcon(siguienteIconUnpressed);
+		siguienteBtn.setPressedIcon(siguienteIconPressed);
+		siguienteBtn.setBorder(null);
+		siguienteBtn.setContentAreaFilled(false);
+		add(siguienteBtn);
 		
 		add(calendar);
 	}

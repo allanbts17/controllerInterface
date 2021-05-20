@@ -125,7 +125,6 @@ public class StartSessionPanel extends JPanel {
 		
 		//Start button
 		inicio_btn = new JButton();		
-		inicio_btn.setFont(new Font("Alegreya Sans SC", Font.PLAIN, 25));
 		inicioBtnWidth = 150;
 		inicioBtnX = componentsX + componentsWidth/2 - inicioBtnWidth/2;
 		inicioIconUnpressed = new ImageIcon(inicioIconUnpressed.getImage().getScaledInstance(inicioBtnWidth, componentsHeight,java.awt.Image.SCALE_SMOOTH));
