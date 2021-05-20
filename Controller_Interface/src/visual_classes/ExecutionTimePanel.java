@@ -128,7 +128,7 @@ public class ExecutionTimePanel extends JPanel {
 					main.selectExecutionPane.setExtensionNameList(".toc");
 					break;
 				case CARRILLON:
-					main.selectExecutionPane.setType("la melodÃ­a");
+					main.selectExecutionPane.setType("la melodía");
 					main.selectExecutionPane.setExtensionNameList(".mp3");
 					break;
 				case BANDEO:
@@ -156,7 +156,8 @@ public class ExecutionTimePanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
-				//panelSwitch("exeTime",3);
+				main.atribute.time = MenuOptionsTime.REPETITIVAS;
+				main.menuNavegation.next(main.atribute);
 			}
 		});
 	}

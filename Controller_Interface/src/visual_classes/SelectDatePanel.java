@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.AbstractButton;
 import javax.swing.GroupLayout.Alignment;
 
+import useful_classes.MenuOptionsTime;
 import useful_classes.osChange;
 
 import java.awt.Color;
@@ -36,6 +37,7 @@ public class SelectDatePanel extends JPanel {
 	JLabel leftArrow = new JLabel();
 	JLabel rightArrow = new JLabel();
 	JLabel lastPressed;
+	ImageIcon lastIcon;
 	JButton siguienteBtn = new JButton();
 	int calendarY = 90;
 	int actualMonth;
@@ -125,6 +127,7 @@ public class SelectDatePanel extends JPanel {
 	JLabel overlapedCalendarDayLabel;
 	JLabel otherDay;
 	JPanel dayPane;
+	String message="";
 	int count=0;
 	/**
 	 * Create the panel.
@@ -190,6 +193,19 @@ public class SelectDatePanel extends JPanel {
 	}
 	
 	public void setActions() {
+		siguienteBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(!message.equals("")) {
+					main.dateForMessage = message;
+					System.out.println(main.dateForMessage);
+					main.menuNavegation.next(main.atribute);
+				}
+				message="";
+				lastPressed.setIcon(lastIcon);
+			}
+		});
+		
 		leftArrow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -198,6 +214,7 @@ public class SelectDatePanel extends JPanel {
 					setDateTitleText(false);
 					calendarMonthYear.setText(DateTitleText);
 					startToWriteDay = false;
+					message="";
 					monthCalendarDataSetting();	
 					otherMonthDaysFill();
 					fillCalendar();
@@ -230,6 +247,7 @@ public class SelectDatePanel extends JPanel {
 				setDateTitleText(false); //boolean useActual
 				calendarMonthYear.setText(DateTitleText);
 				startToWriteDay = false;
+				message="";
 				monthCalendarDataSetting();	
 				otherMonthDaysFill();
 				fillCalendar();
@@ -531,20 +549,19 @@ public class SelectDatePanel extends JPanel {
 				dayBtn.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						//JLabel calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+
 						JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
-						System.out.println(calendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+						message = calendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
+						System.out.println(message);
 					}
 					@Override
 					public void mousePressed(MouseEvent e) {
-						//JLabel dayBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[3];
+						if(lastPressed != null)
+							lastPressed.setIcon(lastIcon);
 						JLabel dayBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[3];
+						lastPressed = dayBtn;
+						lastIcon = (ImageIcon) dayBtn.getIcon();
 						dayBtn.setIcon(calendarDayPressedIco);
-					}
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						JLabel dayBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[3];
-						dayBtn.setIcon(calendarDayUnpressedIco);
 					}
 				});
 					
@@ -555,13 +572,15 @@ public class SelectDatePanel extends JPanel {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 							if(up) {
-								//JLabel calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+								
 								JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
-								System.out.println(calendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+								message = calendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
+								System.out.println(message);
 							}
 							else {
 								JLabel overlapedCalendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[1];
-								System.out.println(overlapedCalendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+								message = overlapedCalendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
+								System.out.println(message);
 							}
 						}
 						@Override
@@ -569,21 +588,21 @@ public class SelectDatePanel extends JPanel {
 							float x = e.getX();
 							float y = e.getY();
 							float yLimit = -((float)calendarDayHeight/(float)calendarDayWidth)*(x-(float)calendarDayWidth);
-							//JLabel multiBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[2];
+							if(lastPressed != null)
+								lastPressed.setIcon(lastIcon);
 							JLabel multiBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[2];
 							if(y < yLimit) {
 								up=true;
+								lastPressed = multiBtn;
+								lastIcon = (ImageIcon) multiBtn.getIcon();
 								multiBtn.setIcon(calendarUpDaySelectedIco);
 							}
 							else {
 								up=false;
+								lastPressed = multiBtn;
+								lastIcon = (ImageIcon) multiBtn.getIcon();
 								multiBtn.setIcon(calendarDownDaySelectedIco);
 							}
-						}
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							JLabel multiBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[2];
-							multiBtn.setIcon(calendarDoubleDayUnpressedIco);
 						}
 					});
 				}

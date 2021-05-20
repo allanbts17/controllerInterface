@@ -237,7 +237,7 @@ public class VirtualNumberKeyboard  extends JPanel{
     			dataBuffer="";
     			break;
     		case READY:
-    			((SelectHourPanel) parent).ready(); //// multi cast
+    			multiCastReady(); //// multi cast
     			break;
     		}
     	}
@@ -339,9 +339,9 @@ public class VirtualNumberKeyboard  extends JPanel{
     
     private void multiCastReady() { ///////??????
     	if(parent instanceof SelectHourPanel)
-    		((SelectHourPanel) parent).selectChange();
+    		((SelectHourPanel) parent).ready();
     	else
-    		((SelectDayHourPanel) parent).selectChange();
+    		((SelectDayHourPanel) parent).ready();
     }
     
     private void forceTwoDigit(int numData) {

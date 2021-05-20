@@ -53,6 +53,11 @@ public class MainPane extends JPanelBackground {
 	
 	//Keyboard
 	JPanel keyPan = new JPanel();
+	//
+	String message;
+	String dateForMessage;
+	String daysOfWeekForMessage;
+	String hourForMessage;
 	
 	//Buttons
 	CustomButton back_btn = new VisualElements().new CustomButton("back");
@@ -115,7 +120,9 @@ public class MainPane extends JPanelBackground {
 		principalPane.setMainPane(this);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
-		selectDatePane.setMainPane(this);			
+		selectDatePane.setMainPane(this);
+		selectHourPane.setMainPane(this);
+		selectDayHourPane.setMainPane(this);
 		dateAndHour.setMainPane(this);
 		virtualKeyboard.setFrame(frame);
 		

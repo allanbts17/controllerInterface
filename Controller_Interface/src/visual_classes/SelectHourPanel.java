@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import useful_classes.MenuOptionsTime;
 import useful_classes.osChange;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -24,6 +25,9 @@ public class SelectHourPanel extends JPanel {
 	JLabel minute = new JLabel();
 	JLabel section = new JLabel();
 	JLabel colon = new JLabel(":");
+	String baseHour = "01";
+	String baseMinutes = "00";
+	String baseSection = "p.m.";
 	JPanelBackground basePane = new JPanelBackground();
 	VirtualNumberKeyboard numKey = new VirtualNumberKeyboard();
 	
@@ -36,6 +40,7 @@ public class SelectHourPanel extends JPanel {
 			hour,minute,section
 	};
 	MatteBorder border = new MatteBorder(3, 0, 4, 0, new Color(14,160,250,200));
+	MainPane main;
 	osChange os = new osChange();
 	
 	public SelectHourPanel() {
@@ -85,7 +90,7 @@ public class SelectHourPanel extends JPanel {
 		int componentsX = (baseWidth/2)-(numberWidth+gap+colonWidth+gap+numberWidth+sectionGap+sectionWidth)/2;
 		int componentsY = 70;
 		//Hour
-		hourData[0].setText("12");
+		hourData[0].setText(baseHour);
 		hourData[0].setBounds(componentsX,componentsY,numberWidth,componentHeight);
 		hourData[0].setFont(new Font("DejaVu Sans Mono", Font.PLAIN, 80));
 		hourData[0].setOpaque(debugOpaque);
@@ -100,7 +105,7 @@ public class SelectHourPanel extends JPanel {
 		colon.setBackground(Color.RED);
 		basePane.add(colon);
 		//minutes
-		hourData[1].setText("30");
+		hourData[1].setText(baseMinutes);
 		hourData[1].setBounds(colon.getLocation().x+colonWidth+gap,componentsY,numberWidth,componentHeight);
 		hourData[1].setHorizontalAlignment(SwingConstants.LEFT);
 		hourData[1].setOpaque(debugOpaque);
@@ -108,7 +113,7 @@ public class SelectHourPanel extends JPanel {
 		hourData[1].setBackground(Color.RED);
 		basePane.add(hourData[1]);
 		//section
-		hourData[2].setText("p.m.");
+		hourData[2].setText(baseSection);
 		hourData[2].setBounds(minute.getLocation().x+numberWidth+sectionGap,componentsY,sectionWidth,componentHeight);
 		hourData[2].setHorizontalAlignment(SwingConstants.LEFT);
 		hourData[2].setOpaque(debugOpaque);
@@ -142,6 +147,9 @@ public class SelectHourPanel extends JPanel {
 			});
 		}
 	}
+	void setMainPane(MainPane main){
+		this.main = main;
+	}
 	
 	void selectChange() {
 		for(int i=0;i<3;i++) {
@@ -154,6 +162,27 @@ public class SelectHourPanel extends JPanel {
 	}
 	
 	void ready() {
-		System.out.println("READY!: "+hourData[0].getText()+":"+hourData[1].getText()+" "+hourData[2].getText());
+		main.hourForMessage = hourData[0].getText()+":"+hourData[1].getText()+hourData[2].getText();
+		System.out.println(main.hourForMessage);
+		switch(main.atribute.type) {
+		case TOQUES:
+			main.selectExecutionPane.setType("el toque");
+			main.selectExecutionPane.setExtensionNameList(".toc");
+			break;
+		case CARRILLON:
+			main.selectExecutionPane.setType("la melodía");
+			main.selectExecutionPane.setExtensionNameList(".mp3");
+			break;
+		case BANDEO:
+			main.selectExecutionPane.setType("la secuencia");
+			main.selectExecutionPane.setExtensionNameList(".sec");
+			break;
+		}
+		hourData[0].setText(baseHour);
+		hourData[1].setText(baseMinutes);
+		hourData[2].setText(baseSection);
+		main.selectExecutionPane.cleanButtonList();
+		main.selectExecutionPane.showButtonListAndSelectionSetting();
+		main.menuNavegation.next(main.atribute);
 	}
 }

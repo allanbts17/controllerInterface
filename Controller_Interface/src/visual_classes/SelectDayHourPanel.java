@@ -21,6 +21,9 @@ public class SelectDayHourPanel extends JPanel {
 	JLabel minute = new JLabel();
 	JLabel section = new JLabel();
 	JLabel colon = new JLabel(":");
+	String baseHour = "01";
+	String baseMinutes = "00";
+	String baseSection = "p.m.";
 	JPanelBackground basePane = new JPanelBackground();
 	VirtualNumberKeyboard numKey = new VirtualNumberKeyboard(400,305,40);
 	
@@ -32,14 +35,18 @@ public class SelectDayHourPanel extends JPanel {
 	public JLabel[] hourData = new JLabel[] {
 			hour,minute,section
 	};
+	String selectedDaysOfWeek="";
 	MatteBorder border = new MatteBorder(3, 0, 4, 0, new Color(14,160,250,200));
 	osChange os = new osChange();
+	MainPane main;
 	
 	private class DayButton extends JPanel{
 		private int x;
 		private int y;
 		private int width;
 		private int height;
+		private String dayNum="";
+		private String temporalDayNum;
 		private int textSize = 30;
 		private boolean selected = false;
 		private Color pressedColor = new Color(37,103,174,250);
@@ -56,6 +63,16 @@ public class SelectDayHourPanel extends JPanel {
 			return selected;
 		}
 		
+		public String getDayNum() {
+			return dayNum;
+		}
+		
+		public void reset() {
+			unpressedLabel.setVisible(true);
+			pressedLabel.setVisible(false);
+			selected=false;
+		}
+		
 		private void changeBackground() {
 			if(selected) {
 				unpressedLabel.setVisible(false);
@@ -66,7 +83,8 @@ public class SelectDayHourPanel extends JPanel {
 				pressedLabel.setVisible(false);
 			}
 		}
-		public DayButton(int x, int y, int width, int height){
+		public DayButton(int x, int y, int width, int height,int num){
+			this.temporalDayNum = String.valueOf(num);
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -99,6 +117,7 @@ public class SelectDayHourPanel extends JPanel {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					selected = !selected;
+					dayNum = selected? temporalDayNum:"";
 					changeBackground();
 				}
 				
@@ -155,7 +174,7 @@ public class SelectDayHourPanel extends JPanel {
 				
 				for(int i=0;i<7;i++) {
 					btnX = outerGap+(btnWidth+innerGap)*i;
-					 days[i] = new DayButton(btnX,btnY,btnWidth,btnHeight);
+					 days[i] = new DayButton(btnX,btnY,btnWidth,btnHeight,i+1);
 					 days[i].setText(dayNames[i]);
 					 basePane.add(days[i]);
 				}
@@ -172,7 +191,7 @@ public class SelectDayHourPanel extends JPanel {
 				int componentsY = 125;
 				int hourSize = 60;
 				//Hour
-				hourData[0].setText("12");
+				hourData[0].setText(baseHour);
 				hourData[0].setBounds(componentsX,componentsY,numberWidth,componentHeight);
 				hourData[0].setFont(new Font("DejaVu Sans Mono", Font.PLAIN, hourSize));
 				hourData[0].setOpaque(debugOpaque);
@@ -187,7 +206,7 @@ public class SelectDayHourPanel extends JPanel {
 				colon.setBackground(Color.RED);
 				basePane.add(colon);
 				//minutes
-				hourData[1].setText("30");
+				hourData[1].setText(baseMinutes);
 				hourData[1].setBounds(colon.getLocation().x+colonWidth+gap,componentsY,numberWidth,componentHeight);
 				hourData[1].setHorizontalAlignment(SwingConstants.LEFT);
 				hourData[1].setOpaque(debugOpaque);
@@ -195,7 +214,7 @@ public class SelectDayHourPanel extends JPanel {
 				hourData[1].setBackground(Color.RED);
 				basePane.add(hourData[1]);
 				//section
-				hourData[2].setText("p.m.");
+				hourData[2].setText(baseSection);
 				hourData[2].setBounds(minute.getLocation().x+numberWidth+sectionGap,componentsY,sectionWidth,componentHeight);
 				hourData[2].setHorizontalAlignment(SwingConstants.LEFT);
 				hourData[2].setOpaque(debugOpaque);
@@ -225,6 +244,10 @@ public class SelectDayHourPanel extends JPanel {
 				}
 	}
 	
+	public void setMainPane(MainPane main) {
+		this.main = main;
+	}
+	
 	void selectChange() {
 		for(int i=0;i<3;i++) {
 			if(i==numKey.select) {
@@ -234,8 +257,44 @@ public class SelectDayHourPanel extends JPanel {
 				hourData[i].setBorder(null);
 		}
 	}
-	
+	void fillSelectedWeekDaysWord() {
+		for(DayButton day: days) {
+			selectedDaysOfWeek += day.getDayNum();
+		}
+	}
+	void resetWeekDaySelection() {
+		for(DayButton day: days) {
+			day.reset();
+		}
+	}
 	void ready() {
-		System.out.println("READY!: "+hourData[0].getText()+":"+hourData[1].getText()+" "+hourData[2].getText());
+		fillSelectedWeekDaysWord();
+		if(!selectedDaysOfWeek.equals("")) {
+			selectedDaysOfWeek="";
+			main.daysOfWeekForMessage = selectedDaysOfWeek;
+			main.hourForMessage=hourData[0].getText()+":"+hourData[1].getText()+hourData[2].getText();
+			System.out.println(main.message);
+			switch(main.atribute.type) {
+			case TOQUES:
+				main.selectExecutionPane.setType("el toque");
+				main.selectExecutionPane.setExtensionNameList(".toc");
+				break;
+			case CARRILLON:
+				main.selectExecutionPane.setType("la melodía");
+				main.selectExecutionPane.setExtensionNameList(".mp3");
+				break;
+			case BANDEO:
+				main.selectExecutionPane.setType("la secuencia");
+				main.selectExecutionPane.setExtensionNameList(".sec");
+				break;
+			}
+			hourData[0].setText(baseHour);
+			hourData[1].setText(baseMinutes);
+			hourData[2].setText(baseSection);
+			resetWeekDaySelection();
+			main.selectExecutionPane.cleanButtonList();
+			main.selectExecutionPane.showButtonListAndSelectionSetting();
+			main.menuNavegation.next(main.atribute);
+		}
 	}
 }
