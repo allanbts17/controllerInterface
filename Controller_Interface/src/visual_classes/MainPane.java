@@ -120,8 +120,9 @@ public class MainPane extends JPanelBackground {
 		virtualKeyboard.setFrame(frame);
 		
 		//////////////
-		atribute.time = MenuOptionsTime.REPETITIVAS;
-		menuNavegation.goTo(atribute,4);	
+		/*selectDatePane.showCalendar();
+		atribute.time = MenuOptionsTime.PROGRAMADAS;
+		menuNavegation.goTo(atribute,4);	*/
 		
 		/////////////
 		

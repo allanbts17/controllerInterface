@@ -16,7 +16,7 @@ import useful_classes.osChange;
 
 public class SelectDayHourPanel extends JPanel {
 	//JPanel basePane = new JPanel();
-	JLabel title = new JLabel("Seleccione el día y la hora");
+	JLabel title = new JLabel("Seleccione los dias y la hora");
 	JLabel hour = new JLabel();
 	JLabel minute = new JLabel();
 	JLabel section = new JLabel();
@@ -139,7 +139,7 @@ public class SelectDayHourPanel extends JPanel {
 				basePane.setLayout(null);
 				
 				//Title setting
-				title.setBounds(10,10,450,35);
+				title.setBounds(10,10,500,35);
 				//title.setOpaque(true);
 				title.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 40));
 				title.setForeground(Color.BLACK);
@@ -208,11 +208,6 @@ public class SelectDayHourPanel extends JPanel {
 				
 				add(basePane);
 				add(numKey);
-				
-				JLabel lblNewLabel = new JLabel("New label");
-				lblNewLabel.setBackground(Color.BLUE);
-				lblNewLabel.setBounds(20, 20, 100, 40);
-				add(lblNewLabel);
 				
 				for(JLabel data: hourData) {
 					data.addMouseListener(new MouseAdapter() {

@@ -21,6 +21,7 @@ import javax.swing.GroupLayout.Alignment;
 import useful_classes.osChange;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,7 +30,7 @@ public class SelectDatePanel extends JPanel {
 	MainPane main;
 	JPanel calendar = new JPanel();
 	JLabel calendarBase = new JLabel();
-	JPanel calendarDay = new JPanel();
+	JPanel calendarDaysPane = new JPanel();
 	JPanel calendarTitle = new JPanel();
 	JLabel calendarMonthYear = new JLabel();
 	JLabel leftArrow = new JLabel();
@@ -84,8 +85,6 @@ public class SelectDatePanel extends JPanel {
 	//
 	int calendarDayWidth;
 	int calendarDayHeight;
-	JLabel multiBtn;
-	JLabel overlapedCalendarDayLabel;
 	
 	//Days
 	int day;
@@ -113,6 +112,14 @@ public class SelectDatePanel extends JPanel {
 	boolean startToWriteDay;
 	boolean blockPreviousMonths = true;
 	osChange os = new osChange();
+	
+	JLabel dayBtn;
+	JLabel multiBtn;
+	JLabel calendarDayLabel;
+	JLabel overlapedCalendarDayLabel;
+	JLabel otherDay;
+	JPanel dayPane;
+	int count=0;
 	/**
 	 * Create the panel.
 	 */
@@ -141,11 +148,19 @@ public class SelectDatePanel extends JPanel {
 		calendar.setBackground(Color.BLUE);
 		calendar.setLayout(null);
 		calendar.setOpaque(false);
-		
-		calendar.add(calendarTitle);
-		showCalendar();
-		calendar.add(calendarBase);
 		calendar.setBounds((panelWidth/2)-(calendarBaseWidth/2),calendarY,calendarBaseWidth,calendarBaseHeight);
+		calendar.add(calendarTitle);
+		
+		calendarDaysPane.setSize(calendar.getSize());
+		calendarDaysPane.setLocation(0,0);
+		calendarDaysPane.setLayout(null);
+		calendarDaysPane.setOpaque(false);
+		
+		calendar.add(calendarDaysPane);
+		createCalendar();
+		setActionsToCalendar();
+		calendar.add(calendarBase);
+		
 		add(calendar);
 	}
 	
@@ -424,50 +439,165 @@ public class SelectDatePanel extends JPanel {
 		return nextMonth;
 	}
 	
-	private void fillCalendar(){
-		int count=0;
-		int overlapedDayCount=overlapedDays-1;
-		boolean calendarDaysFilled = calendarDays.size() > 0;
+	private void createCalendar(){
 		for(int row=0;row<5;row++) {
-			for(int column=0;column<7;column++) {
-				JLabel dayBtn;
-				JLabel multiBtn;
-				JLabel calendarDayLabel;
-				JLabel overlapedCalendarDayLabel;
-				JPanel dayPane;
+			for(int column=0;column<7;column++) {			
+				dayBtn = new JLabel();
+				multiBtn = new JLabel();
+				calendarDayLabel = new JLabel();
+				overlapedCalendarDayLabel = new JLabel();
+				otherDay = new JLabel();
+				dayPane = new JPanel();
 				
-				if(calendarDaysFilled) {
-					dayBtn = (JLabel) calendarDays.get(count).getComponents()[3];
-					multiBtn = (JLabel) calendarDays.get(count).getComponents()[2];
-					overlapedCalendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[1];	
-					calendarDayLabel = (JLabel) calendarDays.get(count).getComponents()[0];
-					dayPane = calendarDays.get(count);
-				}
-				else {
-					dayBtn = new JLabel();
-					multiBtn = new JLabel();
-					calendarDayLabel = new JLabel();
-					overlapedCalendarDayLabel = new JLabel();
-					dayPane = new JPanel();
-					
-					dayPane.add(calendarDayLabel);
-					dayPane.add(overlapedCalendarDayLabel);
-					dayPane.add(multiBtn);
-					dayPane.add(dayBtn);
-					calendarDays.add(dayPane);
-					calendar.add(dayPane);
-				}
+				dayPane.add(calendarDayLabel);
+				dayPane.add(overlapedCalendarDayLabel);
+				dayPane.add(multiBtn);
+				dayPane.add(dayBtn);
+				dayPane.add(otherDay);
+				calendarDaysPane.add(dayPane);
+				//calendar.add(dayPane);
 				
+				//DayPane config
+				int x = sideGap+column*(calendarDayWidth+horizontalGap);
+				int y = upperGap+row*(calendarDayHeight+verticalGap);
+				dayPane.setBounds(x,y,calendarDayWidth,calendarDayHeight);
+				dayPane.setLayout(null);
+				dayPane.setOpaque(false);	
+				
+				//DayBtn config
 				dayBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
-				dayBtn.setBorder(null);
 				dayBtn.setOpaque(false);
+				dayBtn.setIcon(calendarDayUnpressedIco);
 				
-				
-				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
+				//calendarDayLabel config
 				int calendarDayLabelX = 5;
 				int calendarDayLabelY = 5;
 				calendarDayLabel.setBounds(calendarDayLabelX,calendarDayLabelY,30,20);
-								
+				calendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
+				calendarDayLabel.setForeground(Color.BLACK);
+				
+				//multibtn config
+				multiBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
+				multiBtn.setIcon(calendarDoubleDayUnpressedIco);
+				
+				//overlapedCalendarDayLabel config
+				overlapedCalendarDayLabel.setBounds(calendarDayWidth-calendarDayLabelX-30,calendarDayHeight-calendarDayLabelY-20,30,20);
+				overlapedCalendarDayLabel.setForeground(Color.BLACK);
+				overlapedCalendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
+				
+				//OtherDay config
+				otherDay.setBounds(0,0,calendarDayWidth,calendarDayHeight);
+				otherDay.setIcon(calendarDayOtherIco);
+			}
+		}
+	}
+	private void setActionsToCalendar() {
+		count=0;
+		JLabel otherDay;
+		JLabel dayBtn;
+		JLabel multiBtn;
+		JLabel overlapedCalendarDayLabel;	
+		JLabel calendarDayLabel;
+		JPanel dayPane;
+		for(int row=0;row<5;row++) {
+			for(int column=0;column<7;column++) {
+				otherDay = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[4];
+				dayBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[3];
+				multiBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[2];
+				overlapedCalendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[1];
+				calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+				dayPane = (JPanel) calendarDaysPane.getComponents()[count];
+					
+				dayBtn.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						//JLabel calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+						JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
+						System.out.println(calendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+					}
+					@Override
+					public void mousePressed(MouseEvent e) {
+						//JLabel dayBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[3];
+						JLabel dayBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[3];
+						dayBtn.setIcon(calendarDayPressedIco);
+					}
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						JLabel dayBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[3];
+						dayBtn.setIcon(calendarDayUnpressedIco);
+					}
+				});
+					
+				//Overlapped days
+				if(row==4) {					
+					multiBtn.addMouseListener(new MouseAdapter() {
+						boolean up;
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							if(up) {
+								//JLabel calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+								JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
+								System.out.println(calendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+							}
+							else {
+								JLabel overlapedCalendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[1];
+								System.out.println(overlapedCalendarDayLabel.getText()+" de "+selectedMonth+" de "+selectedYear);
+							}
+						}
+						@Override
+						public void mousePressed(MouseEvent e) {
+							float x = e.getX();
+							float y = e.getY();
+							float yLimit = -((float)calendarDayHeight/(float)calendarDayWidth)*(x-(float)calendarDayWidth);
+							//JLabel multiBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[2];
+							JLabel multiBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[2];
+							if(y < yLimit) {
+								up=true;
+								multiBtn.setIcon(calendarUpDaySelectedIco);
+							}
+							else {
+								up=false;
+								multiBtn.setIcon(calendarDownDaySelectedIco);
+							}
+						}
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							JLabel multiBtn = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[2];
+							multiBtn.setIcon(calendarDoubleDayUnpressedIco);
+						}
+					});
+				}
+				count++;
+			}
+		}
+	}
+	
+	private void fillCalendar(){
+		count=0;
+		int overlapedDayCount=overlapedDays-1;
+
+		JLabel otherDay;
+		JLabel dayBtn;
+		JLabel multiBtn;
+		JLabel overlapedCalendarDayLabel;	
+		JLabel calendarDayLabel;
+		JPanel dayPane;
+		for(int row=0;row<5;row++) {
+			for(int column=0;column<7;column++) {
+				otherDay = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[4];
+				dayBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[3];
+				multiBtn = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[2];
+				overlapedCalendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[1];
+				calendarDayLabel = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[0];
+				dayPane = (JPanel) calendarDaysPane.getComponents()[count];
+				
+				//
+				dayBtn.setVisible(true);
+				calendarDayLabel.setVisible(true);
+				overlapedCalendarDayLabel.setVisible(false);
+				multiBtn.setVisible(false);
+				otherDay.setVisible(false);
+				
 				//To define if write the actual month days or last/next month days
 				if(row==0 && column == startingWeekDay-1) startToWriteDay = true; 
 				else if (dayCount > numberOfDays) startToWriteDay = false;
@@ -480,35 +610,13 @@ public class SelectDatePanel extends JPanel {
 						//Switch to see multibtn
 						dayBtn.setVisible(false);
 						multiBtn.setVisible(true);
-						multiBtn.setBounds(0,0,calendarDayWidth,calendarDayHeight);
-						overlapedCalendarDayLabel.setBounds(calendarDayWidth-calendarDayLabelX-30,calendarDayHeight-calendarDayLabelY-20,30,20);
+						calendarDayLabel.setVisible(true);
+						overlapedCalendarDayLabel.setVisible(true);
+						otherDay.setVisible(false);
 						overlapedCalendarDayLabel.setForeground(Color.BLACK);
-						overlapedCalendarDayLabel.setText(Integer.toString(numberOfDays-overlapedDayCount));
-						overlapedCalendarDayLabel.setFont(new Font("Alegreya Sans SC Medium", Font.PLAIN, 25));
+						overlapedCalendarDayLabel.setText(Integer.toString(numberOfDays-overlapedDayCount));					
 						
-						multiBtn.setIcon(calendarDoubleDayUnpressedIco);
-						multiBtn.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
-								//System.out.println(overlapedCalendarDayLabel.getText());
-							}
-							@Override
-							public void mousePressed(MouseEvent e) {
-								float x = e.getX();
-								float y = e.getY();
-								float yLimit = -((float)calendarDayHeight/(float)calendarDayWidth)*(x-(float)calendarDayWidth);
-								//System.out.println("x: "+x+", y: "+y+", xLimit: "+yLimit+", width: "+calendarDayWidth+", height: "+calendarDayHeight);
-								
-								if(y < yLimit)
-									multiBtn.setIcon(calendarUpDaySelectedIco);
-								else
-									multiBtn.setIcon(calendarDownDaySelectedIco);
-							}
-							@Override
-							public void mouseReleased(MouseEvent e) {
-								multiBtn.setIcon(calendarDoubleDayUnpressedIco);
-							}
-						});
+						//multiBtn.setIcon(calendarDoubleDayUnpressedIco);
 						calendarDayLabel.setText(Integer.toString(dayCount));
 						calendarDayLabel.setForeground(Color.BLACK);
 						overlapedDayCount--;
@@ -517,6 +625,9 @@ public class SelectDatePanel extends JPanel {
 						Color dayColor;
 						dayBtn.setVisible(true);
 						multiBtn.setVisible(false);
+						calendarDayLabel.setVisible(true);
+						overlapedCalendarDayLabel.setVisible(false);
+						otherDay.setVisible(false);
 						dayBtn.setIcon(calendarDayUnpressedIco);
 						calendarDayLabel.setText(Integer.toString(dayCount));
 						if(isToday(dayCount))
@@ -524,50 +635,20 @@ public class SelectDatePanel extends JPanel {
 						else
 							dayColor = Color.BLACK;
 						calendarDayLabel.setForeground(dayColor);
-						
-						dayBtn.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
-								System.out.println(calendarDayLabel.getText());
-							}
-							@Override
-							public void mousePressed(MouseEvent e) {
-								dayBtn.setIcon(calendarDayPressedIco);
-							}
-							@Override
-							public void mouseReleased(MouseEvent e) {
-								dayBtn.setIcon(calendarDayUnpressedIco);
-							}
-						});
 					}
 					dayCount++;
 				}
 				else {
-					dayBtn.setIcon(calendarDayOtherIco);
-					dayBtn.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							//System.out.println(calendarDayLabel.getText());
-						}
-						@Override
-						public void mousePressed(MouseEvent e) {
-							dayBtn.setIcon(calendarDayOtherIco);
-						}
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							dayBtn.setIcon(calendarDayOtherIco);
-						}
-					});
+					otherDay.setVisible(true);
+					dayBtn.setVisible(false);
+					multiBtn.setVisible(false);
+					calendarDayLabel.setVisible(true);
+					overlapedCalendarDayLabel.setVisible(false);
+					otherDay.setIcon(calendarDayOtherIco);
 					calendarDayLabel.setText(Integer.toString(otherMonthDays[otherMonthDayCount]));
 					calendarDayLabel.setForeground(new Color(0,0,0,120));
 					otherMonthDayCount++;
-				}
-				
-				int x = sideGap+column*(calendarDayWidth+horizontalGap);
-				int y = upperGap+row*(calendarDayHeight+verticalGap);
-				dayPane.setBounds(x,y,calendarDayWidth,calendarDayHeight);
-				dayPane.setLayout(null);
-				dayPane.setOpaque(false);		
+				}	
 				count++;			
 			}
 		}
