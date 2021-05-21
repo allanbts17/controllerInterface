@@ -92,6 +92,26 @@ public class FileHandler {
 		  return txt;
 	  }
 	  
+	  public String[] readFileLine() {
+		  String txt="";
+		  String[] lines = null;
+		  try {
+	            FileReader reader = new FileReader(filename);
+	            BufferedReader bufferedReader = new BufferedReader(reader);
+	           
+	            String line;
+	            while ((line = bufferedReader.readLine()) != null) {
+	                if(debug) System.out.println(line);
+	                txt += line+"\n";
+	            }
+	            reader.close();
+	            lines = txt.split("\n");
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		  return lines;
+	  }
+	  
 	  public String readFileLine(int line_number) {
 		  String txt="";
 		  String line="";

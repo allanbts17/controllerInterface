@@ -1,10 +1,14 @@
 package visual_classes;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
+import useful_classes.FileHandler;
 import useful_classes.osChange;
 
 import javax.swing.ImageIcon;
@@ -13,6 +17,9 @@ import javax.swing.JLabel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class PrincipalPanel extends JPanel {
 	JButton nuevoBtn = new JButton();
@@ -21,6 +28,7 @@ public class PrincipalPanel extends JPanel {
 	JButton cambiarContrasenaBtn = new JButton();
 	JPanel container = new JPanel();
 	JLabel base = new JLabel();
+	JLabel execution;
 	JLabel scrollLabels = new JLabel();
 	JLabel scrollLabelsContainer = new JLabel();
 	JLabel scrollBar = new JLabel();
@@ -63,6 +71,7 @@ public class PrincipalPanel extends JPanel {
 	int baseWidth;
 	int baseHeight;
 	//ScrollLabelsContainer
+	int scrollLabelsContainerGap;
 	int scrollLabelsContainerX;
 	int scrollLabelsContainerY;
 	int scrollLabelsContainerWidth;
@@ -72,6 +81,12 @@ public class PrincipalPanel extends JPanel {
 	int scrollLabelsY;
 	int scrollLabelsWidth;
 	int scrollLabelsHeight;
+	//execution
+	int executionGap;
+	int executionX;
+	int executionY;
+	int executionWidth;
+	int executionHeight;
 	// ScrollBar
 	int scrollBarX;
 	int scrollBarY;
@@ -95,7 +110,11 @@ public class PrincipalPanel extends JPanel {
 	int individualLabelWidth;
 	int individualLabelHeight;
 
-	
+	ArrayList<String> todoNames = new ArrayList<String>();
+	ArrayList<String> toquesNames = new ArrayList<String>();
+	ArrayList<String> melodiasNames = new ArrayList<String>();
+	ArrayList<String> secuenciasNames = new ArrayList<String>();
+	FileHandler executions = new FileHandler();
 	osChange os = new osChange();
 	MainPane main;
 	/**
@@ -124,7 +143,6 @@ public class PrincipalPanel extends JPanel {
 		container.setBorder(null);
 		container.setOpaque(false);
 		container.setBounds(containerX,containerY,containerWidth,containerHeight);
-		add(container);
 		
 		//Tabs
 		tabsX = 0;
@@ -132,7 +150,6 @@ public class PrincipalPanel extends JPanel {
 		tabsWidth = (int)Math.round(tabsTodo.getIconWidth()/scale);
 		tabsHeight= (int)Math.round(tabsTodo.getIconHeight()/scale);
 		tabs.setBounds(tabsX,tabsY,tabsWidth,tabsHeight);
-		container.add(tabs);
 		
 		//Base
 		baseX = 0;
@@ -140,13 +157,22 @@ public class PrincipalPanel extends JPanel {
 		baseWidth = (int)Math.round(baseIco.getIconWidth()/scale);
 		baseHeight = (int)Math.round(baseIco.getIconHeight()/scale);
 		base.setBounds(baseX,baseY,baseWidth,baseHeight);
-		container.add(base);
 		
 		//ScrollLabelsContainer
-		scrollLabelsContainerX = 0;
-		scrollLabelsContainerY = 0;
-		scrollLabelsContainerWidth = 0;
-		scrollLabelsContainerHeight = 0;
+		scrollLabelsContainerGap = 10;
+		scrollLabelsContainerX = scrollLabelsContainerGap;
+		scrollLabelsContainerY = baseY+scrollLabelsContainerGap;
+		scrollLabelsContainerWidth = (int) Math.round(baseWidth - scrollLabelsContainerGap * 2);
+		scrollLabelsContainerHeight = (int) Math.round(baseHeight - scrollLabelsContainerGap * 2);
+		scrollLabelsContainer.setBounds(scrollLabelsContainerX,scrollLabelsContainerY,scrollLabelsContainerWidth,scrollLabelsContainerHeight);
+		//scrollLabelsContainer.setOpaque(true);
+		
+		//ScrollLabels
+		scrollLabelsX = 0;
+		scrollLabelsY = 0;
+		scrollLabelsWidth = scrollLabelsContainerWidth;
+		scrollLabelsHeight = scrollLabelsContainerHeight;
+		scrollLabels.setBounds(scrollLabelsX,scrollLabelsY,scrollLabelsWidth,scrollLabelsHeight);
 		
 		//Buttons
 		buttonsGap = 20;
@@ -204,8 +230,6 @@ public class PrincipalPanel extends JPanel {
 		cambiarContrasenaBtn.setIcon(cambiarContrasenaIcoUnpressed);
 		cambiarContrasenaBtn.setPressedIcon(cambiarContrasenaIcoPressed);
 		
-		
-		
 		//nuevo
 		nuevoBtn.setBorder(null);
 		nuevoBtn.setContentAreaFilled(false);
@@ -229,11 +253,76 @@ public class PrincipalPanel extends JPanel {
 		cambiarContrasenaBtn.setContentAreaFilled(false);
 		cambiarContrasenaBtn.setBounds(buttonsX, cambiarContrasenaY, buttonsWidth, buttonsHeight);
 		add(cambiarContrasenaBtn);
+		
+		fillNameList();
+		showExecutionList(toquesNames);
+		
+		add(container);
+		container.add(tabs);
+		container.add(scrollLabelsContainer);
+		container.add(base);
+		scrollLabelsContainer.add(scrollLabels);
 	}
 	
 	public void setMainPane(MainPane main) {
 		this.main = main;
 		setActions();
+	}
+	private void fillNameList() {
+		String list;
+		String[] lines;
+		
+		executions.setFilename("toques.int");
+		list = executions.readFile();
+		lines = executions.readFileLine();
+		for(String line: lines)
+			toquesNames.add(line);
+		
+		executions.setFilename("melodias.int");
+		list = executions.readFile();
+		lines = executions.readFileLine();
+		for(String line: lines)
+			toquesNames.add(line);
+		
+		executions.setFilename("secuencias.int");
+		list = executions.readFile();
+		lines = executions.readFileLine();
+		for(String line: lines)
+			toquesNames.add(line);
+		
+		todoNames.addAll(toquesNames);
+		todoNames.addAll(melodiasNames);
+		todoNames.addAll(secuenciasNames);
+		
+		Collections.sort(todoNames);
+		/*for(int i=0;i<todoNames.size();i++) {
+			System.out.println(todoNames.get(i));
+		}*/
+	}
+	
+	public void showExecutionList(ArrayList<String> nameList) {
+		for (int i = 0; i < nameList.size(); i++) {
+			executionSetting(i,nameList.get(i));
+		}
+	}
+	
+	private void executionSetting(int iteration,String text) {
+		//execution
+		execution = new JLabel();
+		executionGap = 0;
+		executionWidth=scrollLabelsWidth;
+		executionHeight=45;
+		executionX=0;
+		executionY=(executionHeight+executionGap)*iteration;
+		execution.setText(text);
+		execution.setFont(new Font("Quicksand Medium", Font.PLAIN, executionHeight - 15));
+		execution.setHorizontalAlignment(SwingConstants.LEFT);
+		execution.setVerticalAlignment(SwingConstants.CENTER);
+		execution.setForeground(Color.BLACK);
+		execution.setBackground(Color.BLUE);
+		//execution.setOpaque(true);
+		execution.setBounds(executionX,executionY,executionWidth,executionHeight);
+		scrollLabels.add(execution);
 	}
 	
 	private void tabSelect(int tabNumber){
@@ -267,14 +356,18 @@ public class PrincipalPanel extends JPanel {
 				int x = e.getX();
 				System.out.println("x: "+x);
 				int tabNumber;
-				if(x<=90)
+				if(x<=90) {
 					tabNumber = 0;
-				else if(x<=234)
+				}
+				else if(x<=234) {
 					tabNumber = 1;
-				else if(x<=407)
+				}
+				else if(x<=407) {
 					tabNumber = 2;
-				else
+				}
+				else {
 					tabNumber = 3;
+				}
 				tabSelect(tabNumber);
 			}
 		});
