@@ -35,9 +35,13 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon selectionIco = new ImageIcon(this.getClass().getResource("/icons/element_select.png"));
 	ImageIcon scrollBarIco = new ImageIcon(this.getClass().getResource("/icons/scroll_bar.png"));
 	ImageIcon nuevoBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/nuevo_btn_unpressed.png"));
+	ImageIcon nuevoBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/nuevo_btn_pressed.png"));
 	ImageIcon editarBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/editar_btn_unpressed.png"));
+	ImageIcon editarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/editar_btn_pressed.png"));
 	ImageIcon eliminarBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_unpressed.png"));
-	ImageIcon cambarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_unpressed.png"));
+	ImageIcon eliminarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_pressed.png"));	
+	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_unpressed.png"));
+	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_pressed.png"));
 	int scale = 2;
 	//Buttons
 	int buttonsGap;
@@ -180,17 +184,27 @@ public class PrincipalPanel extends JPanel {
 		selectionIco = new ImageIcon(selectionIco.getImage().getScaledInstance(selectionWidth, selectionHeight,java.awt.Image.SCALE_SMOOTH));
 		scrollBarIco = new ImageIcon(scrollBarIco.getImage().getScaledInstance(baseWidth, baseHeight,java.awt.Image.SCALE_SMOOTH));
 		nuevoBtnIcoUnpressed = new ImageIcon(nuevoBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		nuevoBtnIcoPressed = new ImageIcon(nuevoBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		editarBtnIcoUnpressed = new ImageIcon(editarBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		editarBtnIcoPressed = new ImageIcon(editarBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		eliminarBtnIcoUnpressed = new ImageIcon(eliminarBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
-		cambarContrasenaIcoUnpressed = new ImageIcon(cambarContrasenaIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		eliminarBtnIcoPressed = new ImageIcon(eliminarBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		cambiarContrasenaIcoUnpressed = new ImageIcon(cambiarContrasenaIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		cambiarContrasenaIcoPressed = new ImageIcon(cambiarContrasenaIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		
 		//Icon set
-		tabs.setIcon(tabsToques);
+		tabSelect(0);
 		base.setIcon(baseIco);
 		nuevoBtn.setIcon(nuevoBtnIcoUnpressed);
+		nuevoBtn.setPressedIcon(nuevoBtnIcoPressed);
 		editarBtn.setIcon(editarBtnIcoUnpressed);
+		editarBtn.setPressedIcon(editarBtnIcoPressed);
 		eliminarBtn.setIcon(eliminarBtnIcoUnpressed);
-		cambiarContrasenaBtn.setIcon(cambarContrasenaIcoUnpressed);
+		eliminarBtn.setPressedIcon(eliminarBtnIcoPressed);
+		cambiarContrasenaBtn.setIcon(cambiarContrasenaIcoUnpressed);
+		cambiarContrasenaBtn.setPressedIcon(cambiarContrasenaIcoPressed);
+		
+		
 		
 		//nuevo
 		nuevoBtn.setBorder(null);
@@ -222,11 +236,46 @@ public class PrincipalPanel extends JPanel {
 		setActions();
 	}
 	
+	private void tabSelect(int tabNumber){
+		switch(tabNumber) {
+		case 0:
+			tabs.setIcon(tabsTodo);
+			break;
+		case 1:
+			tabs.setIcon(tabsToques);
+			break;
+		case 2:
+			tabs.setIcon(tabsMelodias);
+			break;
+		case 3:
+			tabs.setIcon(tabsSecuencias);
+			break;
+		}
+	}
+	
 	private void setActions() {
 		nuevoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				main.menuNavegation.next(main.atribute);
+			}
+		});
+		
+		tabs.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				System.out.println("x: "+x);
+				int tabNumber;
+				if(x<=90)
+					tabNumber = 0;
+				else if(x<=234)
+					tabNumber = 1;
+				else if(x<=407)
+					tabNumber = 2;
+				else
+					tabNumber = 3;
+				tabSelect(tabNumber);
 			}
 		});
 	}
