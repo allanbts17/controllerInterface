@@ -44,6 +44,12 @@ public class MenuNavegation {
 		panelSwitch();
 	}
 	
+	public void goToMain(MenuAtributes atribute) {
+		menu.setLevel(1);
+		itemName = menu.inLevelItemSelection(atribute);
+		panelSwitch();
+	}
+	
 	public void goTo(MenuAtributes atribute, int level) {
 		menu.setLevel(level);
 		itemName = menu.inLevelItemSelection(atribute);

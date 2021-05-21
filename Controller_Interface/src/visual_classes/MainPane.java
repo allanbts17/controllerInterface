@@ -120,6 +120,7 @@ public class MainPane extends JPanelBackground {
 		principalPane.setMainPane(this);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
+		selectExecutionPane.setMainPane(this);
 		selectDatePane.setMainPane(this);
 		selectHourPane.setMainPane(this);
 		selectDayHourPane.setMainPane(this);

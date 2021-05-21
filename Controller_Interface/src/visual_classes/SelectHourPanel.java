@@ -181,6 +181,8 @@ public class SelectHourPanel extends JPanel {
 		hourData[0].setText(baseHour);
 		hourData[1].setText(baseMinutes);
 		hourData[2].setText(baseSection);
+		numKey.select=0;
+		selectChange();
 		main.selectExecutionPane.cleanButtonList();
 		main.selectExecutionPane.showButtonListAndSelectionSetting();
 		main.menuNavegation.next(main.atribute);

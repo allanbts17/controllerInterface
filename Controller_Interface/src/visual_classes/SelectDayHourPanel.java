@@ -270,8 +270,8 @@ public class SelectDayHourPanel extends JPanel {
 	void ready() {
 		fillSelectedWeekDaysWord();
 		if(!selectedDaysOfWeek.equals("")) {
-			selectedDaysOfWeek="";
 			main.daysOfWeekForMessage = selectedDaysOfWeek;
+			selectedDaysOfWeek="";
 			main.hourForMessage=hourData[0].getText()+":"+hourData[1].getText()+hourData[2].getText();
 			System.out.println(main.message);
 			switch(main.atribute.type) {
@@ -291,6 +291,8 @@ public class SelectDayHourPanel extends JPanel {
 			hourData[0].setText(baseHour);
 			hourData[1].setText(baseMinutes);
 			hourData[2].setText(baseSection);
+			numKey.select=0;
+			selectChange();
 			resetWeekDaySelection();
 			main.selectExecutionPane.cleanButtonList();
 			main.selectExecutionPane.showButtonListAndSelectionSetting();
