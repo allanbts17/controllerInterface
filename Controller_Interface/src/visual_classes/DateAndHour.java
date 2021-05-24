@@ -148,7 +148,7 @@ public class DateAndHour extends JPanel {
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "SÃ¡bado";
+            case 7: letraD = "Sábado";
                 break;
         }
 

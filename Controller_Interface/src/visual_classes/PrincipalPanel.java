@@ -1,8 +1,10 @@
 package visual_classes;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.MouseInfo;
 import java.awt.Toolkit;
 
 import javax.swing.JPanel;
@@ -11,15 +13,20 @@ import javax.swing.SwingConstants;
 import useful_classes.FileHandler;
 import useful_classes.osChange;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class PrincipalPanel extends JPanel {
 	JButton nuevoBtn = new JButton();
@@ -28,9 +35,10 @@ public class PrincipalPanel extends JPanel {
 	JButton cambiarContrasenaBtn = new JButton();
 	JPanel container = new JPanel();
 	JLabel base = new JLabel();
-	JLabel execution;
-	JLabel scrollLabels = new JLabel();
-	JLabel scrollLabelsContainer = new JLabel();
+	
+	JPanel execution;
+	JPanel scrollLabels = new JPanel();
+	JPanel scrollLabelsContainer = new JPanel();
 	JLabel scrollBar = new JLabel();
 	JLabel tabs = new JLabel();
 	JLabel selection = new JLabel();
@@ -51,6 +59,9 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_unpressed.png"));
 	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_pressed.png"));
 	int scale = 2;
+	boolean executionPressed = false;
+	boolean scrollBarPressed = false;
+	int scrollMoveY = 0;
 	//Buttons
 	int buttonsGap;
 	int buttonsX;
@@ -109,7 +120,10 @@ public class PrincipalPanel extends JPanel {
 	int individualLabelY;
 	int individualLabelWidth;
 	int individualLabelHeight;
-
+	
+	String mes[] = {"enero", "febrero", "marzo", "abril", 
+			"mayo", "junio", "julio", "agosto", "septiembre", 
+			"octubre", "noviembre", "diciembre"};
 	ArrayList<String> todoNames = new ArrayList<String>();
 	ArrayList<String> toquesNames = new ArrayList<String>();
 	ArrayList<String> melodiasNames = new ArrayList<String>();
@@ -164,6 +178,8 @@ public class PrincipalPanel extends JPanel {
 		scrollLabelsContainerY = baseY+scrollLabelsContainerGap;
 		scrollLabelsContainerWidth = (int) Math.round(baseWidth - scrollLabelsContainerGap * 2);
 		scrollLabelsContainerHeight = (int) Math.round(baseHeight - scrollLabelsContainerGap * 2);
+		scrollLabelsContainer.setLayout(null);
+		scrollLabelsContainer.setOpaque(false);
 		scrollLabelsContainer.setBounds(scrollLabelsContainerX,scrollLabelsContainerY,scrollLabelsContainerWidth,scrollLabelsContainerHeight);
 		//scrollLabelsContainer.setOpaque(true);
 		
@@ -172,7 +188,15 @@ public class PrincipalPanel extends JPanel {
 		scrollLabelsY = 0;
 		scrollLabelsWidth = scrollLabelsContainerWidth;
 		scrollLabelsHeight = scrollLabelsContainerHeight;
+		scrollLabels.setLayout(null);
+		scrollLabels.setOpaque(false);
 		scrollLabels.setBounds(scrollLabelsX,scrollLabelsY,scrollLabelsWidth,scrollLabelsHeight);
+		
+		//Execution
+		executionGap = 10;
+		executionWidth=scrollLabelsWidth;
+		executionHeight=60;
+		executionX=0;
 		
 		//Buttons
 		buttonsGap = 20;
@@ -206,7 +230,6 @@ public class PrincipalPanel extends JPanel {
 		tabsToques = new ImageIcon(tabsToques.getImage().getScaledInstance(tabsWidth, tabsHeight,java.awt.Image.SCALE_SMOOTH));
 		tabsMelodias = new ImageIcon(tabsMelodias.getImage().getScaledInstance(tabsWidth, tabsHeight,java.awt.Image.SCALE_SMOOTH));
 		tabsSecuencias = new ImageIcon(tabsSecuencias.getImage().getScaledInstance(tabsWidth, tabsHeight,java.awt.Image.SCALE_SMOOTH));
-		
 		selectionIco = new ImageIcon(selectionIco.getImage().getScaledInstance(selectionWidth, selectionHeight,java.awt.Image.SCALE_SMOOTH));
 		scrollBarIco = new ImageIcon(scrollBarIco.getImage().getScaledInstance(baseWidth, baseHeight,java.awt.Image.SCALE_SMOOTH));
 		nuevoBtnIcoUnpressed = new ImageIcon(nuevoBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
@@ -220,6 +243,7 @@ public class PrincipalPanel extends JPanel {
 		
 		//Icon set
 		tabSelect(0);
+		scrollBar.setIcon(scrollBarIco);
 		base.setIcon(baseIco);
 		nuevoBtn.setIcon(nuevoBtnIcoUnpressed);
 		nuevoBtn.setPressedIcon(nuevoBtnIcoPressed);
@@ -255,12 +279,13 @@ public class PrincipalPanel extends JPanel {
 		add(cambiarContrasenaBtn);
 		
 		fillNameList();
-		showExecutionList(toquesNames);
+		showExecutionList(todoNames);
 		
 		add(container);
 		container.add(tabs);
 		container.add(scrollLabelsContainer);
 		container.add(base);
+		scrollLabelsContainer.add(scrollBar);
 		scrollLabelsContainer.add(scrollLabels);
 	}
 	
@@ -275,20 +300,65 @@ public class PrincipalPanel extends JPanel {
 		executions.setFilename("toques.int");
 		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines)
+		for(String line: lines) {
+			String[] parts = line.split(";",3);
+			if(parts[0].contains("/")) {
+				String[] date = parts[0].split("/");
+				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
+			}
+			else {
+				line="";
+				for(int i=0;i<parts[0].length();i++) {
+					line += dayWeekNumberToName(parts[0].charAt(i));
+					if(i<parts[0].length()-1)
+						line+=", ";
+				}
+				line += ";"+parts[1] + ";"+ parts[2];
+			}
 			toquesNames.add(line);
+		}
 		
 		executions.setFilename("melodias.int");
 		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines)
-			toquesNames.add(line);
+		for(String line: lines) {
+			String[] parts = line.split(";",3);
+			if(parts[0].contains("/")) {
+				String[] date = parts[0].split("/");
+				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
+			}
+			else {
+				line="";
+				for(int i=0;i<parts[0].length();i++) {
+					line += dayWeekNumberToName(parts[0].charAt(i));
+					if(i<parts[0].length()-1)
+						line+=", ";
+				}
+				line += ";"+parts[1] + ";"+ parts[2];
+			}
+			melodiasNames.add(line);
+		}
 		
 		executions.setFilename("secuencias.int");
 		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines)
-			toquesNames.add(line);
+		for(String line: lines) {
+			String[] parts = line.split(";",3);
+			if(parts[0].contains("/")) {
+				String[] date = parts[0].split("/");
+				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
+			}
+			else {
+				line="";
+				for(int i=0;i<parts[0].length();i++) {
+					line += dayWeekNumberToName(parts[0].charAt(i));
+					if(i<parts[0].length()-1)
+						line+=", ";
+				}
+				line += ";"+parts[1] + ";"+ parts[2];
+			}
+			secuenciasNames.add(line);
+		}
 		
 		todoNames.addAll(toquesNames);
 		todoNames.addAll(melodiasNames);
@@ -300,29 +370,200 @@ public class PrincipalPanel extends JPanel {
 		}*/
 	}
 	
+	private String dayWeekNumberToName (char c)
+    {     
+		String letraD = ""; 
+        switch (c){
+            case '1': letraD = "Dom";
+                break;
+            case '2': letraD = "Lun";
+                break;
+            case '3': letraD = "Mar";
+                break;
+            case '4': letraD = "Mie";
+                break;
+            case '5': letraD = "Jue";
+                break;
+            case '6': letraD = "Vie";
+                break;
+            case '7': letraD = "Sáb";
+                break;
+        }
+        return letraD;
+    }
+	
 	public void showExecutionList(ArrayList<String> nameList) {
+		scrollLabelsHeight = (executionHeight+executionGap)*nameList.size()-executionGap;
+		scrollLabels.setBounds(scrollLabelsX, scrollLabelsY, scrollLabelsWidth, scrollLabelsHeight);
 		for (int i = 0; i < nameList.size(); i++) {
 			executionSetting(i,nameList.get(i));
+			executionActionListener();
 		}
+		scrollBarSetting();
 	}
 	
 	private void executionSetting(int iteration,String text) {
 		//execution
-		execution = new JLabel();
-		executionGap = 0;
-		executionWidth=scrollLabelsWidth;
-		executionHeight=45;
-		executionX=0;
+		JLabel nameUp = new JLabel();
+		JLabel nameDown = new JLabel();
+		JLabel back = new JLabel();
+		execution = new JPanel();
+		execution.setLayout(null);
+		execution.setOpaque(false);
 		executionY=(executionHeight+executionGap)*iteration;
-		execution.setText(text);
-		execution.setFont(new Font("Quicksand Medium", Font.PLAIN, executionHeight - 15));
-		execution.setHorizontalAlignment(SwingConstants.LEFT);
-		execution.setVerticalAlignment(SwingConstants.CENTER);
-		execution.setForeground(Color.BLACK);
 		execution.setBackground(Color.BLUE);
-		//execution.setOpaque(true);
 		execution.setBounds(executionX,executionY,executionWidth,executionHeight);
+		Font font = new Font("Quicksand Medium", Font.BOLD, (int)Math.round((executionHeight - 10)*1f/2f));
+		String textParts[] = text.split(";",3);
+		String outText = textParts[0]+" "+textParts[1];
+		
+		//back.setBackground(new Color(255,255,255,50));
+		back.setBackground(new Color(0,0,0,10));
+		back.setLocation(0,0);
+		back.setSize(execution.getSize());
+		back.setOpaque(true);
+		nameUp.setFont(font);
+		nameUp.setHorizontalAlignment(SwingConstants.LEFT);
+		nameUp.setVerticalAlignment(SwingConstants.CENTER);
+		nameUp.setForeground(new Color(0,42,53));
+		nameUp.setSize(execution.getWidth(),(int)Math.round(execution.getHeight()*1f/2f));
+		nameUp.setLocation(0,0);
+		nameUp.setText(outText);
+		
+		nameDown.setFont(font);
+		nameDown.setHorizontalAlignment(SwingConstants.LEFT);
+		nameDown.setVerticalAlignment(SwingConstants.CENTER);
+		nameDown.setForeground(nameUp.getForeground());
+		nameDown.setSize(nameUp.getSize());
+		nameDown.setLocation(0,nameDown.getHeight());	
+		nameDown.setText(textParts[2]);	
+		
+		execution.add(nameUp);
+		execution.add(nameDown);
+		execution.add(back);
 		scrollLabels.add(execution);
+	}
+	
+	private void executionActionListener() {
+		execution.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				executionPressed = true;
+				scrollMoveY = MouseInfo.getPointerInfo().getLocation().y;
+				//System.out.println("Touch pressed: "+ scrollMoveY);
+				//System.out.println(((JLabel) ((JPanel) e.getSource()).getComponents()[0]).getText());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				executionPressed = false;
+				// System.out.println("Touch released: "+MouseInfo.getPointerInfo().getLocation().y);
+			}
+
+	/*		@Override
+			public void mouseClicked(MouseEvent e) {
+				// System.out.println("Touch clicked");
+				int relativeMouse = Math.abs(MouseInfo.getPointerInfo().getLocation().y
+						- (scrollButtons.getY() + scrollLabelsContainer.getY() + window.getY()));
+
+				for (int i = 0; i < nameList.length; i++) {
+					if (relativeMouse <= (executionButtonHeight + buttonGap) * i + executionButtonHeight) {
+						executionSelectedY = (executionButtonHeight + buttonGap) * i;
+						break;
+					}
+				}
+				setMessage(executionButton.getText());
+				System.out.println(main.message);
+				main.menuNavegation.goToMain(main.atribute);
+				executionSelectedX = executionButton.getX();
+				executionSelectedWidth = executionButton.getWidth();
+				executionSelectedHeight = executionButton.getHeight();
+				executionSelected.setBounds(executionSelectedX, executionSelectedY, executionSelectedWidth,
+						executionSelectedHeight);
+				executionSelected.setVisible(true);
+			}*/
+		});
+		execution.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				if (executionPressed) {
+					//System.out.println("Touch dragged: "+MouseInfo.getPointerInfo().getLocation().y);
+					scrollLabelsY = MouseInfo.getPointerInfo().getLocation().y - scrollMoveY + scrollLabels.getY();
+					
+					scrollMoveY = MouseInfo.getPointerInfo().getLocation().y;
+					selection.setVisible(false);
+					int limit = scrollLabelsContainerHeight - scrollLabelsHeight;
+					scrollLabelsY = Math.max(scrollLabelsY, limit);
+					scrollLabelsY = Math.min(scrollLabelsY, 0);
+					
+					scrollLabels.setBounds(scrollLabelsX, scrollLabelsY, scrollLabelsWidth, scrollLabelsHeight);
+
+					int scrollBarYMin = 0;
+					int scrollBarYMax = scrollLabelsContainerHeight - scrollBarHeight;
+					int scrollLabelsYMin = 0;
+					int scrollLabelsYMax = scrollLabelsContainerHeight - scrollLabelsHeight;
+					scrollBarY = (int) Math
+							.round((scrollLabelsY - scrollLabelsYMin) * 1f / (scrollLabelsYMax - scrollLabelsYMin)
+									* (scrollBarYMax - scrollBarYMin) + scrollBarYMin);
+					scrollBar.setBounds(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight);
+				}
+			}
+		});
+	}
+	
+	private void scrollBarSetting() {
+		// ScrollBar
+		scrollBarMaxHeight = scrollLabelsContainerHeight;
+		scrollBarMinHeight = (int) Math.round(scrollLabelsContainerHeight * 0.2);
+		scrollBarWidth = 50;
+		scrollBarHeight = scrollBarMaxHeight - (scrollLabelsHeight - scrollLabelsContainerHeight);
+		scrollBarHeight = Math.max(scrollBarHeight, scrollBarMinHeight);
+		scrollBarX = scrollLabelsContainerWidth - scrollBarWidth;
+		scrollBarY = 0;
+		scrollBarIco = new ImageIcon(scrollBarIco.getImage().getScaledInstance(scrollBarWidth, scrollBarHeight, java.awt.Image.SCALE_SMOOTH));
+		scrollBar.setIcon(scrollBarIco);
+		scrollBar.setBounds(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight);
+		// If it appears
+		if (scrollLabelsHeight <= scrollLabelsContainerHeight)
+			scrollBar.setVisible(false);
+		else
+			scrollBar.setVisible(true);
+
+		scrollBar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				scrollBarPressed = true;
+				scrollMoveY = MouseInfo.getPointerInfo().getLocation().y;
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				scrollBarPressed = false;
+			}
+		});
+		scrollBar.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				if (scrollBarPressed) {
+					scrollBarY = MouseInfo.getPointerInfo().getLocation().y - scrollMoveY + scrollBar.getY();
+					scrollMoveY = MouseInfo.getPointerInfo().getLocation().y;
+					selection.setVisible(false);
+					int limit = scrollLabelsContainerHeight - scrollBarHeight;
+					scrollBarY = Math.min(scrollBarY, limit);
+					scrollBarY = Math.max(scrollBarY, 0);
+					scrollBar.setBounds(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight);
+
+					int scrollBarYMin = 0;
+					int scrollBarYMax = limit;
+					int scrollButtonsYMin = 0;
+					int scrollButtonsYMax = scrollLabelsContainerHeight - scrollLabelsHeight;
+					scrollLabelsY = (int) Math
+							.round((scrollBarY - scrollBarYMin) * 1f / (scrollBarYMax - scrollBarYMin)
+									* (scrollButtonsYMax - scrollButtonsYMin) + scrollButtonsYMin);
+					scrollLabels.setBounds(scrollLabelsX, scrollLabelsY, scrollLabelsWidth, scrollLabelsHeight);
+				}
+			}
+		});
 	}
 	
 	private void tabSelect(int tabNumber){

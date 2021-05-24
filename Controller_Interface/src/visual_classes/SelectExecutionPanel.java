@@ -269,6 +269,7 @@ public class SelectExecutionPanel extends JPanel {
 				setMessage(executionButton.getText());
 				System.out.println(main.message);
 				main.menuNavegation.goToMain(main.atribute);
+				
 				executionSelectedX = executionButton.getX();
 				executionSelectedWidth = executionButton.getWidth();
 				executionSelectedHeight = executionButton.getHeight();
