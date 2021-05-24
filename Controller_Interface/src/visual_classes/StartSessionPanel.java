@@ -181,7 +181,8 @@ public class StartSessionPanel extends JPanel {
 				correct = passwordCorrect(stringToChar(passLine[1]),stringToChar(enc_pass));
 				if(correct) {
 					System.out.println("correct");
-					main.atribute.setup = false;
+					//main.atribute.setup = false;
+					main.principalPane.reset();	
 					main.menuNavegation.next(main.atribute);
 					password_fld.setText("");
 					

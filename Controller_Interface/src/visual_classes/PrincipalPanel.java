@@ -124,6 +124,8 @@ public class PrincipalPanel extends JPanel {
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
 			"octubre", "noviembre", "diciembre"};
+	JLabel lastSelectedBack;
+	int tabNumber;
 	ArrayList<String> todoNames = new ArrayList<String>();
 	ArrayList<String> toquesNames = new ArrayList<String>();
 	ArrayList<String> melodiasNames = new ArrayList<String>();
@@ -279,8 +281,7 @@ public class PrincipalPanel extends JPanel {
 		add(cambiarContrasenaBtn);
 		
 		fillNameList();
-		showExecutionList(todoNames);
-		
+				
 		add(container);
 		container.add(tabs);
 		container.add(scrollLabelsContainer);
@@ -293,9 +294,22 @@ public class PrincipalPanel extends JPanel {
 		this.main = main;
 		setActions();
 	}
+	
+	public void reset() {	
+		tabNumber = 0;
+		clearList();
+		showExecutionList(todoNames);
+		if(lastSelectedBack!=null) lastSelectedBack.setVisible(false);
+		tabSelect(tabNumber);
+	}
+	
 	private void fillNameList() {
 		String list;
 		String[] lines;
+		
+		toquesNames.clear();
+		melodiasNames.clear();
+		secuenciasNames.clear();
 		
 		executions.setFilename("toques.int");
 		list = executions.readFile();
@@ -370,27 +384,11 @@ public class PrincipalPanel extends JPanel {
 		}*/
 	}
 	
-	private String dayWeekNumberToName (char c)
-    {     
-		String letraD = ""; 
-        switch (c){
-            case '1': letraD = "Dom";
-                break;
-            case '2': letraD = "Lun";
-                break;
-            case '3': letraD = "Mar";
-                break;
-            case '4': letraD = "Mie";
-                break;
-            case '5': letraD = "Jue";
-                break;
-            case '6': letraD = "Vie";
-                break;
-            case '7': letraD = "Sáb";
-                break;
-        }
-        return letraD;
-    }
+	private void clearList() {
+		scrollLabels.removeAll();
+		scrollLabelsY=0;
+		scrollLabels.setBounds(scrollLabelsX,scrollLabelsY,scrollLabelsWidth,scrollLabelsHeight);
+	}
 	
 	public void showExecutionList(ArrayList<String> nameList) {
 		scrollLabelsHeight = (executionHeight+executionGap)*nameList.size()-executionGap;
@@ -407,6 +405,7 @@ public class PrincipalPanel extends JPanel {
 		JLabel nameUp = new JLabel();
 		JLabel nameDown = new JLabel();
 		JLabel back = new JLabel();
+		JLabel selectedBack = new JLabel();
 		execution = new JPanel();
 		execution.setLayout(null);
 		execution.setOpaque(false);
@@ -417,11 +416,17 @@ public class PrincipalPanel extends JPanel {
 		String textParts[] = text.split(";",3);
 		String outText = textParts[0]+" "+textParts[1];
 		
-		//back.setBackground(new Color(255,255,255,50));
+		selectedBack.setBackground(new Color(0,146,250));
+		selectedBack.setVisible(false);
+		selectedBack.setLocation(0,0);
+		selectedBack.setSize(execution.getSize());
+		selectedBack.setOpaque(true);
+		
 		back.setBackground(new Color(0,0,0,10));
 		back.setLocation(0,0);
 		back.setSize(execution.getSize());
 		back.setOpaque(true);
+		
 		nameUp.setFont(font);
 		nameUp.setHorizontalAlignment(SwingConstants.LEFT);
 		nameUp.setVerticalAlignment(SwingConstants.CENTER);
@@ -438,9 +443,10 @@ public class PrincipalPanel extends JPanel {
 		nameDown.setLocation(0,nameDown.getHeight());	
 		nameDown.setText(textParts[2]);	
 		
-		execution.add(nameUp);
-		execution.add(nameDown);
-		execution.add(back);
+		execution.add(nameUp); 		//1
+		execution.add(nameDown);	//2
+		execution.add(selectedBack);//3
+		execution.add(back);		//4
 		scrollLabels.add(execution);
 	}
 	
@@ -460,10 +466,17 @@ public class PrincipalPanel extends JPanel {
 				// System.out.println("Touch released: "+MouseInfo.getPointerInfo().getLocation().y);
 			}
 
-	/*		@Override
+			@Override
 			public void mouseClicked(MouseEvent e) {
+				//JLabel back = ((JLabel) ((JPanel) e.getSource()).getComponents()[2]);
+				JLabel selectedBack = ((JLabel) ((JPanel) e.getSource()).getComponents()[2]);
+				if(lastSelectedBack != null)
+					lastSelectedBack.setVisible(false);
+				
+				selectedBack.setVisible(true);
+				lastSelectedBack = selectedBack;
 				// System.out.println("Touch clicked");
-				int relativeMouse = Math.abs(MouseInfo.getPointerInfo().getLocation().y
+				/*int relativeMouse = Math.abs(MouseInfo.getPointerInfo().getLocation().y
 						- (scrollButtons.getY() + scrollLabelsContainer.getY() + window.getY()));
 
 				for (int i = 0; i < nameList.length; i++) {
@@ -480,8 +493,8 @@ public class PrincipalPanel extends JPanel {
 				executionSelectedHeight = executionButton.getHeight();
 				executionSelected.setBounds(executionSelectedX, executionSelectedY, executionSelectedWidth,
 						executionSelectedHeight);
-				executionSelected.setVisible(true);
-			}*/
+				executionSelected.setVisible(true);*/
+			}
 		});
 		execution.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -511,12 +524,34 @@ public class PrincipalPanel extends JPanel {
 		});
 	}
 	
+	private String dayWeekNumberToName (char c)
+    {     
+		String letraD = ""; 
+        switch (c){
+            case '1': letraD = "Dom";
+                break;
+            case '2': letraD = "Lun";
+                break;
+            case '3': letraD = "Mar";
+                break;
+            case '4': letraD = "Mie";
+                break;
+            case '5': letraD = "Jue";
+                break;
+            case '6': letraD = "Vie";
+                break;
+            case '7': letraD = "Sáb";
+                break;
+        }
+        return letraD;
+    }
+	
 	private void scrollBarSetting() {
 		// ScrollBar
 		scrollBarMaxHeight = scrollLabelsContainerHeight;
 		scrollBarMinHeight = (int) Math.round(scrollLabelsContainerHeight * 0.2);
 		scrollBarWidth = 50;
-		scrollBarHeight = scrollBarMaxHeight - (scrollLabelsHeight - scrollLabelsContainerHeight);
+		scrollBarHeight = scrollBarMaxHeight - (int)Math.round((scrollLabelsHeight - scrollLabelsContainerHeight)*0.5);
 		scrollBarHeight = Math.max(scrollBarHeight, scrollBarMinHeight);
 		scrollBarX = scrollLabelsContainerWidth - scrollBarWidth;
 		scrollBarY = 0;
@@ -587,6 +622,17 @@ public class PrincipalPanel extends JPanel {
 		nuevoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				reset();
+				main.atribute.setup = false;
+				main.menuNavegation.next(main.atribute);
+			}
+		});
+		
+		cambiarContrasenaBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				reset();
+				main.atribute.setup = true;
 				main.menuNavegation.next(main.atribute);
 			}
 		});
@@ -596,18 +642,35 @@ public class PrincipalPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
 				System.out.println("x: "+x);
-				int tabNumber;
 				if(x<=90) {
-					tabNumber = 0;
+					if(tabNumber!=0) {
+						tabNumber = 0;
+						clearList();
+						showExecutionList(todoNames);
+						lastSelectedBack.setVisible(false);
+					}
 				}
 				else if(x<=234) {
-					tabNumber = 1;
+					if(tabNumber!=1) {
+						tabNumber = 1;
+						clearList();
+						//lastSelectedBack.setVisible(false);
+						showExecutionList(toquesNames);
+					}
 				}
 				else if(x<=407) {
-					tabNumber = 2;
+					if(tabNumber!=2) {
+						tabNumber = 2;
+						clearList();
+						showExecutionList(melodiasNames);
+					}
 				}
 				else {
-					tabNumber = 3;
+					if(tabNumber!=3) {
+						tabNumber = 3;
+						clearList();
+						showExecutionList(secuenciasNames);
+					}
 				}
 				tabSelect(tabNumber);
 			}

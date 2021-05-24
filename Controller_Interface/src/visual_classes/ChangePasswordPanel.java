@@ -25,12 +25,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
-public class FirstTimePanel extends JPanel {
+public class ChangePasswordPanel extends JPanel {
 	JLabel password_lbl;
 	JLabel password_confirmation_lbl;
 	JPasswordField password_fld;
 	JPasswordField confirmation_fld;
-	JButton show_password_img;
+	JLabel show_password_img;
 	JButton inicio_btn;
 	
 	int componentsX;
@@ -56,7 +56,7 @@ public class FirstTimePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FirstTimePanel() {
+	public ChangePasswordPanel() {
 		//Setting size parameters
 		//Screen
 		Dimension screenSize = os.setDimension();
@@ -137,7 +137,7 @@ public class FirstTimePanel extends JPanel {
 		conOff = new ImageIcon(conOff.getImage().getScaledInstance(conOffWidth, conOffHeight,java.awt.Image.SCALE_SMOOTH));
 		
 		//Show password button
-		show_password_img = new JButton();
+		show_password_img = new JLabel();
 		show_password_img.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -145,8 +145,9 @@ public class FirstTimePanel extends JPanel {
 				showPassword(show_pass,conOn,conOff);
 			}
 		});
-		show_password_img.setContentAreaFilled(false);
-		show_password_img.setBorder(null);
+		//show_password_img.setContentAreaFilled(false);
+		//show_password_img.setBorder(null);
+		show_password_img.setOpaque(false);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);
 		add(show_password_img);
@@ -189,8 +190,9 @@ public class FirstTimePanel extends JPanel {
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
 					main.virtualKeyboard.setVisible(true);
-					main.screen_btn.setVisible(false);
-					main.firstPane.moveComponents();
+					main.lock_btn.setVisible(false);
+					main.back_btn.setVisible(true);
+					main.changePasswordPane.moveComponents();
 					moveOnce = true;
 				}
 			}
@@ -218,7 +220,7 @@ public class FirstTimePanel extends JPanel {
 				if(confirmed && !(password_fld.getPassword().length == 0)) {
 					//main.atribute.setup = false;
 					main.principalPane.reset();	
-					main.menuNavegation.next(main.atribute);
+					main.menuNavegation.goToMain(main.atribute);
 					
 					//Habilitando la encriptación
 					Encryption hash = new Encryption();

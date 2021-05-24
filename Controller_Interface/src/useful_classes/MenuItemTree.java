@@ -64,16 +64,13 @@ public class MenuItemTree {
 	
 	private void levelTwo() {
 		if(atribute.setup)
-			itemName = "SetupPanel";
+			itemName = "ChangePasswordPanel";
 		else
 			itemName = "ExecutionTypePanel";
 	}
 	
 	private void levelThree() {
-		if(atribute.setup)
-			itemName = "ChangePasswordPanel";
-		else
-			itemName = "ExecutionTimePanel";
+		itemName = "ExecutionTimePanel";
 	}
 
 	private void levelFour() {

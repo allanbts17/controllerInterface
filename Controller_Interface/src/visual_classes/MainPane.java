@@ -41,6 +41,7 @@ public class MainPane extends JPanelBackground {
 	//JPanel classes
 	FirstTimePanel firstPane = new FirstTimePanel();
 	StartSessionPanel startSessionPane = new StartSessionPanel();
+	ChangePasswordPanel changePasswordPane = new ChangePasswordPanel();
 	PrincipalPanel principalPane = new PrincipalPanel();
 	ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
@@ -95,6 +96,7 @@ public class MainPane extends JPanelBackground {
 		add(principalPane);
 		add(firstPane);
 		add(startSessionPane);
+		add(changePasswordPane);
 		add(screenSaverPane);	
 		add(selectExecutionPane);
 		add(selectDatePane); 
@@ -117,6 +119,7 @@ public class MainPane extends JPanelBackground {
 		//Sending this class to the other class
 		startSessionPane.setMainPane(this);
 		firstPane.setMainPane(this);
+		changePasswordPane.setMainPane(this);
 		principalPane.setMainPane(this);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
@@ -131,7 +134,6 @@ public class MainPane extends JPanelBackground {
 		/*selectDatePane.showCalendar();
 		atribute.time = MenuOptionsTime.PROGRAMADAS;
 		menuNavegation.goTo(atribute,4);	*/
-		
 		/////////////
 		
 		back_btn.addMouseListener(new MouseAdapter() {
