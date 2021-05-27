@@ -634,6 +634,7 @@ public class PrincipalPanel extends JPanel {
 				reset();
 				main.atribute.setup = true;
 				main.menuNavegation.next(main.atribute);
+				main.virtualKeyboard.setHeight(290);
 			}
 		});
 		

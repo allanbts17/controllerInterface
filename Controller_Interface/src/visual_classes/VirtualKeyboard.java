@@ -3,11 +3,13 @@ package visual_classes;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -42,6 +44,7 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 	private int rowY = 0;
 	private int alpha = 255;
 	private JPanel keyPanel;
+	public int defaultHeight = 350;
 	osChange os = new osChange();
     /**
      * Private class for storing key specification.
@@ -157,15 +160,46 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
         currentComponent = frame.getFocusOwner();
         if (currentComponent == null) {
             currentComponent = frame.getFocusTraversalPolicy().getFirstComponent(frame);
-        }
-        
-        
+        } 
+        Color keyColor = getBackground();
+        add(initRow(row1, getSize(),keyColor));
+        add(initRow(row2, getSize(),keyColor));
+        add(initRow(row3, getSize(),keyColor));
+        add(initRow(row4, getSize(),keyColor));
+    }
+    
+    /*public void setFrame(JFrame frame,int height) {
+    	setPanel(height);
+        this.frame = frame;
+        currentComponent = frame.getFocusOwner();
+        if (currentComponent == null) {
+            currentComponent = frame.getFocusTraversalPolicy().getFirstComponent(frame);
+        } 
         Color keyColor = getBackground();
         //keyColor = new Color(0,0,0,);
         add(initRow(row1, getSize(),keyColor));
         add(initRow(row2, getSize(),keyColor));
         add(initRow(row3, getSize(),keyColor));
         add(initRow(row4, getSize(),keyColor));
+    }*/
+    
+    public void setHeight(int height) {
+    //	JPanel[] rows = (JPanel[])((Component[]) getComponents());
+    	rowY = 0;
+    	Component[] rows = getComponents();
+    	for(Component row: rows) {
+    		setRowHeight((JPanel)row,height);
+    	}
+    	
+    	setPanel(height);
+    /*	Color keyColor = getBackground();
+        add(initRow(row1, getSize(),keyColor));
+        add(initRow(row2, getSize(),keyColor));
+        add(initRow(row3, getSize(),keyColor));
+        add(initRow(row4, getSize(),keyColor));*/
+        //repaint();
+        //revalidate();
+    	
     }
     
     private void setPanel() {
@@ -178,7 +212,29 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 		
 		//pan.setOpaque(false);
 		int keyPanWidth = screenWidth;
-		int keyPanHeight = 350;
+		int keyPanHeight = defaultHeight;
+		int keyPanX = screenWidth/2 - keyPanWidth/2;
+		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
+		int keyPanY = screenHeight - keyPanHeight;
+		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
+		//add(keyPan);
+		//key.show(frame,keyPan);
+		//screen_btn.setVisible(false);
+		
+		setLayout(null);
+    }
+    
+    private void setPanel(int height) {
+    	Dimension screenSize = os.setDimension();
+		int screenWidth = (int)screenSize.getWidth();
+		int screenHeight = (int)screenSize.getHeight();
+    	
+//		keyPan.setBackground(Color.BLACK);
+		setBackground(new Color(0,0,0,200));
+		
+		//pan.setOpaque(false);
+		int keyPanWidth = screenWidth;
+		int keyPanHeight = height; //350
 		int keyPanX = screenWidth/2 - keyPanWidth/2;
 		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
 		int keyPanY = screenHeight - keyPanHeight;
@@ -201,7 +257,31 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
     	colorWithAlpha = new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha);
     	return colorWithAlpha;
     }
+    
+    private void setRowHeight(JPanel row, int height) {
+    	int outerButtonsGap = 10;
+    	int innerButtonsGap = 10;
+        int buttonHeight = (height - outerButtonsGap*2 - innerButtonsGap*3) / 4; // number of rows
+        
+        Component[] btn = (Component[]) row.getComponents();
+        for (int i = 0; i < btn.length; ++i) {
+            Dimension btnSize = btn[i].getSize();
+            btnSize.height = buttonHeight;
+            btn[i].setSize(btnSize);
+        }
+        
+        int pY = outerButtonsGap+rowY;
+        int pHeight = buttonHeight;
+        Dimension rowSize = row.getSize();
+        Point rowLocation = row.getLocation();
+        rowLocation.y = pY;
+        rowSize.height = pHeight;
+        row.setBounds(rowLocation.x,rowLocation.y,rowSize.width,rowSize.height);
+        rowY += pHeight + innerButtonsGap;
+    }
+        
 
+    
     private JPanel initRow(Key[] keys, Dimension dimensions, Color panelColor) {
     	int outerButtonsGap = 10;
     	int innerButtonsGap = 10;
@@ -224,10 +304,7 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
                 Color btnLineColor = getColorWithAlpha(Color.WHITE);
                 Color btnColor = getColorWithAlpha(Color.BLACK);
                 Color btnTextColor = getColorWithAlpha(Color.WHITE);
-                /*
-                button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) btnLineColor));
-                button.setForeground(btnTextColor);
-                button.setBackground(btnColor);*/
+               
                 button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
                 button.setForeground(Color.WHITE);
                 button.setBackground(new Color(0,0,0,255));

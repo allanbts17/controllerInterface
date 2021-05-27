@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 import useful_classes.Encryption;
 import useful_classes.FileHandler;
 import useful_classes.osChange;
+import visual_classes.VisualElements.CustomButton;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -42,7 +43,9 @@ public class ChangePasswordPanel extends JPanel {
 	int passFieldLimit;
 	int inicioBtnX;
 	
-	
+	int backX;
+	int backY;
+	CustomButton back_btn = new VisualElements().new CustomButton("back");
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(FirstTimePanel.class.getResource("/icons/ojo_contrasena_off.png"));
@@ -63,7 +66,7 @@ public class ChangePasswordPanel extends JPanel {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
-		int panelWidth = 800;
+		int panelWidth = screenWidth;
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
@@ -78,7 +81,6 @@ public class ChangePasswordPanel extends JPanel {
 		//setBounds(0,0,400,250);
 		setLayout(null);
 		
-
 		//Position and size parameters
 		componentsX = (panelWidth/2)-(componentsWidth/2);
 		passlblY = (getHeight()/2)-(componentsHeight*5+gap*2)/2;
@@ -165,15 +167,21 @@ public class ChangePasswordPanel extends JPanel {
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);
+		add(back_btn);
 	}
 	public void setMainPane(MainPane main) {
 		this.main = main;
+		backX = this.main.back_btn.getLocation().x;
+		backY = this.main.back_btn.getLocation().y-350;
+		moveOnce = false;
+		setBackButton();
 		setActions();
 	}
 	
 	public void moveComponents() {
 		componentsUp = !componentsUp;
 		int move = (componentsUp)? -180:0;
+		//int backMove = (componentsUp)? -350:0;
 		
 		password_lbl.setLocation(componentsX, passlblY+move);
 		password_confirmation_lbl.setLocation(componentsX, conflblY+move);
@@ -181,20 +189,58 @@ public class ChangePasswordPanel extends JPanel {
 		confirmation_fld.setLocation(componentsX, conffldY+move);
 		show_password_img.setLocation(componentsX, buttonsY+move);
 		inicio_btn.setLocation(inicioBtnX, buttonsY+move);
+		
+		main.virtualKeyboard.setVisible(componentsUp);
+		main.back_btn.setVisible(!componentsUp);
+		back_btn.setVisible(componentsUp);
+		//back_btn.setLocation(backX,backY+backMove);
 
 	}
 	
+	private void setBackButton(){
+		ImageIcon backU = new ImageIcon(this.getClass().getResource("/icons/back_btn_unpressed.png"));
+		ImageIcon backP = new ImageIcon(this.getClass().getResource("/icons/back_btn_pressed.png"));
+		backU = new ImageIcon(backU.getImage().getScaledInstance( main.squareButtonSize, main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		backP = new ImageIcon(backP.getImage().getScaledInstance( main.squareButtonSize, main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		back_btn.setBounds(backX,backY,main.squareButtonSize,main.squareButtonSize);
+		back_btn.setIcon(backU);
+		back_btn.setPressedIcon(backP);
+		back_btn.setBorder(null);
+		back_btn.setContentAreaFilled(false);
+		back_btn.setVisible(false);
+	}
+	
 	public void setActions() {
+		back_btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				moveComponents();
+				main.dateAndHour.update();
+				main.menuNavegation.goBack(main.atribute);
+				//main.virtualKeyboard.setVisible(false);
+				moveOnce = false;
+				
+				show_pass = false;
+				showPassword(show_pass,conOn,conOff);
+				password_fld.setText("");
+				confirmation_fld.setText("");
+				main.virtualKeyboard.setHeight(
+						main.virtualKeyboard.defaultHeight);
+			}
+		});
 		password_fld.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
-					main.virtualKeyboard.setVisible(true);
+					//main.virtualKeyboard.setVisible(true);
 					main.lock_btn.setVisible(false);
-					main.back_btn.setVisible(true);
-					main.changePasswordPane.moveComponents();
+					//main.back_btn.setVisible(false);
+					//back_btn.setVisible(true);
 					moveOnce = true;
+					moveComponents();
+					
 				}
+				System.out.println("Focus pass");
 			}
 		});	
 		
@@ -203,10 +249,13 @@ public class ChangePasswordPanel extends JPanel {
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
 					main.virtualKeyboard.setVisible(true);
-					main.screen_btn.setVisible(false);
-					main.firstPane.moveComponents();
+					main.lock_btn.setVisible(false);
+					//main.back_btn.setVisible(false);
+					//back_btn.setVisible(true);
 					moveOnce = true;
+					moveComponents();
 				}
+				System.out.println("Focus conf");
 			}
 		});	
 		
@@ -221,6 +270,9 @@ public class ChangePasswordPanel extends JPanel {
 					//main.atribute.setup = false;
 					main.principalPane.reset();	
 					main.menuNavegation.goToMain(main.atribute);
+					main.virtualKeyboard.setHeight(main.virtualKeyboard.defaultHeight);
+					show_pass = false;
+					showPassword(show_pass,conOn,conOff);
 					
 					//Habilitando la encriptación
 					Encryption hash = new Encryption();
@@ -234,8 +286,8 @@ public class ChangePasswordPanel extends JPanel {
 					fl.writeFileln(enc_pass,true);
 					
 					main.atribute.first = false;
-					main.virtualKeyboard.setVisible(false);
-					main.firstPane.moveComponents();
+					//main.virtualKeyboard.setVisible(false);
+					moveComponents();
 					moveOnce = false;
 				}
 

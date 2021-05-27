@@ -82,14 +82,14 @@ public class MainPane extends JPanelBackground {
 	MenuOptionsType enumType;
 	MenuOptionsTime enumTime;
 	osChange os = new osChange();
-	
+	JFrame frame;
 	boolean save_screen_on = false;
 	
 	VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
-	private boolean keyboardOn = true;
+	//private boolean keyboardOn = true;
 	
 	public MainPane(JFrame f) {
-		JFrame frame = f;
+		frame = f;
 		sizeSetting();
 		add(executionTimePane);
 		add(executionTypePane);
@@ -140,6 +140,8 @@ public class MainPane extends JPanelBackground {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dateAndHour.update();
+		//		if(menuNavegation.getActualPane().equals("ChangePasswordPanel"))
+		//			changePasswordPane.moveComponents();
 				menuNavegation.goBack(atribute);
 			}
 		});
@@ -158,27 +160,6 @@ public class MainPane extends JPanelBackground {
 				menuNavegation.screenSaver();
 			}
 		});	
-		
-		
-		
-		
-	/*	
-//		keyPan.setBackground(Color.BLACK);
-		keyPan.setBackground(new Color(0,0,0,200));
-		
-		//pan.setOpaque(false);
-		int keyPanWidth = screenWidth;
-		int keyPanHeight = 350;
-		int keyPanX = screenWidth/2 - keyPanWidth/2;
-		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
-		int keyPanY = screenHeight - keyPanHeight;
-		keyPan.setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
-		add(keyPan);
-		key.show(frame,keyPan);*/
-		
-		/*screen_btn.setVisible(false);
-		startSessionPane.moveComponents();
-		firstPane.moveComponents();*/
 		
 	}
 	

@@ -30,7 +30,7 @@ public class FirstTimePanel extends JPanel {
 	JLabel password_confirmation_lbl;
 	JPasswordField password_fld;
 	JPasswordField confirmation_fld;
-	JButton show_password_img;
+	JLabel show_password_img;
 	JButton inicio_btn;
 	
 	int componentsX;
@@ -137,7 +137,7 @@ public class FirstTimePanel extends JPanel {
 		conOff = new ImageIcon(conOff.getImage().getScaledInstance(conOffWidth, conOffHeight,java.awt.Image.SCALE_SMOOTH));
 		
 		//Show password button
-		show_password_img = new JButton();
+		show_password_img = new JLabel();
 		show_password_img.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -145,7 +145,7 @@ public class FirstTimePanel extends JPanel {
 				showPassword(show_pass,conOn,conOff);
 			}
 		});
-		show_password_img.setContentAreaFilled(false);
+		show_password_img.setOpaque(false);
 		show_password_img.setBorder(null);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);

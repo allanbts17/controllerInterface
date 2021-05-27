@@ -32,7 +32,7 @@ import java.awt.event.FocusEvent;
 public class StartSessionPanel extends JPanel {
 	JLabel password_lbl;
 	JPasswordField password_fld;
-	JButton show_password_img;
+	JLabel show_password_img;
 	JButton inicio_btn;
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_on.png"));
@@ -116,8 +116,8 @@ public class StartSessionPanel extends JPanel {
 		conOff = new ImageIcon(conOff.getImage().getScaledInstance(conOffWidth, conOffHeight,java.awt.Image.SCALE_SMOOTH));
 		
 		//Show password button
-		show_password_img = new JButton();
-		show_password_img.setContentAreaFilled(false);
+		show_password_img = new JLabel();
+		show_password_img.setOpaque(false);
 		show_password_img.setBorder(null);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);
@@ -180,8 +180,8 @@ public class StartSessionPanel extends JPanel {
 				
 				correct = passwordCorrect(stringToChar(passLine[1]),stringToChar(enc_pass));
 				if(correct) {
-					System.out.println("correct");
-					//main.atribute.setup = false;
+					show_pass = false;
+					showPassword(show_pass,conOn,conOff);
 					main.principalPane.reset();	
 					main.menuNavegation.next(main.atribute);
 					password_fld.setText("");

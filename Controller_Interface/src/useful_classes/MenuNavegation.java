@@ -32,6 +32,10 @@ public class MenuNavegation {
 		panelSwitch();
 	}
 	
+	public String getActualPane() {
+		return itemName;
+	}
+	
 	public void goBack(MenuAtributes atribute) {
 		menu.previousLevel();
 		itemName = menu.inLevelItemSelection(atribute);
