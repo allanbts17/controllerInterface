@@ -75,7 +75,7 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
         }
     }
 
-    // Special keys definition
+ // Special keys definition
     //private final Key TAB_KEY = new Key(KeyEvent.VK_TAB, "Tab");
     private final Key PARENTHESIS_KEY = new Key(KeyEvent.VK_LEFT_PARENTHESIS,"(",")");
     private final Key CAPS_LOCK_KEY = new Key(KeyEvent.VK_CAPS_LOCK, "Caps");
@@ -168,38 +168,13 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
         add(initRow(row4, getSize(),keyColor));
     }
     
-    /*public void setFrame(JFrame frame,int height) {
-    	setPanel(height);
-        this.frame = frame;
-        currentComponent = frame.getFocusOwner();
-        if (currentComponent == null) {
-            currentComponent = frame.getFocusTraversalPolicy().getFirstComponent(frame);
-        } 
-        Color keyColor = getBackground();
-        //keyColor = new Color(0,0,0,);
-        add(initRow(row1, getSize(),keyColor));
-        add(initRow(row2, getSize(),keyColor));
-        add(initRow(row3, getSize(),keyColor));
-        add(initRow(row4, getSize(),keyColor));
-    }*/
-    
-    public void setHeight(int height) {
-    //	JPanel[] rows = (JPanel[])((Component[]) getComponents());
+    public void setHeight(int height) {	
     	rowY = 0;
     	Component[] rows = getComponents();
     	for(Component row: rows) {
     		setRowHeight((JPanel)row,height);
     	}
-    	
-    	setPanel(height);
-    /*	Color keyColor = getBackground();
-        add(initRow(row1, getSize(),keyColor));
-        add(initRow(row2, getSize(),keyColor));
-        add(initRow(row3, getSize(),keyColor));
-        add(initRow(row4, getSize(),keyColor));*/
-        //repaint();
-        //revalidate();
-    	
+    	setPanel(height);	
     }
     
     private void setPanel() {
@@ -214,12 +189,8 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 		int keyPanWidth = screenWidth;
 		int keyPanHeight = defaultHeight;
 		int keyPanX = screenWidth/2 - keyPanWidth/2;
-		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
 		int keyPanY = screenHeight - keyPanHeight;
 		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
-		//add(keyPan);
-		//key.show(frame,keyPan);
-		//screen_btn.setVisible(false);
 		
 		setLayout(null);
     }
@@ -436,38 +407,38 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
                 switch (key.keyCode) {
                     case KeyEvent.VK_A:
                         keyString = accentuationBuffer
-                                == ACUTE_KEY ? "á"
-                                        : accentuationBuffer == GRAVE_KEY ? "à"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "ã"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "â" : key.value;
+                                == ACUTE_KEY ? "Ã¡"
+                                        : accentuationBuffer == GRAVE_KEY ? "Ã "
+                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "Ã£"
+                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "Ã¢" : key.value;
                         break;
                     case KeyEvent.VK_E:
                         keyString = accentuationBuffer
-                                == ACUTE_KEY ? "é"
-                                        : accentuationBuffer == GRAVE_KEY ? "è"
+                                == ACUTE_KEY ? "Ã©"
+                                        : accentuationBuffer == GRAVE_KEY ? "Ã¨"
                                                 : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~e"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "ê" : key.value;
+                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "Ãª" : key.value;
                         break;
                     case KeyEvent.VK_I:
                         keyString = accentuationBuffer
-                                == ACUTE_KEY ? "í"
-                                        : accentuationBuffer == GRAVE_KEY ? "ì"
+                                == ACUTE_KEY ? "Ã­"
+                                        : accentuationBuffer == GRAVE_KEY ? "Ã¬"
                                                 : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~i"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "î" : key.value;
+                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "Ã®" : key.value;
                         break;
                     case KeyEvent.VK_O:
                         keyString = accentuationBuffer
-                                == ACUTE_KEY ? "ó"
-                                        : accentuationBuffer == GRAVE_KEY ? "ò"
-                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "õ"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "ô" : key.value;
+                                == ACUTE_KEY ? "Ã³"
+                                        : accentuationBuffer == GRAVE_KEY ? "Ã²"
+                                                : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "Ãµ"
+                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "Ã´" : key.value;
                         break;
                     case KeyEvent.VK_U:
                         keyString = accentuationBuffer
-                                == ACUTE_KEY ? "ú"
-                                        : accentuationBuffer == GRAVE_KEY ? "ù"
+                                == ACUTE_KEY ? "Ãº"
+                                        : accentuationBuffer == GRAVE_KEY ? "Ã¹"
                                                 : accentuationBuffer == TILDE_CIRCUMFLEX_KEY ? "~u"
-                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "û" : key.value;
+                                                        : accentuationBuffer == CIRCUMFLEX_KEY ? "Ã»" : key.value;
                     default:
                         keyString = key.value;
                         break;
