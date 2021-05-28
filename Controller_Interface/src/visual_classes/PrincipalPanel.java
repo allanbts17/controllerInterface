@@ -303,76 +303,82 @@ public class PrincipalPanel extends JPanel {
 		tabSelect(tabNumber);
 	}
 	
-	private void fillNameList() {
-		String list;
+	public void fillNameList() {
 		String[] lines;
-		
+		boolean fileEmpty;
 		toquesNames.clear();
 		melodiasNames.clear();
 		secuenciasNames.clear();
+		todoNames.clear();
 		
 		executions.setFilename("toques.int");
-		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines) {
-			String[] parts = line.split(";",3);
-			if(parts[0].contains("/")) {
-				String[] date = parts[0].split("/");
-				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-			}
-			else {
-				line="";
-				for(int i=0;i<parts[0].length();i++) {
-					line += dayWeekNumberToName(parts[0].charAt(i));
-					if(i<parts[0].length()-1)
-						line+=", ";
+		fileEmpty = lines.length == 1 && lines[0].equals(""); 
+		
+		if(!fileEmpty)
+			for(String line: lines) {
+				String[] parts = line.split(";",3);
+				if(parts[0].contains("-")) {
+					String[] date = parts[0].split("-");
+					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
 				}
-				line += ";"+parts[1] + ";"+ parts[2];
+				else {
+					line="";
+					for(int i=0;i<parts[0].length();i++) {
+						line += dayWeekNumberToName(parts[0].charAt(i));
+						if(i<parts[0].length()-1)
+							line+=", ";
+					}
+					line += ";"+parts[1] + ";"+ parts[2];
+				}
+				toquesNames.add(line);
 			}
-			toquesNames.add(line);
-		}
 		
 		executions.setFilename("melodias.int");
-		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines) {
-			String[] parts = line.split(";",3);
-			if(parts[0].contains("/")) {
-				String[] date = parts[0].split("/");
-				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-			}
-			else {
-				line="";
-				for(int i=0;i<parts[0].length();i++) {
-					line += dayWeekNumberToName(parts[0].charAt(i));
-					if(i<parts[0].length()-1)
-						line+=", ";
+		fileEmpty = lines.length == 1 && lines[0].equals(""); 
+		
+		if(!fileEmpty)
+			for(String line: lines) {
+				String[] parts = line.split(";",3);
+				if(parts[0].contains("-")) {
+					String[] date = parts[0].split("-");
+					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
 				}
-				line += ";"+parts[1] + ";"+ parts[2];
+				else {
+					line="";
+					for(int i=0;i<parts[0].length();i++) {
+						line += dayWeekNumberToName(parts[0].charAt(i));
+						if(i<parts[0].length()-1)
+							line+=", ";
+					}
+					line += ";"+parts[1] + ";"+ parts[2];
+				}
+				melodiasNames.add(line);
 			}
-			melodiasNames.add(line);
-		}
 		
 		executions.setFilename("secuencias.int");
-		list = executions.readFile();
 		lines = executions.readFileLine();
-		for(String line: lines) {
-			String[] parts = line.split(";",3);
-			if(parts[0].contains("/")) {
-				String[] date = parts[0].split("/");
-				line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-			}
-			else {
-				line="";
-				for(int i=0;i<parts[0].length();i++) {
-					line += dayWeekNumberToName(parts[0].charAt(i));
-					if(i<parts[0].length()-1)
-						line+=", ";
+		fileEmpty = lines.length == 1 && lines[0].equals(""); 
+		
+		if(!fileEmpty)
+			for(String line: lines) {
+				String[] parts = line.split(";",3);
+				if(parts[0].contains("-")) {
+					String[] date = parts[0].split("-");
+					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
 				}
-				line += ";"+parts[1] + ";"+ parts[2];
+				else {
+					line="";
+					for(int i=0;i<parts[0].length();i++) {
+						line += dayWeekNumberToName(parts[0].charAt(i));
+						if(i<parts[0].length()-1)
+							line+=", ";
+					}
+					line += ";"+parts[1] + ";"+ parts[2];
+				}
+				secuenciasNames.add(line);
 			}
-			secuenciasNames.add(line);
-		}
 		
 		todoNames.addAll(toquesNames);
 		todoNames.addAll(melodiasNames);
@@ -474,26 +480,7 @@ public class PrincipalPanel extends JPanel {
 					lastSelectedBack.setVisible(false);
 				
 				selectedBack.setVisible(true);
-				lastSelectedBack = selectedBack;
-				// System.out.println("Touch clicked");
-				/*int relativeMouse = Math.abs(MouseInfo.getPointerInfo().getLocation().y
-						- (scrollButtons.getY() + scrollLabelsContainer.getY() + window.getY()));
-
-				for (int i = 0; i < nameList.length; i++) {
-					if (relativeMouse <= (executionButtonHeight + buttonGap) * i + executionButtonHeight) {
-						executionSelectedY = (executionButtonHeight + buttonGap) * i;
-						break;
-					}
-				}
-				setMessage(executionButton.getText());
-				System.out.println(main.message);
-				main.menuNavegation.goToMain(main.atribute);
-				executionSelectedX = executionButton.getX();
-				executionSelectedWidth = executionButton.getWidth();
-				executionSelectedHeight = executionButton.getHeight();
-				executionSelected.setBounds(executionSelectedX, executionSelectedY, executionSelectedWidth,
-						executionSelectedHeight);
-				executionSelected.setVisible(true);*/
+				lastSelectedBack = selectedBack;				
 			}
 		});
 		execution.addMouseMotionListener(new MouseMotionAdapter() {
@@ -648,7 +635,8 @@ public class PrincipalPanel extends JPanel {
 						tabNumber = 0;
 						clearList();
 						showExecutionList(todoNames);
-						lastSelectedBack.setVisible(false);
+						//if(lastSelectedBack != null)
+						//	lastSelectedBack.setVisible(false);
 					}
 				}
 				else if(x<=234) {
@@ -674,6 +662,7 @@ public class PrincipalPanel extends JPanel {
 					}
 				}
 				tabSelect(tabNumber);
+				repaint();
 			}
 		});
 	}

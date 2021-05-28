@@ -141,12 +141,31 @@ public class SelectExecutionPanel extends JPanel {
 			//iniciar ejecución ya
 			break;
 		case PROGRAMADAS:
-			main.message = main.dateForMessage+" "+main.hourForMessage+" "+filename;
+			main.message = main.dateForMessage+";"+main.hourForMessage+";"+filename;
 			break;
 		case REPETITIVAS:
-			main.message = main.daysOfWeekForMessage+" "+main.hourForMessage+" "+filename;
+			main.message = main.daysOfWeekForMessage+";"+main.hourForMessage+";"+filename;
 			break;
-		}	
+		}
+		
+		//Guardando la contraseña
+		FileHandler fl = new FileHandler();
+		fl.setDirection("src/sav/");
+		
+		switch(main.atribute.type) {
+		case TOQUES:
+			fl.setFilename("toques.int");
+			break;
+		case CARRILLON:
+			fl.setFilename("melodias.int");
+			break;
+		case BANDEO:
+			fl.setFilename("secuencias.int");
+			break;
+		}
+		fl.writeFileln(main.message,true);
+		main.principalPane.fillNameList();
+		main.principalPane.reset();
 	}
 
 	public void cleanButtonList() {

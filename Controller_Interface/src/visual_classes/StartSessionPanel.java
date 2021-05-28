@@ -145,7 +145,7 @@ public class StartSessionPanel extends JPanel {
 	
 	public void moveComponents() {
 		componentsUp = !componentsUp;
-		int move = (componentsUp)? -200:0;
+		int move = (componentsUp)? -160:0;
 		
 		password_lbl.setBounds(componentsX, passlblY+move, componentsWidth, componentsHeight);
 		password_fld.setBounds(componentsX, passfldY+move, componentsWidth, componentsHeight);

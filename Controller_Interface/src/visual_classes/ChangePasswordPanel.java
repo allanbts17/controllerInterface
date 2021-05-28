@@ -27,14 +27,18 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 public class ChangePasswordPanel extends JPanel {
+	JLabel current_password_lbl;
 	JLabel password_lbl;
 	JLabel password_confirmation_lbl;
+	JPasswordField current_password_fld;
 	JPasswordField password_fld;
 	JPasswordField confirmation_fld;
 	JLabel show_password_img;
 	JButton inicio_btn;
 	
 	int componentsX;
+	int currPasslblY;
+	int currPassfldY;
 	int passlblY;
 	int passfldY;
 	int conflblY;
@@ -83,12 +87,22 @@ public class ChangePasswordPanel extends JPanel {
 		
 		//Position and size parameters
 		componentsX = (panelWidth/2)-(componentsWidth/2);
-		passlblY = (getHeight()/2)-(componentsHeight*5+gap*2)/2;
+		currPasslblY = (getHeight()/2)-(componentsHeight*7+gap*2)/2;
+		currPassfldY = currPasslblY + componentsHeight;
+		passlblY = currPassfldY + componentsHeight + gap;
 		passfldY = passlblY + componentsHeight;
 		conflblY = passfldY + componentsHeight + gap;
 		conffldY = conflblY + componentsHeight;
 		buttonsY = conffldY + componentsHeight+gap;
 		passFieldLimit = 16;
+		
+		//Password label
+		current_password_lbl = new JLabel("Contrase\u00F1a actual");
+		current_password_lbl.setForeground(Color.WHITE);
+		current_password_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 35));
+		current_password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
+		current_password_lbl.setBounds(componentsX, currPasslblY, componentsWidth, componentsHeight);
+		add(current_password_lbl);
 		
 		//Password label
 		password_lbl = new JLabel("Nueva contrase\u00F1a");
@@ -107,6 +121,16 @@ public class ChangePasswordPanel extends JPanel {
 		//password_confirmation_lbl.setBounds(29, 99, 254, 27);
 		password_confirmation_lbl.setBounds(componentsX, conflblY, componentsWidth, componentsHeight);
 		add(password_confirmation_lbl);
+		
+		//Password field
+		current_password_fld = new JPasswordField(passFieldLimit);
+		current_password_fld.setForeground(Color.WHITE);
+		current_password_fld.setOpaque(false);
+		current_password_fld.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		current_password_fld.setBorder(new LineBorder(Color.WHITE, 2, true));
+		//password_fld.setBounds(28, 74, 155, 20);
+		current_password_fld.setBounds(componentsX, currPassfldY, componentsWidth, componentsHeight);
+		add(current_password_fld);
 		
 		//Password field
 		password_fld = new JPasswordField(passFieldLimit);
@@ -147,8 +171,6 @@ public class ChangePasswordPanel extends JPanel {
 				showPassword(show_pass,conOn,conOff);
 			}
 		});
-		//show_password_img.setContentAreaFilled(false);
-		//show_password_img.setBorder(null);
 		show_password_img.setOpaque(false);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);
@@ -172,17 +194,19 @@ public class ChangePasswordPanel extends JPanel {
 	public void setMainPane(MainPane main) {
 		this.main = main;
 		backX = this.main.back_btn.getLocation().x;
-		backY = this.main.back_btn.getLocation().y-350;
+		backY = this.main.back_btn.getLocation().y-280;
 		moveOnce = false;
 		setBackButton();
 		setActions();
 	}
 	
-	public void moveComponents() {
+	public void moveComponents(boolean leaving) {
 		componentsUp = !componentsUp;
-		int move = (componentsUp)? -180:0;
+		int move = (componentsUp)? -150:0;
 		//int backMove = (componentsUp)? -350:0;
 		
+		current_password_lbl.setLocation(componentsX, currPasslblY+move);
+		current_password_fld.setLocation(componentsX, currPassfldY+move);
 		password_lbl.setLocation(componentsX, passlblY+move);
 		password_confirmation_lbl.setLocation(componentsX, conflblY+move);
 		password_fld.setLocation(componentsX, passfldY+move);
@@ -191,7 +215,7 @@ public class ChangePasswordPanel extends JPanel {
 		inicio_btn.setLocation(inicioBtnX, buttonsY+move);
 		
 		main.virtualKeyboard.setVisible(componentsUp);
-		main.back_btn.setVisible(!componentsUp);
+		main.back_btn.setVisible(!componentsUp && !leaving);
 		back_btn.setVisible(componentsUp);
 		//back_btn.setLocation(backX,backY+backMove);
 
@@ -214,7 +238,7 @@ public class ChangePasswordPanel extends JPanel {
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				moveComponents();
+				moveComponents(true);
 				main.dateAndHour.update();
 				main.menuNavegation.goBack(main.atribute);
 				//main.virtualKeyboard.setVisible(false);
@@ -222,40 +246,45 @@ public class ChangePasswordPanel extends JPanel {
 				
 				show_pass = false;
 				showPassword(show_pass,conOn,conOff);
+				current_password_fld.setText("");
 				password_fld.setText("");
 				confirmation_fld.setText("");
 				main.virtualKeyboard.setHeight(
 						main.virtualKeyboard.defaultHeight);
 			}
 		});
+		current_password_fld.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(!moveOnce) {
+					main.lock_btn.setVisible(false);
+					moveOnce = true;
+					moveComponents(false);
+					
+				}
+			}
+		});	
 		password_fld.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
-					//main.virtualKeyboard.setVisible(true);
 					main.lock_btn.setVisible(false);
-					//main.back_btn.setVisible(false);
-					//back_btn.setVisible(true);
 					moveOnce = true;
-					moveComponents();
+					moveComponents(false);
 					
 				}
-				System.out.println("Focus pass");
 			}
 		});	
-		
 		confirmation_fld.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
 					main.virtualKeyboard.setVisible(true);
 					main.lock_btn.setVisible(false);
-					//main.back_btn.setVisible(false);
-					//back_btn.setVisible(true);
+					main.back_btn.setVisible(false);
 					moveOnce = true;
-					moveComponents();
+					moveComponents(false);
 				}
-				System.out.println("Focus conf");
 			}
 		});	
 		
@@ -263,20 +292,31 @@ public class ChangePasswordPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				boolean confirmed;
+				boolean correct;
 				main.dateAndHour.update();
 				
+				//Habilitando la encriptación
+				FileHandler passRead = main.passRead;
+				Encryption hash = new Encryption();
+				String enc_pass = hash.sha1(current_password_fld.getPassword());
+				String[] passLine = passRead.readFileLine(1).trim().split("\\s+");
+				
+				correct = main.startSessionPane.passwordCorrect(
+						main.startSessionPane.stringToChar(passLine[1]),
+						main.startSessionPane.stringToChar(enc_pass));
+				
 				confirmed = passwordConfirmed(password_fld.getPassword(),confirmation_fld.getPassword());
-				if(confirmed && !(password_fld.getPassword().length == 0)) {
+				if(confirmed && !(password_fld.getPassword().length == 0) && correct) {
 					//main.atribute.setup = false;
-					main.principalPane.reset();	
+					main.principalPane.reset();
 					main.menuNavegation.goToMain(main.atribute);
 					main.virtualKeyboard.setHeight(main.virtualKeyboard.defaultHeight);
 					show_pass = false;
 					showPassword(show_pass,conOn,conOff);
 					
 					//Habilitando la encriptación
-					Encryption hash = new Encryption();
-					String enc_pass = hash.sha1(password_fld.getPassword());
+					//Encryption hash = new Encryption();
+					enc_pass = hash.sha1(password_fld.getPassword());
 					
 					//Guardando la contraseña
 					FileHandler fl = new FileHandler();
@@ -286,11 +326,10 @@ public class ChangePasswordPanel extends JPanel {
 					fl.writeFileln(enc_pass,true);
 					
 					main.atribute.first = false;
-					//main.virtualKeyboard.setVisible(false);
-					moveComponents();
+					moveComponents(true);
 					moveOnce = false;
 				}
-
+				current_password_fld.setText("");
 				password_fld.setText("");
 				confirmation_fld.setText("");
 				
@@ -301,11 +340,13 @@ public class ChangePasswordPanel extends JPanel {
 	public void showPassword(boolean pass,ImageIcon on,ImageIcon off) {
 		if(pass) {
 			show_password_img.setIcon(on);
+			current_password_fld.setEchoChar((char)0);
 			password_fld.setEchoChar((char)0);
 			confirmation_fld.setEchoChar((char)0);
 		}
 		else {
 			show_password_img.setIcon(off);
+			current_password_fld.setEchoChar('•');
 			password_fld.setEchoChar('•');
 			confirmation_fld.setEchoChar('•');
 		}
