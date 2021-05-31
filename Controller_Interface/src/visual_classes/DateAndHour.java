@@ -88,9 +88,9 @@ public class DateAndHour extends JPanel {
 		//Hora
 		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
 		String test = hourFormat.format(date);
-		for(int i=0;i<test.length();i++){
+		/*for(int i=0;i<test.length();i++){
 			System.out.println(i+": "+test.charAt(i)+", "+(int)test.charAt(i));
-		}
+		}*/
 		char replaceDigit = os.ifWindows()? (char)160:(char)32;
 		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
 		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);

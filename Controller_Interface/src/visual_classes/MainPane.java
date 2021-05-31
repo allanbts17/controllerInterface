@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,7 +136,12 @@ public class MainPane extends JPanelBackground {
 		virtualKeyboard.setFrame(frame);
 		
 		
-		sendExecution.serialCommunication();
+		try {
+			sendExecution.serialCommunication();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		//////////////
 		/*selectDatePane.showCalendar();
 		atribute.time = MenuOptionsTime.PROGRAMADAS;

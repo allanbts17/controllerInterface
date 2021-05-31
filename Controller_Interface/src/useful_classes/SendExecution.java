@@ -1,7 +1,7 @@
 package useful_classes;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -11,7 +11,8 @@ public class SendExecution {
 	MainPane main;
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
-	
+	SerialPort arduinoPort;
+
 	public SendExecution(){
 		fl.setDirection("src/sav/");
 	}
@@ -89,20 +90,52 @@ public class SendExecution {
 			System.out.println(name);
 	}
 	
-	public void serialCommunication(){
+	public void serialCommunication() throws IOException{
 		
 	    /*
 	     This returns an array of commport addresses, not useful for the client
 	     but useful for iterating through to get an actual list of com parts available
 	    */
 	    SerialPort ports[] = SerialPort.getCommPorts();
-	    int i = 1;
-
 	    for (SerialPort port : ports) {
 	      //iterator to pass through port array
 	    	System.out.println(port.getSystemPortName()+": "+port.getDescriptivePortName());
 	    }
+		
+		arduinoPort =SerialPort.getCommPort("/dev/ttyUSB0");
+		arduinoPort = ports[0];
+		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
+		arduinoPort.setComPortParameters(9600, 8, 1, 0);
+		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+		if(arduinoPort.openPort()){
+			System.out.println("Port is open.");
+		} else {
+			System.out.println("Failed to open port.");
+		}
 
+		String msg = "259";
+		/*for(int i=0;i<msg.length();i++){
+
+				arduinoPort.getOutputStream().write(msg.charAt(i));
+				arduinoPort.getOutputStream().flush();
+				System.out.println("Sent number: "+(msg.charAt(i)));
+		
+		}*/
+
+		/*for(Integer i=0;i<5;i++){
+			arduinoPort.getOutputStream().write(i.byteValue());
+			arduinoPort.getOutputStream().flush();
+			System.out.println("Sent number: "+i);
+	
+		}*/
+		byte[] b = {4,6,8};
+		System.out.println(arduinoPort.writeBytes(b, 3)+" bytes writen");
+
+		if(arduinoPort.closePort()){
+			System.out.println("Port is closed.");
+		} else {
+			System.out.println("Failed to close port.");
+		}
 	    
 	}
 
