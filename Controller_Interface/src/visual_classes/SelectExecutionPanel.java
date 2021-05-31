@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,7 +28,8 @@ public class SelectExecutionPanel extends JPanel {
 	JLabel title = new JLabel();
 	JLabel executionSelected = new JLabel();
 	JLabel executionButton;
-
+	JButton listoBtn = new JButton();
+	
 	// Window
 	int windowY;
 	int windowX;
@@ -65,10 +67,17 @@ public class SelectExecutionPanel extends JPanel {
 	int titleY;
 	int titleWidth;
 	int titleHeight;
+	//Listo btn
+	int listoBtnX;
+	int listoBtnY;
+	int listoBtnWidth;
+	int listoBtnHeight;
 	// ImageIcons
 	ImageIcon windowIco;
 	ImageIcon scrollBarIco;
 	ImageIcon executionSelectedIco;
+	ImageIcon listoBtnIcoUnpressed;
+	ImageIcon listoBtnIcoPressed;
 
 	// Other
 	float scale = 3.7f;
@@ -85,9 +94,11 @@ public class SelectExecutionPanel extends JPanel {
 	MainPane main;
 	String test = "Selecione la melodía";
 	osChange os = new osChange();
+	boolean anExecutionIsSelected = false;
 	boolean labelPressed = false;
 	boolean barPressed = false;
 	String extension;
+	String selectedText="";
 
 	public SelectExecutionPanel() {
 		// Setting size parameters
@@ -117,12 +128,31 @@ public class SelectExecutionPanel extends JPanel {
 
 		// Title
 		titleSetting();
+		
+		//Listo btn
+		listoBtnSetting(panelWidth, panelHeight);
 
 		add(window);
 	}
 
 	public void setMainPane(MainPane main) {
 		this.main = main;
+		setActions();
+	}
+	
+	private void setActions() {
+		listoBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(anExecutionIsSelected) {
+					if(!selectedText.equals("")) {
+						setMessage(selectedText);
+						selectedText="";
+						main.menuNavegation.goToMain(main.atribute);
+					}
+				}
+			}
+		});
 	}
 
 	public void setExtensionNameList(String extension) {
@@ -136,17 +166,26 @@ public class SelectExecutionPanel extends JPanel {
 	}
 
 	private void setMessage(String filename) {
+		boolean addReminder = true;
 		switch(main.atribute.time) {
 		case INMEDIATAS:
 			//iniciar ejecución ya
+			main.message = filename;
+			addReminder = false;
 			break;
 		case PROGRAMADAS:
-			main.message = main.dateForMessage+";"+main.hourForMessage+";"+filename;
+			main.message = main.dateForMessage+";"+main.hourForMessage+";"+filename+extension;
 			break;
 		case REPETITIVAS:
-			main.message = main.daysOfWeekForMessage+";"+main.hourForMessage+";"+filename;
+			main.message = main.daysOfWeekForMessage+";"+main.hourForMessage+";"+filename+extension;
 			break;
 		}
+		
+		//Reset
+		main.dateForMessage = "";
+		main.hourForMessage = "";
+		main.daysOfWeekForMessage = "";
+		
 		
 		//Guardando la contraseña
 		FileHandler fl = new FileHandler();
@@ -163,9 +202,13 @@ public class SelectExecutionPanel extends JPanel {
 			fl.setFilename("secuencias.int");
 			break;
 		}
-		fl.writeFileln(main.message,true);
-		main.principalPane.fillNameList();
-		main.principalPane.reset();
+		
+		if(addReminder) {
+			fl.writeFileln(main.message,true);
+			main.principalPane.fillNameList();
+			main.principalPane.reset(true);
+			System.out.println(main.message);
+		}
 	}
 
 	public void cleanButtonList() {
@@ -188,13 +231,32 @@ public class SelectExecutionPanel extends JPanel {
 
 		scrollButtons.setLocation(0, 0);
 	}
-
+	
+	private void listoBtnSetting(int panelWidth, int panelHeight) {
+		float btnScale = 6.5f;
+		int btnGap = 10;
+		listoBtnIcoUnpressed = iconScale(listoBtnIcoUnpressed,"/icons/listo_btn_unpressed.png",btnScale);
+		listoBtnIcoPressed = iconScale(listoBtnIcoPressed,"/icons/listo_btn_pressed.png",btnScale);
+		listoBtnHeight = listoBtnIcoPressed.getIconHeight();
+		listoBtnWidth = listoBtnIcoPressed.getIconWidth();
+		listoBtnY = windowY+windowHeight+btnGap;
+		listoBtnX = panelWidth / 2 - listoBtnWidth / 2;
+		listoBtn.setContentAreaFilled(false);
+		listoBtn.setBorder(null);
+		listoBtn.setIcon(listoBtnIcoUnpressed);
+		listoBtn.setPressedIcon(listoBtnIcoPressed);
+		listoBtn.setVisible(true);
+		listoBtn.setBounds(listoBtnX,listoBtnY,listoBtnWidth,listoBtnHeight);
+		add(listoBtn);
+	}
+	
 	private void windowSetting(int panelWidth, int panelHeight) {
 		windowIco = iconScale(windowIco, "/icons/execution_selection.png", scale);
 		windowWidth = windowIco.getIconWidth();
-		windowHeight = windowIco.getIconHeight();
+		windowHeight = windowIco.getIconHeight()-70;
 		windowX = panelWidth / 2 - windowWidth / 2;
-		windowY = panelHeight / 2 - windowHeight / 2 + 30;
+		//windowY = panelHeight / 2 - windowHeight / 2 -20;
+		windowY = 90;
 		window.setLayout(null);
 		window.setBounds(windowX, windowY, windowWidth, windowHeight);
 		window.setBackground("/icons/execution_selection.png");
@@ -225,7 +287,7 @@ public class SelectExecutionPanel extends JPanel {
 	private void executionButtonSetting(int iteration) {
 		executionButton = new JLabel();
 		executionButton.setText(nameList[iteration]);
-
+		
 		executionButtonWidth = scrollButtonsWidth;
 		executionButtonHeight = 55;
 		executionButtonX = 0;
@@ -285,16 +347,15 @@ public class SelectExecutionPanel extends JPanel {
 						break;
 					}
 				}
-				setMessage(executionButton.getText());
-				System.out.println(main.message);
-				main.menuNavegation.goToMain(main.atribute);
-				
+				anExecutionIsSelected = true;
 				executionSelectedX = executionButton.getX();
 				executionSelectedWidth = executionButton.getWidth();
 				executionSelectedHeight = executionButton.getHeight();
 				executionSelected.setBounds(executionSelectedX, executionSelectedY, executionSelectedWidth,
 						executionSelectedHeight);
 				executionSelected.setVisible(true);
+				
+				selectedText = ((JLabel) e.getSource()).getText();
 			}
 		});
 		executionButton.addMouseMotionListener(new MouseMotionAdapter() {
@@ -306,6 +367,7 @@ public class SelectExecutionPanel extends JPanel {
 					scrollButtonsY = MouseInfo.getPointerInfo().getLocation().y - moveY + scrollButtons.getY();
 					moveY = MouseInfo.getPointerInfo().getLocation().y;
 					executionSelected.setVisible(false);
+					anExecutionIsSelected = false;
 					int limit = scrollLabelsContainerHeight - scrollButtonsHeight;
 					scrollButtonsY = Math.max(scrollButtonsY, limit);
 					scrollButtonsY = Math.min(scrollButtonsY, 0);
@@ -361,6 +423,7 @@ public class SelectExecutionPanel extends JPanel {
 					scrollBarY = MouseInfo.getPointerInfo().getLocation().y - moveY + scrollBar.getY();
 					moveY = MouseInfo.getPointerInfo().getLocation().y;
 					executionSelected.setVisible(false);
+					anExecutionIsSelected = false;
 					int limit = scrollLabelsContainerHeight - scrollBarHeight;
 					scrollBarY = Math.min(scrollBarY, limit);
 					scrollBarY = Math.max(scrollBarY, 0);

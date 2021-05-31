@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -39,10 +40,11 @@ import java.awt.Color;
 public class MainPane extends JPanelBackground {
 	
 	//JPanel classes
+	SendExecution sendExecution = new SendExecution();
 	FirstTimePanel firstPane = new FirstTimePanel();
 	StartSessionPanel startSessionPane = new StartSessionPanel();
 	ChangePasswordPanel changePasswordPane = new ChangePasswordPanel();
-	PrincipalPanel principalPane = new PrincipalPanel();
+	public PrincipalPanel principalPane = new PrincipalPanel();
 	ExecutionTypePanel executionTypePane = new ExecutionTypePanel();
 	ExecutionTimePanel executionTimePane = new ExecutionTimePanel();
 	SelectExecutionPanel selectExecutionPane = new SelectExecutionPanel();
@@ -84,7 +86,7 @@ public class MainPane extends JPanelBackground {
 	osChange os = new osChange();
 	JFrame frame;
 	boolean save_screen_on = false;
-	
+	ArrayList<String> scheduledExecutionList;
 	VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
 	//private boolean keyboardOn = true;
 	
@@ -121,6 +123,7 @@ public class MainPane extends JPanelBackground {
 		firstPane.setMainPane(this);
 		changePasswordPane.setMainPane(this);
 		principalPane.setMainPane(this);
+		sendExecution.setScheduledExecutionList(this.scheduledExecutionList);
 		executionTypePane.setMainPane(this);
 		executionTimePane.setMainPane(this);
 		selectExecutionPane.setMainPane(this);
@@ -128,8 +131,11 @@ public class MainPane extends JPanelBackground {
 		selectHourPane.setMainPane(this);
 		selectDayHourPane.setMainPane(this);
 		dateAndHour.setMainPane(this);
+		sendExecution.setMainPane(this);
 		virtualKeyboard.setFrame(frame);
 		
+		
+		sendExecution.serialCommunication();
 		//////////////
 		/*selectDatePane.showCalendar();
 		atribute.time = MenuOptionsTime.PROGRAMADAS;
@@ -140,8 +146,6 @@ public class MainPane extends JPanelBackground {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dateAndHour.update();
-		//		if(menuNavegation.getActualPane().equals("ChangePasswordPanel"))
-		//			changePasswordPane.moveComponents();
 				menuNavegation.goBack(atribute);
 			}
 		});

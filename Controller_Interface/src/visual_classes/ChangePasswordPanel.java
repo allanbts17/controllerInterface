@@ -308,7 +308,7 @@ public class ChangePasswordPanel extends JPanel {
 				confirmed = passwordConfirmed(password_fld.getPassword(),confirmation_fld.getPassword());
 				if(confirmed && !(password_fld.getPassword().length == 0) && correct) {
 					//main.atribute.setup = false;
-					main.principalPane.reset();
+					main.principalPane.reset(true);
 					main.menuNavegation.goToMain(main.atribute);
 					main.virtualKeyboard.setHeight(main.virtualKeyboard.defaultHeight);
 					show_pass = false;

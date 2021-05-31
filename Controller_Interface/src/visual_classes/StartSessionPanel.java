@@ -182,7 +182,7 @@ public class StartSessionPanel extends JPanel {
 				if(correct) {
 					show_pass = false;
 					showPassword(show_pass,conOn,conOff);
-					main.principalPane.reset();	
+					main.principalPane.reset(true);	
 					main.menuNavegation.next(main.atribute);
 					password_fld.setText("");
 					

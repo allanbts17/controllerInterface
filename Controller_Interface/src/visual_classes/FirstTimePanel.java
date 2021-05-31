@@ -217,7 +217,7 @@ public class FirstTimePanel extends JPanel {
 				confirmed = passwordConfirmed(password_fld.getPassword(),confirmation_fld.getPassword());
 				if(confirmed && !(password_fld.getPassword().length == 0)) {
 					//main.atribute.setup = false;
-					main.principalPane.reset();	
+					main.principalPane.reset(true);	
 					main.menuNavegation.next(main.atribute);
 					
 					//Habilitando la encriptación

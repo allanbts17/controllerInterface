@@ -71,6 +71,7 @@ public class SelectDayHourPanel extends JPanel {
 			unpressedLabel.setVisible(true);
 			pressedLabel.setVisible(false);
 			selected=false;
+			dayNum = "";
 		}
 		
 		private void changeBackground() {
@@ -266,9 +267,11 @@ public class SelectDayHourPanel extends JPanel {
 		for(DayButton day: days) {
 			day.reset();
 		}
+		selectedDaysOfWeek = "";
 	}
 	void ready() {
 		fillSelectedWeekDaysWord();
+		System.out.println("selectedDaysOfWeek: "+selectedDaysOfWeek);
 		if(!selectedDaysOfWeek.equals("")) {
 			main.daysOfWeekForMessage = selectedDaysOfWeek;
 			selectedDaysOfWeek="";

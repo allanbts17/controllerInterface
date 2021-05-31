@@ -17,8 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import useful_classes.SendExecution;
 import useful_classes.osChange;
-
 
 
 public class DateAndHour extends JPanel {
@@ -27,6 +27,7 @@ public class DateAndHour extends JPanel {
 	JLabel hora;
 	Timer timer;
 	int time = 20*1 + 60*3+60*60*1;
+	String dateForCompare = "";
 	String texto_hora;
 	int texto_dia;
 	String texto_mes;
@@ -35,7 +36,9 @@ public class DateAndHour extends JPanel {
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
 			"octubre", "noviembre", "diciembre"};
+	boolean minuteChange = false;
 	osChange os = new osChange();
+	SendExecution sendExecution = new SendExecution();
 	MainPane main;
 	/**
 	 * Create the panel.
@@ -81,29 +84,37 @@ public class DateAndHour extends JPanel {
 	
 	private void getDate() {
 		Date date = new Date();
-			
-		//Hora
-		DateFormat hourFormat = new SimpleDateFormat("h:mm aa");
-		texto_hora = hourFormat.format(date);
 		
-		//DÃ­a
-		DateFormat dayFormat = new SimpleDateFormat("dd");
+		//Hora
+		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
+		minuteChange = !hourFormat.format(date).replace(String.valueOf((char)160),"").equals(texto_hora);
+		texto_hora = hourFormat.format(date).replace(String.valueOf((char)160),"");
+		
+		//Día
+		DateFormat dayFormat = new SimpleDateFormat("d");
 		texto_dia = Integer.parseInt(dayFormat.format(date));
 		
 		//Mes
-		DateFormat dateFormat = new SimpleDateFormat("MM");
+		DateFormat dateFormat = new SimpleDateFormat("M");
 		texto_mes = dateFormat.format(date);
-		
-		//Aï¿½o
+		//System.out.println("dia: "+dayFormat.format(date)+", month: "+dateFormat.format(date));
+		//Año
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		texto_ano = yearFormat.format(date);
 		
-		//Hora
-		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd");
-		//DÃ­a semana
-		text_date = diaSemana(texto_dia,
-									Integer.parseInt(texto_mes),
-									Integer.parseInt(texto_ano));
+		//Día semana
+		DateFormat dayOfWeekFormat = new SimpleDateFormat("u");
+		int weekCorrect = Integer.parseInt(dayOfWeekFormat.format(date))+1;
+		weekCorrect = weekCorrect==8? 1:weekCorrect;
+		text_date = diaSemana(weekCorrect);
+		
+		DateFormat forCompareHourFormat = new SimpleDateFormat("hh:mmaa");
+		DateFormat forCompareDateFormat = new SimpleDateFormat("d-M-yyyy");
+		String hourCompare = forCompareHourFormat.format(date).replace(String.valueOf((char)160),"");
+		String dateCompare = forCompareDateFormat.format(date);
+		
+		dateForCompare = weekCorrect+";"+dateCompare+";"+hourCompare;
+		//System.out.println(dateForCompare);
 	}
 	
 	public void startTimer(int seg) {
@@ -127,14 +138,9 @@ public class DateAndHour extends JPanel {
 		startTimer(time);
 	}
 	
-	private String diaSemana (int dia, int mes, int ano)
+	private String diaSemana (int nD)
     {
-        String letraD="";
-        TimeZone timezone = TimeZone.getDefault();
-        Calendar calendar = new GregorianCalendar(timezone);
-        calendar.set(ano, mes-1, dia);
-        int nD=calendar.get(Calendar.DAY_OF_WEEK);
-     
+		String letraD = "";		
         switch (nD){
             case 1: letraD = "Domingo";
                 break;
@@ -151,7 +157,6 @@ public class DateAndHour extends JPanel {
             case 7: letraD = "Sábado";
                 break;
         }
-
         return letraD;
     }
 	
@@ -159,8 +164,15 @@ public class DateAndHour extends JPanel {
 	    TimerTask repeatedTask = new TimerTask() {
 	        public void run() {    	
 	        	getDate();
+	        	if(minuteChange) {
+	        		System.out.println(minuteChange);
+	        		main.sendExecution.compareDateStrings(dateForCompare);
+	        		minuteChange=false;
+	        	}
 	    		fecha.setText(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]); 		
 	    		hora.setText(texto_hora);
+	    		
+	    		
 	        }
 	    };
 	    Timer timer = new Timer("Timer");

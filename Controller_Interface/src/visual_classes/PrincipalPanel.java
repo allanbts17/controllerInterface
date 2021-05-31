@@ -124,6 +124,7 @@ public class PrincipalPanel extends JPanel {
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
 			"octubre", "noviembre", "diciembre"};
+	String selectedData="";
 	JLabel lastSelectedBack;
 	int tabNumber;
 	ArrayList<String> todoNames = new ArrayList<String>();
@@ -279,8 +280,7 @@ public class PrincipalPanel extends JPanel {
 		cambiarContrasenaBtn.setContentAreaFilled(false);
 		cambiarContrasenaBtn.setBounds(buttonsX, cambiarContrasenaY, buttonsWidth, buttonsHeight);
 		add(cambiarContrasenaBtn);
-		
-		fillNameList();
+
 				
 		add(container);
 		container.add(tabs);
@@ -292,13 +292,27 @@ public class PrincipalPanel extends JPanel {
 	
 	public void setMainPane(MainPane main) {
 		this.main = main;
+		fillNameList();
 		setActions();
 	}
 	
-	public void reset() {	
-		tabNumber = 0;
+	public void reset(boolean resetTabNumber) {	
+		tabNumber = resetTabNumber? 0:tabNumber;
 		clearList();
-		showExecutionList(todoNames);
+		switch(tabNumber) {
+		case 0:
+			showExecutionList(todoNames);
+			break;
+		case 1:
+			showExecutionList(toquesNames);
+			break;
+		case 2:
+			showExecutionList(melodiasNames);
+			break;
+		case 3:
+			showExecutionList(secuenciasNames);
+			break;
+		}
 		if(lastSelectedBack!=null) lastSelectedBack.setVisible(false);
 		tabSelect(tabNumber);
 	}
@@ -310,84 +324,43 @@ public class PrincipalPanel extends JPanel {
 		melodiasNames.clear();
 		secuenciasNames.clear();
 		todoNames.clear();
-		
+
+		//Toques
+		executions.setDirection("src/sav");
 		executions.setFilename("toques.int");
 		lines = executions.readFileLine();
 		fileEmpty = lines.length == 1 && lines[0].equals(""); 
 		
 		if(!fileEmpty)
 			for(String line: lines) {
-				String[] parts = line.split(";",3);
-				if(parts[0].contains("-")) {
-					String[] date = parts[0].split("-");
-					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-				}
-				else {
-					line="";
-					for(int i=0;i<parts[0].length();i++) {
-						line += dayWeekNumberToName(parts[0].charAt(i));
-						if(i<parts[0].length()-1)
-							line+=", ";
-					}
-					line += ";"+parts[1] + ";"+ parts[2];
-				}
 				toquesNames.add(line);
 			}
 		
+		//Melodías
 		executions.setFilename("melodias.int");
 		lines = executions.readFileLine();
 		fileEmpty = lines.length == 1 && lines[0].equals(""); 
 		
 		if(!fileEmpty)
 			for(String line: lines) {
-				String[] parts = line.split(";",3);
-				if(parts[0].contains("-")) {
-					String[] date = parts[0].split("-");
-					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-				}
-				else {
-					line="";
-					for(int i=0;i<parts[0].length();i++) {
-						line += dayWeekNumberToName(parts[0].charAt(i));
-						if(i<parts[0].length()-1)
-							line+=", ";
-					}
-					line += ";"+parts[1] + ";"+ parts[2];
-				}
 				melodiasNames.add(line);
 			}
 		
+		//Secuencias
 		executions.setFilename("secuencias.int");
 		lines = executions.readFileLine();
 		fileEmpty = lines.length == 1 && lines[0].equals(""); 
 		
 		if(!fileEmpty)
 			for(String line: lines) {
-				String[] parts = line.split(";",3);
-				if(parts[0].contains("-")) {
-					String[] date = parts[0].split("-");
-					line = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2]+ ";"+parts[1]+";"+parts[2];
-				}
-				else {
-					line="";
-					for(int i=0;i<parts[0].length();i++) {
-						line += dayWeekNumberToName(parts[0].charAt(i));
-						if(i<parts[0].length()-1)
-							line+=", ";
-					}
-					line += ";"+parts[1] + ";"+ parts[2];
-				}
 				secuenciasNames.add(line);
 			}
 		
 		todoNames.addAll(toquesNames);
 		todoNames.addAll(melodiasNames);
 		todoNames.addAll(secuenciasNames);
-		
+		main.scheduledExecutionList = this.todoNames;
 		Collections.sort(todoNames);
-		/*for(int i=0;i<todoNames.size();i++) {
-			System.out.println(todoNames.get(i));
-		}*/
 	}
 	
 	private void clearList() {
@@ -408,6 +381,7 @@ public class PrincipalPanel extends JPanel {
 	
 	private void executionSetting(int iteration,String text) {
 		//execution
+		JLabel originalText = new JLabel();
 		JLabel nameUp = new JLabel();
 		JLabel nameDown = new JLabel();
 		JLabel back = new JLabel();
@@ -419,8 +393,27 @@ public class PrincipalPanel extends JPanel {
 		execution.setBackground(Color.BLUE);
 		execution.setBounds(executionX,executionY,executionWidth,executionHeight);
 		Font font = new Font("Quicksand Medium", Font.BOLD, (int)Math.round((executionHeight - 10)*1f/2f));
-		String textParts[] = text.split(";",3);
-		String outText = textParts[0]+" "+textParts[1];
+		
+		originalText.setText(text);
+		originalText.setVisible(false);
+		execution.add(originalText);
+		
+		String[] parts = text.split(";",3);
+		if(parts[0].contains("-")) {
+			String[] date = parts[0].split("-");
+			parts[0] = date[0] + " de " + mes[Integer.parseInt(date[1])-1] + " de " + date[2];
+		}
+		else {
+			text="";
+			for(int i=0;i<parts[0].length();i++) {
+				text += dayWeekNumberToName(parts[0].charAt(i));
+				if(i<parts[0].length()-1)
+					text+=", ";
+			}
+			parts[0] = text;
+		}
+		
+		String outText = parts[0]+" "+parts[1];
 		
 		selectedBack.setBackground(new Color(0,146,250));
 		selectedBack.setVisible(false);
@@ -447,7 +440,7 @@ public class PrincipalPanel extends JPanel {
 		nameDown.setForeground(nameUp.getForeground());
 		nameDown.setSize(nameUp.getSize());
 		nameDown.setLocation(0,nameDown.getHeight());	
-		nameDown.setText(textParts[2]);	
+		nameDown.setText(parts[2].split("\\.")[0]);
 		
 		execution.add(nameUp); 		//1
 		execution.add(nameDown);	//2
@@ -475,12 +468,14 @@ public class PrincipalPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//JLabel back = ((JLabel) ((JPanel) e.getSource()).getComponents()[2]);
-				JLabel selectedBack = ((JLabel) ((JPanel) e.getSource()).getComponents()[2]);
+				selectedData = ((JLabel) ((JPanel) e.getSource()).getComponents()[0]).getText();
+				JLabel selectedBack = ((JLabel) ((JPanel) e.getSource()).getComponents()[3]);
 				if(lastSelectedBack != null)
 					lastSelectedBack.setVisible(false);
 				
 				selectedBack.setVisible(true);
-				lastSelectedBack = selectedBack;				
+				lastSelectedBack = selectedBack;
+				System.out.println("Selected data: "+selectedData);
 			}
 		});
 		execution.addMouseMotionListener(new MouseMotionAdapter() {
@@ -609,16 +604,54 @@ public class PrincipalPanel extends JPanel {
 		nuevoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				reset();
+				reset(true);
 				main.atribute.setup = false;
 				main.menuNavegation.next(main.atribute);
+			}
+		});
+		
+		eliminarBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("selectedData: "+selectedData+" "+!selectedData.equals(""));
+				if(!selectedData.equals("")) {
+					executions.setDirection("src/sav");
+					String[] fileLines;
+					
+					String extension = selectedData.split(";")[2].split("\\.")[1];
+					System.out.println("extension: "+extension);
+					switch(extension) {
+					case "mp3":
+						executions.setFilename("melodias.int");
+						break;
+					case "toc":
+						executions.setFilename("toques.int");
+						break;
+					case "sec":
+						executions.setFilename("secuencias.int");
+						break;
+					}
+									
+					fileLines = executions.readFileLine();
+					executions.writeFile("",false);
+					for(String line: fileLines) {
+						if(!line.equals(selectedData)) {
+							executions.writeFileln(line,true);
+						}
+					}
+					selectedData="";
+					fillNameList();
+					reset(false);
+					repaint();
+					
+				}
 			}
 		});
 		
 		cambiarContrasenaBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				reset();
+				reset(true);
 				main.atribute.setup = true;
 				main.menuNavegation.next(main.atribute);
 				main.virtualKeyboard.setHeight(290);

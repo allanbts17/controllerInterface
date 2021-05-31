@@ -164,5 +164,28 @@ public class FileHandler {
 			}
 		  return nameList;
 	  }
+	  
+	  public String[] searchFiles() {
+		String[] nameList = null;
+		  
+		File carpeta = new File(direction);
+		File[] listado = carpeta.listFiles();
+		
+		if (listado == null || listado.length == 0) {
+		    System.out.println("No hay elementos dentro de la carpeta actual");
+		}
+		else {
+			
+			nameList = new String[listado.length];
+		    for (int i=0; i< listado.length; i++) {
+		    	String name = listado[i].getName().toString();
+		    	//String name = listado[i].getName().toString();
+		        //System.out.println(name);
+		        nameList[i] = name;
+		    }
+		    
+		}
+		  return nameList;
+	  }
 	
 }

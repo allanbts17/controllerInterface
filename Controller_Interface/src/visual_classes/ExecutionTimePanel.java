@@ -140,6 +140,7 @@ public class ExecutionTimePanel extends JPanel {
 				main.selectExecutionPane.showButtonListAndSelectionSetting();
 				main.enumTime = MenuOptionsTime.INMEDIATAS;
 				main.atribute.time = main.enumTime;
+				main.selectExecutionPane.anExecutionIsSelected = false;
 				main.menuNavegation.next(main.atribute);
 			}
 		});
