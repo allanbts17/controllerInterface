@@ -121,7 +121,7 @@ public class SendExecution {
 				System.out.println("Sent number: "+(msg.charAt(i)));
 		
 		}*/
-
+		int j;
 		/*for(Integer i=0;i<5;i++){
 			arduinoPort.getOutputStream().write(i.byteValue());
 			arduinoPort.getOutputStream().flush();
