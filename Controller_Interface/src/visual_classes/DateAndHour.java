@@ -87,10 +87,17 @@ public class DateAndHour extends JPanel {
 		
 		//Hora
 		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
-		minuteChange = !hourFormat.format(date).replace(String.valueOf((char)160),"").equals(texto_hora);
-		texto_hora = hourFormat.format(date).replace(String.valueOf((char)160),"");
+		String test = hourFormat.format(date);
+		for(int i=0;i<test.length();i++){
+			System.out.println(i+": "+test.charAt(i)+", "+(int)test.charAt(i));
+		}
+		char replaceDigit = os.ifWindows()? (char)160:(char)32;
+		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
+		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);
+		minuteChange = !replacedText.equals(texto_hora);
+		texto_hora = replacedText;
 		
-		//Día
+		//Dï¿½a
 		DateFormat dayFormat = new SimpleDateFormat("d");
 		texto_dia = Integer.parseInt(dayFormat.format(date));
 		
@@ -98,11 +105,11 @@ public class DateAndHour extends JPanel {
 		DateFormat dateFormat = new SimpleDateFormat("M");
 		texto_mes = dateFormat.format(date);
 		//System.out.println("dia: "+dayFormat.format(date)+", month: "+dateFormat.format(date));
-		//Año
+		//Aï¿½o
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		texto_ano = yearFormat.format(date);
 		
-		//Día semana
+		//Dï¿½a semana
 		DateFormat dayOfWeekFormat = new SimpleDateFormat("u");
 		int weekCorrect = Integer.parseInt(dayOfWeekFormat.format(date))+1;
 		weekCorrect = weekCorrect==8? 1:weekCorrect;
@@ -154,7 +161,7 @@ public class DateAndHour extends JPanel {
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "Sábado";
+            case 7: letraD = "Sï¿½bado";
                 break;
         }
         return letraD;

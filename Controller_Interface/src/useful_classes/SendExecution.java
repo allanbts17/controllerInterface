@@ -90,7 +90,7 @@ public class SendExecution {
 	}
 	
 	public void serialCommunication(){
-		Scanner input = new Scanner(System.in);
+		
 	    /*
 	     This returns an array of commport addresses, not useful for the client
 	     but useful for iterating through to get an actual list of com parts available
@@ -101,7 +101,7 @@ public class SendExecution {
 	    for (SerialPort port : ports) {
 	      //iterator to pass through port array
 	    	System.out.println(port.getSystemPortName()+": "+port.getDescriptivePortName());
-	    } 
+	    }
 
 	    
 	}
