@@ -102,12 +102,10 @@ public class SendExecution {
 	    	System.out.println(port.getSystemPortName()+": "+port.getDescriptivePortName());
 	    }
 		
-		//arduinoPort =SerialPort.getCommPort("/dev/ttyUSB0");
-		//arduinoPort = ports[0];
-	    arduinoPort = SerialPort.getCommPort("COM3");
+	    arduinoPort = SerialPort.getCommPort("/dev/ttyUSB0");
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
-		//arduinoPort.setComPortParameters(9600, 8, 1, 0);
-		//arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+		arduinoPort.setComPortParameters(9600, 8, 1, 0);
+		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
 		arduinoPort.openPort();
 	    if (arduinoPort.isOpen()) {
@@ -116,14 +114,13 @@ public class SendExecution {
 	    	System.out.println("Port not available");
 	    return;
 	    }
-		String msg = "259";
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String txt = "9";
+		String txt = "259";
 		byte[] byteArrray = txt.getBytes();
 		arduinoPort.writeBytes(byteArrray,byteArrray.length);
 
