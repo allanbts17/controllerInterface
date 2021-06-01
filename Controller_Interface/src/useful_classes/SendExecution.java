@@ -2,7 +2,11 @@ package useful_classes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 import com.fazecast.jSerialComm.*;
 
 import visual_classes.MainPane;
@@ -12,6 +16,7 @@ public class SendExecution {
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
 	SerialPort arduinoPort;
+	Player musicFilePlayer;
 
 	public SendExecution(){
 		fl.setDirection("src/sav/");
@@ -140,8 +145,24 @@ public class SendExecution {
 		arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	}
 	
-	public void playSong() {
-		
+	public void playSong() throws FileNotFoundException, JavaLayerException {
+		FileInputStream relative = new FileInputStream("src/files/From The Sky.mp3");
+		musicFilePlayer = new Player(relative);
+	   //   apl.play();
+	      boolean pausa = true;
+	      new Thread() {
+	          public void run() {
+	             try {
+	            	 musicFilePlayer.play();
+	             } catch (JavaLayerException e) {
+	                e.printStackTrace();
+	             }
+	          }
+	       }.start();      
+	}
+	
+	public void stopSong() {
+		musicFilePlayer.close();
 	}
 
 }
