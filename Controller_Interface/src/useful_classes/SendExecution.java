@@ -3,7 +3,7 @@ package useful_classes;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.*;
 
 import visual_classes.MainPane;
 
@@ -102,34 +102,31 @@ public class SendExecution {
 	    	System.out.println(port.getSystemPortName()+": "+port.getDescriptivePortName());
 	    }
 		
-		arduinoPort =SerialPort.getCommPort("/dev/ttyUSB0");
-		arduinoPort = ports[0];
+		//arduinoPort =SerialPort.getCommPort("/dev/ttyUSB0");
+		//arduinoPort = ports[0];
+	    arduinoPort = SerialPort.getCommPort("COM3");
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
-		arduinoPort.setComPortParameters(9600, 8, 1, 0);
-		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
-		if(arduinoPort.openPort()){
-			System.out.println("Port is open.");
-		} else {
-			System.out.println("Failed to open port.");
-		}
-
-		String msg = "259";
-		/*for(int i=0;i<msg.length();i++){
-
-				arduinoPort.getOutputStream().write(msg.charAt(i));
-				arduinoPort.getOutputStream().flush();
-				System.out.println("Sent number: "+(msg.charAt(i)));
+		//arduinoPort.setComPortParameters(9600, 8, 1, 0);
+		//arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
-		}*/
-		int j;
-		/*for(Integer i=0;i<5;i++){
-			arduinoPort.getOutputStream().write(i.byteValue());
-			arduinoPort.getOutputStream().flush();
-			System.out.println("Sent number: "+i);
-	
-		}*/
-		byte[] b = {4,6,8};
-		System.out.println(arduinoPort.writeBytes(b, 3)+" bytes writen");
+		arduinoPort.openPort();
+	    if (arduinoPort.isOpen()) {
+	    	System.out.println("Port initialized!");
+	    } else {
+	    	System.out.println("Port not available");
+	    return;
+	    }
+		String msg = "259";
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String txt = "9";
+		byte[] byteArrray = txt.getBytes();
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+
 
 		if(arduinoPort.closePort()){
 			System.out.println("Port is closed.");
