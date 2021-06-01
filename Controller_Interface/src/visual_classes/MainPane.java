@@ -135,18 +135,20 @@ public class MainPane extends JPanelBackground {
 		sendExecution.setMainPane(this);
 		virtualKeyboard.setFrame(frame);
 		
-		
-		try {
-			sendExecution.serialCommunication();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		//////////////
 		/*selectDatePane.showCalendar();
 		atribute.time = MenuOptionsTime.PROGRAMADAS;
 		menuNavegation.goTo(atribute,4);	*/
 		/////////////
+		try {
+			sendExecution.playSong();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JavaLayerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
