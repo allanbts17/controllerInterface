@@ -46,7 +46,8 @@ public class SendExecution {
 			}
 			if(coincide) {
 				foundScheduledExecutionIndex=i;
-				send(i);
+				deleteExecution(i);
+				
 				coincide=false;
 				break;
 			}
@@ -57,7 +58,7 @@ public class SendExecution {
 		this.main = main;
 	}
 	
-	private void send(int index) {
+	private void deleteExecution(int index) {
 		String executionToSend = scheduledExecutionList.get(index);
 		String extension = executionToSend.split(";")[2].split("\\.")[1];
 		String[] fileLines;
@@ -90,18 +91,7 @@ public class SendExecution {
 			System.out.println(name);
 	}
 	
-	public void serialCommunication() throws IOException{
-		
-	    /*
-	     This returns an array of commport addresses, not useful for the client
-	     but useful for iterating through to get an actual list of com parts available
-	    */
-	    SerialPort ports[] = SerialPort.getCommPorts();
-	    for (SerialPort port : ports) {
-	      //iterator to pass through port array
-	    	System.out.println(port.getSystemPortName()+": "+port.getDescriptivePortName());
-	    }
-		
+	private void openSerialPort() throws IOException{    
 	    arduinoPort = SerialPort.getCommPort("/dev/ttyUSB0");
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
@@ -112,14 +102,16 @@ public class SendExecution {
 	    	System.out.println("Port initialized!");
 	    } else {
 	    	System.out.println("Port not available");
-	    return;
 	    }
+	    
+	    
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		/*
 		String txt = "259";
 		byte[] byteArrray = txt.getBytes();
 		arduinoPort.writeBytes(byteArrray,byteArrray.length);
@@ -129,8 +121,27 @@ public class SendExecution {
 			System.out.println("Port is closed.");
 		} else {
 			System.out.println("Failed to close port.");
-		}
+		}*/
 	    
+	}
+	
+	private void sendToArduino(int index) {
+		String executionToSend = scheduledExecutionList.get(index);
+		String executionFile = executionToSend.split(";")[2];
+		String extension = executionToSend.split(";")[2].split("\\.")[1];
+		String[] fileLines;
+		fl.setDirection("src/files/");
+		fl.setFilename(executionFile);
+		
+		fileLines = fl.readFileLine();
+		
+		String txt = "259";
+		byte[] byteArrray = txt.getBytes();
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+	}
+	
+	public void playSong() {
+		
 	}
 
 }
