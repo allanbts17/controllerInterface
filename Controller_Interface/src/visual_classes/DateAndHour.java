@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import javazoom.jl.decoder.JavaLayerException;
 import useful_classes.SendExecution;
 import useful_classes.osChange;
 
@@ -117,7 +119,7 @@ public class DateAndHour extends JPanel {
 		
 		DateFormat forCompareHourFormat = new SimpleDateFormat("hh:mmaa");
 		DateFormat forCompareDateFormat = new SimpleDateFormat("d-M-yyyy");
-		String hourCompare = forCompareHourFormat.format(date).replace(String.valueOf((char)160),"");
+		String hourCompare = forCompareHourFormat.format(date).replace(String.valueOf((char)replaceDigit),"");
 		String dateCompare = forCompareDateFormat.format(date);
 		
 		dateForCompare = weekCorrect+";"+dateCompare+";"+hourCompare;
@@ -172,8 +174,16 @@ public class DateAndHour extends JPanel {
 	        public void run() {    	
 	        	getDate();
 	        	if(minuteChange) {
-	        		System.out.println(minuteChange);
-	        		main.sendExecution.compareDateStrings(dateForCompare);
+	        		System.out.println("it do a minuteChange: "+minuteChange);
+	        		try {
+						main.sendExecution.compareDateStrings(dateForCompare);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JavaLayerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 	        		minuteChange=false;
 	        	}
 	    		fecha.setText(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]); 		

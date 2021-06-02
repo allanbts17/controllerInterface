@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import javazoom.jl.decoder.JavaLayerException;
 import useful_classes.*;
 import visual_classes.VisualElements.*;
 
@@ -140,6 +142,7 @@ public class MainPane extends JPanelBackground {
 		atribute.time = MenuOptionsTime.PROGRAMADAS;
 		menuNavegation.goTo(atribute,4);	*/
 		/////////////
+		/*
 		try {
 			sendExecution.playSong();
 		} catch (FileNotFoundException e1) {
@@ -149,6 +152,7 @@ public class MainPane extends JPanelBackground {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
 		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override

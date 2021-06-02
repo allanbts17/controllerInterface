@@ -19,6 +19,10 @@ public class FileHandler {
 	public void setDirection(String name) {
 		direction = name+"/";
 	}
+
+	public String getFilePath(){
+		return filename;
+	}
 	
 	public boolean ifExist() {
 		//File myObj = new File(filename);
@@ -113,7 +117,6 @@ public class FileHandler {
 	  }
 	  
 	  public String readFileLine(int line_number) {
-		  String txt="";
 		  String line="";
 
 		  

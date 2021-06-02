@@ -7,7 +7,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="library/jSerialComm-2.7.0.jar" sourcepath="D:/JavaSource/jSerialComm-master"/>
-	<classpathentry kind="lib" path="library/jlayer-1.0.1.4.jar" sourcepath="D:/JavaSource/JLayer-master"/>
+	<classpathentry kind="lib" path="library/jlayer-1.0.1.4.jar"/>
 	<classpathentry kind="lib" path="library/junit-3.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
