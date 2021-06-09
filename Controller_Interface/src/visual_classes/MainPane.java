@@ -154,6 +154,27 @@ public class MainPane extends JPanelBackground {
 		}
 		*/
 		
+		/*
+		JButton arduino = new JButton("New button");
+		arduino.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				sendExecution.testArduino("Bandeo predeterminado.sec");
+			}
+		});
+		arduino.setBounds(200, 100, 100, 30);
+		add(arduino);
+		
+		JButton arduino1 = new JButton("New button1");
+		arduino1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				sendExecution.testArduino("Secuencia del despertar.sec");
+			}
+		});
+		arduino1.setBounds(200, 200, 100, 30);
+		add(arduino1);*/
+		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

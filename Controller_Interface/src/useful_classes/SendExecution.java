@@ -15,11 +15,13 @@ public class SendExecution {
 	MainPane main;
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
-	boolean playingFinished = true;
+	boolean playSong = false;
 	String executionToSend;
 	String extension;
 	SerialPort arduinoPort;
 	Player musicFilePlayer;
+	//ExecutionHandler executionHandler = new ExecutionHandler();
+	osChange os = new osChange();
 
 	public SendExecution(){
 		fl.setDirection("src/sav/");
@@ -29,6 +31,7 @@ public class SendExecution {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//executionHandler.setSerialPort(arduinoPort);
 	}
 	
 	public void setScheduledExecutionList(ArrayList<String> executionList) {
@@ -62,11 +65,7 @@ public class SendExecution {
 			}
 			if(coincide) {
 				//System.out.println("it coincided");
-				executionToSend = scheduledParts[2];
-				setExtension();
-				setDirection();
-				setFilename();
-				startExectuion();
+				prepareForExecution(scheduledParts[2]);
 				if(isDate) deleteExecution(i);
 				//System.out.println("Actual data:");
 				//System.out.println("executionToSend: "+executionToSend);
@@ -76,6 +75,15 @@ public class SendExecution {
 				break;
 			}
 		}
+	}
+	
+	public void  prepareForExecution(String executionName) throws FileNotFoundException, JavaLayerException {
+		executionToSend = executionName;
+		System.out.println("To execute: "+executionToSend);
+		setExtension();
+		setDirection();
+		setFilename();
+		startExecution();
 	}
 	
 	public void setMainPane(MainPane main) {
@@ -92,14 +100,15 @@ public class SendExecution {
 
 	private void setFilename(){
 		fl.setFilename(executionToSend);
+		System.out.println("Filename: "+executionToSend);
 	}
 
-	private void startExectuion() throws FileNotFoundException, JavaLayerException{
+	private void startExecution() throws FileNotFoundException, JavaLayerException{
 		if(extension.equals("mp3")){
 			//System.out.println("Its gonna play song");
-			if(!playingFinished)
+			if(playSong)
 				stopSong();
-			playingFinished = false;
+			//playSong = false;
 			playSong();
 		} else {
 			//System.out.println("Its gonna send to Arduino");
@@ -113,7 +122,7 @@ public class SendExecution {
 			case "mp3":
 				fl.setFilename("melodias.int");
 				break;
-			case "toq":
+			case "toc":
 				fl.setFilename("toques.int");
 				break;
 			case "sec":
@@ -138,8 +147,9 @@ public class SendExecution {
 			System.out.println(name);
 	}
 	
-	private void openSerialPort() throws IOException{    
-	    arduinoPort = SerialPort.getCommPort("/dev/ttyUSB0");
+	private void openSerialPort() throws IOException{
+		String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
+	    arduinoPort = SerialPort.getCommPort(port);
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
 		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
@@ -164,22 +174,42 @@ public class SendExecution {
 		fileLines = fl.readFileLine();
 		System.out.println("Sending to arduino");
 		for(String line: fileLines){
+			
+			if(line.contains("#"))
+				line = line.replace("#","");
+			System.out.print(line+" ");
 			byte[] byteArrray = line.getBytes();
+			System.out.println(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 		}
 		
 	}
 	
+	/*public void testArduino(String name) {
+		
+		fl.setDirection("src/files");
+		fl.setFilename(name);
+		String[] fileLines = fl.readFileLine();
+		
+		executionHandler.setFileLines(fileLines);
+		executionHandler.execute();
+	}*/
+	
+
 	public void playSong() throws FileNotFoundException, JavaLayerException {
 		FileInputStream relative = new FileInputStream(fl.getFilePath());
 		musicFilePlayer = new Player(relative);
+		playSong = true;
 		//System.out.println("enter on playSong");
 	      new Thread() {
 	          public void run() {
 					try {
 						//System.out.println("playing");
-						musicFilePlayer.play();
-						playingFinished = true;
+						
+						while(playSong) {
+							musicFilePlayer.play(1);
+						}
+						
 						//System.out.println("finished: "+playingFinished);
 					} catch (JavaLayerException e) {
 					   e.printStackTrace();
@@ -189,9 +219,9 @@ public class SendExecution {
 	       }.start();      
 	}
 	
-	public void stopSong() {
+	private void stopSong() {
+		playSong = false;
 		musicFilePlayer.close();
-		playingFinished = true;
 	}
 
 }

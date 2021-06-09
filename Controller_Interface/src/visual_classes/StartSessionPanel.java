@@ -135,6 +135,8 @@ public class StartSessionPanel extends JPanel {
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);		
+		
+		
 	}
 	
 	public void setMainPane(MainPane main) {
@@ -246,5 +248,4 @@ public class StartSessionPanel extends JPanel {
         }
         return ch;
 	}
-
 }

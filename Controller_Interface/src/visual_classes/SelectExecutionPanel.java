@@ -14,9 +14,13 @@ import javax.swing.JPanel;
 import useful_classes.*;
 
 import java.awt.event.MouseMotionAdapter;
+import java.io.FileNotFoundException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import javax.swing.SwingConstants;
+
+import javazoom.jl.decoder.JavaLayerException;
+
 import java.awt.Font;
 import java.awt.MouseInfo;
 
@@ -146,7 +150,15 @@ public class SelectExecutionPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if(anExecutionIsSelected) {
 					if(!selectedText.equals("")) {
-						setMessage(selectedText);
+						try {
+							setMessage(selectedText);
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (JavaLayerException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						selectedText="";
 						main.menuNavegation.goToMain(main.atribute);
 					}
@@ -165,13 +177,14 @@ public class SelectExecutionPanel extends JPanel {
 		this.type = type;
 	}
 
-	private void setMessage(String filename) {
+	private void setMessage(String filename) throws FileNotFoundException, JavaLayerException {
 		boolean addReminder = true;
 		switch(main.atribute.time) {
 		case INMEDIATAS:
 			//iniciar ejecución ya
-			main.message = filename;
 			addReminder = false;
+			main.message = filename+extension;
+			main.sendExecution.prepareForExecution(main.message);
 			break;
 		case PROGRAMADAS:
 			main.message = main.dateForMessage+";"+main.hourForMessage+";"+filename+extension;
@@ -186,29 +199,27 @@ public class SelectExecutionPanel extends JPanel {
 		main.hourForMessage = "";
 		main.daysOfWeekForMessage = "";
 		
-		
-		//Guardando la contraseña
-		FileHandler fl = new FileHandler();
-		fl.setDirection("src/sav/");
-		
-		switch(main.atribute.type) {
-		case TOQUES:
-			fl.setFilename("toques.int");
-			break;
-		case CARRILLON:
-			fl.setFilename("melodias.int");
-			break;
-		case BANDEO:
-			fl.setFilename("secuencias.int");
-			break;
-		}
-		
 		if(addReminder) {
+			FileHandler fl = new FileHandler();
+			fl.setDirection("src/sav/");
+			
+			switch(main.atribute.type) {
+			case TOQUES:
+				fl.setFilename("toques.int");
+				break;
+			case CARRILLON:
+				fl.setFilename("melodias.int");
+				break;
+			case BANDEO:
+				fl.setFilename("secuencias.int");
+				break;
+			}
 			fl.writeFileln(main.message,true);
 			main.principalPane.fillNameList();
 			main.principalPane.reset(true);
-			System.out.println(main.message);
+			
 		}
+		System.out.println("Selected message: "+main.message);
 	}
 
 	public void cleanButtonList() {
