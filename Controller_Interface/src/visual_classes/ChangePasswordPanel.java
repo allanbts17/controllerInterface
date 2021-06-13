@@ -58,6 +58,7 @@ public class ChangePasswordPanel extends JPanel {
 	osChange os = new osChange();
 	private boolean componentsUp = false;
 	private boolean moveOnce = false;
+	Dialog dialog = new Dialog();
 	MainPane main;
 
 	/**
@@ -190,6 +191,7 @@ public class ChangePasswordPanel extends JPanel {
 		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);
 		add(back_btn);
+		add(dialog);
 	}
 	public void setMainPane(MainPane main) {
 		this.main = main;
@@ -251,6 +253,7 @@ public class ChangePasswordPanel extends JPanel {
 				confirmation_fld.setText("");
 				main.virtualKeyboard.setHeight(
 						main.virtualKeyboard.defaultHeight);
+				dialog.setVisible(false);
 			}
 		});
 		current_password_fld.addFocusListener(new FocusAdapter() {
@@ -328,6 +331,13 @@ public class ChangePasswordPanel extends JPanel {
 					main.atribute.first = false;
 					moveComponents(true);
 					moveOnce = false;
+					dialog.setVisible(false);
+				}
+				else if(!correct) {
+					dialog.incorrectPasswordMessage();
+				}
+				else if(!confirmed) {
+					dialog.incorrectConfirmationMessage();
 				}
 				current_password_fld.setText("");
 				password_fld.setText("");

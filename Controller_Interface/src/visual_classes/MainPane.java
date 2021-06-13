@@ -92,6 +92,7 @@ public class MainPane extends JPanelBackground {
 	ArrayList<String> scheduledExecutionList;
 	VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
 	//private boolean keyboardOn = true;
+	JLabel l;
 	
 	public MainPane(JFrame f) {
 		frame = f;
@@ -143,37 +144,14 @@ public class MainPane extends JPanelBackground {
 		menuNavegation.goTo(atribute,4);	*/
 		/////////////
 		/*
-		try {
-			sendExecution.playSong();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (JavaLayerException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		l = new JLabel("texto");
+		l.setBounds(100,100,50,50);
+		l.setOpaque(true);
+		add(l);
+		Movement move = new Movement(this.l);
+		move.setUniformMovement(1000,4000,'x');
+		move.start();
 		*/
-		
-		/*
-		JButton arduino = new JButton("New button");
-		arduino.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				sendExecution.testArduino("Bandeo predeterminado.sec");
-			}
-		});
-		arduino.setBounds(200, 100, 100, 30);
-		add(arduino);
-		
-		JButton arduino1 = new JButton("New button1");
-		arduino1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				sendExecution.testArduino("Secuencia del despertar.sec");
-			}
-		});
-		arduino1.setBounds(200, 200, 100, 30);
-		add(arduino1);*/
 		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override

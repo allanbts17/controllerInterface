@@ -66,6 +66,7 @@ public class StartSessionPanel extends JPanel {
 	
 	private boolean componentsUp = false;
 	private boolean moveOnce = false;
+	Dialog dialog = new Dialog();
 	/**
 	 * Create the panel.
 	 */
@@ -77,7 +78,7 @@ public class StartSessionPanel extends JPanel {
 		int screenHeight = (int)screenSize.getHeight();
 		
 		//Panel
-		int panelWidth = 800;
+		int panelWidth = screenWidth;
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
@@ -134,8 +135,8 @@ public class StartSessionPanel extends JPanel {
 		inicio_btn.setPressedIcon(inicioIconPressed);
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
-		add(inicio_btn);		
-		
+		add(inicio_btn);
+		add(dialog);
 		
 	}
 	
@@ -174,7 +175,8 @@ public class StartSessionPanel extends JPanel {
 				boolean correct;
 				main.dateAndHour.update();
 				
-				
+				main.principalPane.dialog.setVisible(false);
+				main.principalPane.selectedData="";
 				//Habilitando la encriptación
 				Encryption hash = new Encryption();
 				String enc_pass = hash.sha1(password_fld.getPassword());
@@ -191,8 +193,10 @@ public class StartSessionPanel extends JPanel {
 					main.virtualKeyboard.setVisible(false);
 					main.startSessionPane.moveComponents();
 					moveOnce = false;
+					dialog.setVisible(false);
 				}
 				else {
+					dialog.incorrectPasswordMessage();
 					password_fld.setText("");
 					password_fld.requestFocus();
 				}

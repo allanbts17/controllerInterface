@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import useful_classes.Movement;
 import useful_classes.osChange;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -85,7 +86,10 @@ public class window extends JFrame {
 
 		mainPane = new MainPane(this);
 		
-
+		//Movement m = new Movement();
+		//Movement m1 = new Movement();
+		
+		
 		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);

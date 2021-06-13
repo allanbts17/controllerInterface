@@ -52,6 +52,7 @@ public class FirstTimePanel extends JPanel {
 	private boolean componentsUp = false;
 	private boolean moveOnce = false;
 	MainPane main;
+	Dialog dialog = new Dialog();
 
 	/**
 	 * Create the panel.
@@ -63,7 +64,7 @@ public class FirstTimePanel extends JPanel {
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		//Panel
-		int panelWidth = 800;
+		int panelWidth = screenWidth;
 		int panelHeight = screenHeight;
 		int panelX=(screenWidth/2)-(panelWidth/2);
 		int panelY=0;
@@ -71,14 +72,16 @@ public class FirstTimePanel extends JPanel {
 		int componentsWidth = 300;
 		int componentsHeight = 40;
 		int gap = 10;
-				
+			
+		int dialogX = dialog.getLocation().x - 30;
+		dialog.setLocation(dialogX,dialog.getLocation().y);
+		
 		//Setting this panel
 		setOpaque(false);
 		setBounds(panelX, panelY, panelWidth, panelHeight);
 		//setBounds(0,0,400,250);
 		setLayout(null);
 		
-
 		//Position and size parameters
 		componentsX = (panelWidth/2)-(componentsWidth/2);
 		passlblY = (getHeight()/2)-(componentsHeight*5+gap*2)/2;
@@ -164,6 +167,8 @@ public class FirstTimePanel extends JPanel {
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
 		add(inicio_btn);
+		
+		add(dialog);
 	}
 	public void setMainPane(MainPane main) {
 		this.main = main;
@@ -235,6 +240,9 @@ public class FirstTimePanel extends JPanel {
 					main.virtualKeyboard.setVisible(false);
 					main.firstPane.moveComponents();
 					moveOnce = false;
+					dialog.setVisible(false);
+				}else if(!confirmed) {
+					dialog.incorrectConfirmationMessage();
 				}
 
 				password_fld.setText("");

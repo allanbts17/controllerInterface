@@ -393,7 +393,7 @@ public class SelectDatePanel extends JPanel {
 	}
 	private void getActualDate() {
 		Date date = new Date();
-		
+
 		//D�a
 		DateFormat dayFormat = new SimpleDateFormat("dd");
 		actualDay = Integer.parseInt(dayFormat.format(date));
@@ -652,12 +652,21 @@ public class SelectDatePanel extends JPanel {
 						calendarDayLabel.setVisible(true);
 						overlapedCalendarDayLabel.setVisible(true);
 						otherDay.setVisible(false);
-						overlapedCalendarDayLabel.setForeground(Color.BLACK);
+						Color dayColor;
+						if(isToday(numberOfDays-overlapedDayCount))
+							dayColor = Color.RED;
+						else
+							dayColor = Color.BLACK;
+						overlapedCalendarDayLabel.setForeground(dayColor);
 						overlapedCalendarDayLabel.setText(Integer.toString(numberOfDays-overlapedDayCount));					
 						
 						//multiBtn.setIcon(calendarDoubleDayUnpressedIco);
+						if(isToday(dayCount))
+							dayColor = Color.RED;
+						else
+							dayColor = Color.BLACK;
 						calendarDayLabel.setText(Integer.toString(dayCount));
-						calendarDayLabel.setForeground(Color.BLACK);
+						calendarDayLabel.setForeground(dayColor);
 						overlapedDayCount--;
 					}
 					else {

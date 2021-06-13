@@ -133,14 +133,18 @@ public class PrincipalPanel extends JPanel {
 	ArrayList<String> secuenciasNames = new ArrayList<String>();
 	FileHandler executions = new FileHandler();
 	osChange os = new osChange();
+	Dialog dialog = new Dialog();
 	MainPane main;
+	int screenWidth;
+	int screenHeight;
+	MouseAdapter eliminarBtnEvent;
 	/**
 	 * Create the panel.
 	 */
 	public PrincipalPanel() {
 		Dimension screenSize = os.setDimension();
-		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
+		screenWidth = (int)screenSize.getWidth();
+		screenHeight = (int)screenSize.getHeight();
 		//Panel
 		int panelWidth = screenWidth;
 		int panelHeight = screenHeight;
@@ -150,6 +154,7 @@ public class PrincipalPanel extends JPanel {
 		setOpaque(false);
 		setBounds(panelX, panelY, panelWidth, panelHeight);
 		setLayout(null);
+		add(dialog);
 		
 		//Container
 		containerX = 0;
@@ -607,10 +612,12 @@ public class PrincipalPanel extends JPanel {
 				reset(true);
 				main.atribute.setup = false;
 				main.menuNavegation.next(main.atribute);
+				dialog.setVisible(false);
+				selectedData="";
 			}
 		});
 		
-		eliminarBtn.addMouseListener(new MouseAdapter() {
+		eliminarBtnEvent = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("selectedData: "+selectedData+" "+!selectedData.equals(""));
@@ -645,6 +652,16 @@ public class PrincipalPanel extends JPanel {
 					repaint();
 					
 				}
+				dialog.setVisible(false);
+			}
+		};
+		dialog.setSiBtnAccionListener(eliminarBtnEvent);
+		
+		eliminarBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(!selectedData.equals(""))
+				dialog.executionEliminationMessage(screenWidth,screenHeight);
 			}
 		});
 		
@@ -655,6 +672,8 @@ public class PrincipalPanel extends JPanel {
 				main.atribute.setup = true;
 				main.menuNavegation.next(main.atribute);
 				main.virtualKeyboard.setHeight(290);
+				dialog.setVisible(false);
+				selectedData="";
 			}
 		});
 		
