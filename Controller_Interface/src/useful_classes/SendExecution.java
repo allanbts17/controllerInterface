@@ -2,6 +2,8 @@ package useful_classes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -27,6 +29,7 @@ public class SendExecution {
 		fl.setDirection("src/sav/");
 		try {
 			openSerialPort();
+			initArduinoDataReception();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,8 +39,31 @@ public class SendExecution {
 	
 	public void setScheduledExecutionList(ArrayList<String> executionList) {
 		this.scheduledExecutionList = executionList;
-		/*for(String name: scheduledExecutionList)
-			System.out.println(name);*/
+	}
+	
+	private void playMelodiasByPhone(int melodyNumber) {
+		FileHandler melodies = new FileHandler();
+		melodies.setDirection("src/files/");
+		String[] files = melodies.searchFiles(".mp3");
+		for(String file: files) {
+			System.out.println("Files: "+file);
+		}
+		System.out.println("melodyNumber: "+melodyNumber);
+		if(melodyNumber == 0) {
+			stopSong();
+		}
+		else if(melodyNumber <= files.length && !playSong) {
+			String melodiaName = files[melodyNumber-1];
+			try {
+				prepareForExecution(melodiaName);
+			} catch (FileNotFoundException | JavaLayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("no hay suficientes");
+		}
 	}
 	
 	public void compareDateStrings(String actualDateHour) throws FileNotFoundException, JavaLayerException {
@@ -105,10 +131,7 @@ public class SendExecution {
 
 	private void startExecution() throws FileNotFoundException, JavaLayerException{
 		if(extension.equals("mp3")){
-			//System.out.println("Its gonna play song");
-			if(playSong)
-				stopSong();
-			//playSong = false;
+			stopSong();
 			playSong();
 		} else {
 			//System.out.println("Its gonna send to Arduino");
@@ -169,6 +192,28 @@ public class SendExecution {
 		}	    
 	}
 	
+	private void initArduinoDataReception() {
+		arduinoPort.addDataListener(new SerialPortDataListener() {
+		      @Override
+		      public int getListeningEvents() {
+		        return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+		      }
+		      public void serialEvent(SerialPortEvent event) {
+		        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+		        return;
+		        byte[] newData = new byte[arduinoPort.bytesAvailable()];
+		        int numRead = arduinoPort.readBytes(newData, newData.length);
+		        int num=Character.getNumericValue(newData[0]);
+		        System.out.println("Bytes number: "+numRead);
+		        System.out.println("Data: "+num);
+		        
+		        playMelodiasByPhone(num);
+		        
+		        
+		      }
+		    });
+	}
+	
 	private void sendToArduino() {
 		String[] fileLines;
 		fileLines = fl.readFileLine();
@@ -220,8 +265,10 @@ public class SendExecution {
 	}
 	
 	private void stopSong() {
-		playSong = false;
-		musicFilePlayer.close();
+		if(playSong) {
+			playSong = false;
+			musicFilePlayer.close();
+		}
 	}
 
 }

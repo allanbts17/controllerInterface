@@ -170,7 +170,7 @@ public class SelectExecutionPanel extends JPanel {
 	public void setExtensionNameList(String extension) {
 		this.extension = extension;
 		fl.setDirection("src/files");
-		nameList = fl.searchFiles(extension);
+		nameList = fl.searchFilesWithoutExtension(extension);
 	}
 
 	public void setType(String type) {

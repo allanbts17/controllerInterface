@@ -46,6 +46,8 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 	private JPanel keyPanel;
 	public int defaultHeight = 350;
 	osChange os = new osChange();
+	int finalHeight;
+	int initialHeight;
     /**
      * Private class for storing key specification.
      */
@@ -168,7 +170,7 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
         add(initRow(row4, getSize(),keyColor));
     }
     
-    public void setHeight(int height) {	
+    public void setHeight(int height) {
     	rowY = 0;
     	Component[] rows = getComponents();
     	for(Component row: rows) {
@@ -176,8 +178,19 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
     	}
     	setPanel(height);	
     }
+        
+    public int[] getHeights( ){  
+	    int[] pos = new int [2];    // Creating an array of 3 elements  
+	    pos[0]=initialHeight;  
+	    pos [1]=finalHeight;  
+	    return pos;            // Return the reference of the array  
+    }
     
-    private void setPanel() {
+    public void moveToInitialHeight() {
+    	setLocation(getLocation().x,initialHeight);
+    }
+    
+    public void setPanel() {
     	Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
@@ -190,12 +203,13 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 		int keyPanHeight = defaultHeight;
 		int keyPanX = screenWidth/2 - keyPanWidth/2;
 		int keyPanY = screenHeight - keyPanHeight;
+		finalHeight = keyPanY;
+		initialHeight = screenHeight;
 		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
-		
 		setLayout(null);
     }
     
-    private void setPanel(int height) {
+    public void setPanel(int height) {
     	Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
@@ -209,11 +223,12 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 		int keyPanX = screenWidth/2 - keyPanWidth/2;
 		//int keyPanY = screenHeight/2 - keyPanHeight/2+100;
 		int keyPanY = screenHeight - keyPanHeight;
+		finalHeight = keyPanY;
+		initialHeight = screenHeight;
 		setBounds(keyPanX,keyPanY,keyPanWidth,keyPanHeight);
 		//add(keyPan);
 		//key.show(frame,keyPan);
 		//screen_btn.setVisible(false);
-		
 		setLayout(null);
     }
     

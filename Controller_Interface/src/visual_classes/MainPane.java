@@ -59,7 +59,6 @@ public class MainPane extends JPanelBackground {
 	
 	//Keyboard
 	JPanel keyPan = new JPanel();
-	//
 	String message;
 	String dateForMessage;
 	String daysOfWeekForMessage;
@@ -72,7 +71,6 @@ public class MainPane extends JPanelBackground {
 	
 	int screenWidth;
 	int screenHeight;
-	
 	int squareButtonHorizontalGap;
 	int squareButtonSize;
 	int squareButtonVerticalGap;
@@ -143,15 +141,16 @@ public class MainPane extends JPanelBackground {
 		atribute.time = MenuOptionsTime.PROGRAMADAS;
 		menuNavegation.goTo(atribute,4);	*/
 		/////////////
-		/*
-		l = new JLabel("texto");
-		l.setBounds(100,100,50,50);
+		
+		/*l = new JLabel("texto");
+		l.setBounds(0,100,50,50);
 		l.setOpaque(true);
 		add(l);
 		Movement move = new Movement(this.l);
-		move.setUniformMovement(1000,4000,'x');
-		move.start();
-		*/
+		//move.setUniformMovement(950,4000,'x');
+		move.setSmoothFinal(350,1000,'x');
+		move.start();*/
+		//virtualKeyboard
 		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override

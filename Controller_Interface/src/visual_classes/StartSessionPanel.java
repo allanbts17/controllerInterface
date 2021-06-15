@@ -161,13 +161,22 @@ public class StartSessionPanel extends JPanel {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if(!moveOnce) {
+					int pos[] = main.virtualKeyboard.getHeights();
+					main.virtualKeyboard.moveToInitialHeight();
+					System.out.println("Initial pos: "+main.virtualKeyboard.getLocation().y);
+					System.out.println("Final pos: "+pos[1]);
 					main.virtualKeyboard.setVisible(true);
+					Movement move = new Movement(main.virtualKeyboard);
+					//move.setUniformMovement(950,4000,'x');
+					move.setSmoothFinal(pos[1],5000,'y');
+					move.start();
 					main.screen_btn.setVisible(false);
 					main.startSessionPane.moveComponents();
 					moveOnce = true;
 				}
 			}
-		});	
+		});
+		
 		inicio_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

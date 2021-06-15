@@ -138,8 +138,7 @@ public class FileHandler {
 	        }
 		  return line;
 	  }
-	  
-	  public String[] searchFiles(String filter) {
+	  public String[] searchFilesWithoutExtension(String filter) {
 		  String[] nameList = new String[3];
 		  FileFilter filtro = new FileFilter() {
 			    @Override
@@ -159,6 +158,34 @@ public class FileHandler {
 				nameList = new String[listado.length];
 			    for (int i=0; i< listado.length; i++) {
 			    	String name = listado[i].getName().toString().split("\\.")[0];
+			    	//String name = listado[i].getName().toString();
+			        //System.out.println(name);
+			        nameList[i] = name;
+			    }
+			    
+			}
+		  return nameList;
+	  }
+	  public String[] searchFiles(String filter) {
+		  String[] nameList = new String[3];
+		  FileFilter filtro = new FileFilter() {
+			    @Override
+			    public boolean accept(File arch) {
+			    	boolean confirm = arch.getName().endsWith(filter);
+			        return confirm; 
+			    }
+			};
+		  
+			File carpeta = new File(direction);
+			File[] listado = carpeta.listFiles(filtro);
+			
+			if (listado == null || listado.length == 0) {
+			    System.out.println("No hay elementos dentro de la carpeta actual");
+			}
+			else {
+				nameList = new String[listado.length];
+			    for (int i=0; i< listado.length; i++) {
+			    	String name = listado[i].getName().toString(); //.split("\\.")[0];
 			    	//String name = listado[i].getName().toString();
 			        //System.out.println(name);
 			        nameList[i] = name;

@@ -28,7 +28,7 @@ import java.awt.Graphics2D;
 public class window extends JFrame {
 	osChange os = new osChange();
 	MainPane mainPane;
-	VirtualKeyboard key = new VirtualKeyboard(); 
+	//VirtualKeyboard key = new VirtualKeyboard(); 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JPanel PaneWithText;
