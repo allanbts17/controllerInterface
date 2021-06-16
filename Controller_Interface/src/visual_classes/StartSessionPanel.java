@@ -34,6 +34,7 @@ public class StartSessionPanel extends JPanel {
 	JPasswordField password_fld;
 	JLabel show_password_img;
 	JButton inicio_btn;
+	JPanel componentsPane = new JPanel();
 	boolean show_pass = false;
 	ImageIcon conOn = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_on.png"));
 	ImageIcon conOff = new ImageIcon(StartSessionPanel.class.getResource("/icons/ojo_contrasena_off.png"));
@@ -96,13 +97,19 @@ public class StartSessionPanel extends JPanel {
 		buttonsY = passfldY + componentsHeight+gap;
 		passFieldLimit = 16;
 		
+		//ComponentPane
+		componentsPane.setSize(getSize());
+		componentsPane.setLocation(0,0);
+		componentsPane.setLayout(null);
+		componentsPane.setOpaque(false);
+		
 		//Password label
 		password_lbl = new JLabel("Ingrese la contrase\u00F1a");
 		password_lbl.setForeground(Color.WHITE);
 		password_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 30));
 		password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
 		password_lbl.setBounds(componentsX, passlblY, componentsWidth, componentsHeight);
-		add(password_lbl);
+		componentsPane.add(password_lbl);
 					
 		//Password field
 		password_fld = new JPasswordField(passFieldLimit);											
@@ -111,7 +118,7 @@ public class StartSessionPanel extends JPanel {
 		password_fld.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		password_fld.setBorder(new LineBorder(Color.WHITE, 2, true));
 		password_fld.setBounds(componentsX, passfldY, componentsWidth, componentsHeight);
-		add(password_fld);
+		componentsPane.add(password_fld);
 		
 		conOn = new ImageIcon(conOn.getImage().getScaledInstance(conOnWidth, conOnHeight,java.awt.Image.SCALE_SMOOTH));
 		conOff = new ImageIcon(conOff.getImage().getScaledInstance(conOffWidth, conOffHeight,java.awt.Image.SCALE_SMOOTH));
@@ -122,7 +129,7 @@ public class StartSessionPanel extends JPanel {
 		show_password_img.setBorder(null);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);
-		add(show_password_img);
+		componentsPane.add(show_password_img);
 		
 		//Start button
 		inicio_btn = new JButton();		
@@ -135,8 +142,9 @@ public class StartSessionPanel extends JPanel {
 		inicio_btn.setPressedIcon(inicioIconPressed);
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
-		add(inicio_btn);
+		componentsPane.add(inicio_btn);
 		add(dialog);
+		add(componentsPane);
 		
 	}
 	
@@ -150,10 +158,16 @@ public class StartSessionPanel extends JPanel {
 		componentsUp = !componentsUp;
 		int move = (componentsUp)? -160:0;
 		
-		password_lbl.setBounds(componentsX, passlblY+move, componentsWidth, componentsHeight);
+		if(componentsUp) {
+			Movement move1 = new Movement(this.componentsPane);
+			move1.setSlowedDownMovement(move,100,0.50f,'y');
+			move1.start();
+		}else
+			componentsPane.setLocation(componentsPane.getLocation().x,move);
+		/*password_lbl.setBounds(componentsX, passlblY+move, componentsWidth, componentsHeight);
 		password_fld.setBounds(componentsX, passfldY+move, componentsWidth, componentsHeight);
 		show_password_img.setBounds(componentsX, buttonsY+move, conOffWidth, conOffHeight);
-		inicio_btn.setBounds(inicioBtnX, buttonsY+move, inicioBtnWidth, componentsHeight);
+		inicio_btn.setBounds(inicioBtnX, buttonsY+move, inicioBtnWidth, componentsHeight);*/
 	}
 	
 	private void setActions() {
@@ -167,8 +181,7 @@ public class StartSessionPanel extends JPanel {
 					System.out.println("Final pos: "+pos[1]);
 					main.virtualKeyboard.setVisible(true);
 					Movement move = new Movement(main.virtualKeyboard);
-					//move.setUniformMovement(950,4000,'x');
-					move.setSmoothFinal(pos[1],5000,'y');
+					move.setSlowedDownMovement(pos[1],100,0.10f,'y');
 					move.start();
 					main.screen_btn.setVisible(false);
 					main.startSessionPane.moveComponents();
