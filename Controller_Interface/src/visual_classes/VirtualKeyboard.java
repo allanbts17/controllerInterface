@@ -1,14 +1,9 @@
 package visual_classes;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -287,9 +282,9 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
                 button = new JButton(key.value);
                 int lineThickness = 2;
                 
-                Color btnLineColor = getColorWithAlpha(Color.WHITE);
+                /*Color btnLineColor = getColorWithAlpha(Color.WHITE);
                 Color btnColor = getColorWithAlpha(Color.BLACK);
-                Color btnTextColor = getColorWithAlpha(Color.WHITE);
+                Color btnTextColor = getColorWithAlpha(Color.WHITE);*/
                
                 button.setBorder(new MatteBorder(lineThickness, lineThickness, lineThickness, lineThickness, (Color) Color.WHITE));
                 button.setForeground(Color.WHITE);

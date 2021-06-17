@@ -1,11 +1,8 @@
 package visual_classes;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +10,6 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 
 import useful_classes.Encryption;
 import useful_classes.FileHandler;
@@ -225,11 +221,11 @@ public class FirstTimePanel extends JPanel {
 					main.principalPane.reset(true);	
 					main.menuNavegation.next(main.atribute);
 					
-					//Habilitando la encriptación
-					Encryption hash = new Encryption();
-					String enc_pass = hash.sha1(password_fld.getPassword());
+					//Habilitando la encriptaciï¿½n
+					//Encryption hash = new Encryption();
+					String enc_pass = Encryption.sha1(password_fld.getPassword());
 					
-					//Guardando la contraseña
+					//Guardando la contraseï¿½a
 					FileHandler fl = new FileHandler();
 					fl.setDirection("src/sav/");
 					fl.setFilename("main_data.int");
@@ -260,8 +256,8 @@ public class FirstTimePanel extends JPanel {
 		}
 		else {
 			show_password_img.setIcon(off);
-			password_fld.setEchoChar('•');
-			confirmation_fld.setEchoChar('•');
+			password_fld.setEchoChar('*');
+			confirmation_fld.setEchoChar('*');
 		}
 	}
 	

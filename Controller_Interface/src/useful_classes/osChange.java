@@ -26,7 +26,7 @@ public class osChange {
 	}
 	
 	public Dimension setDimension() {
-		//Tamaño de toda la pantalla
+		//Tamaï¿½o de toda la pantalla
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				
 		if(operativeSystem.startsWith("Windows") && imitateLinux)

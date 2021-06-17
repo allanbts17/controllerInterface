@@ -1,32 +1,21 @@
 package visual_classes;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.MouseInfo;
-import java.awt.Toolkit;
-
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import useful_classes.FileHandler;
 import useful_classes.osChange;
-
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class PrincipalPanel extends JPanel {
 	JButton nuevoBtn = new JButton();
@@ -56,8 +45,8 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon editarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/editar_btn_pressed.png"));
 	ImageIcon eliminarBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_unpressed.png"));
 	ImageIcon eliminarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_pressed.png"));	
-	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_unpressed.png"));
-	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contraseña_btn_pressed.png"));
+	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_unpressed.png"));
+	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_pressed.png"));
 	int scale = 2;
 	boolean executionPressed = false;
 	boolean scrollBarPressed = false;
@@ -280,7 +269,7 @@ public class PrincipalPanel extends JPanel {
 		eliminarBtn.setBounds(buttonsX, eliminarBtnY, buttonsWidth, buttonsHeight);
 		add(eliminarBtn);
 		
-		//contraseña
+		//contraseï¿½a
 		cambiarContrasenaBtn.setBorder(null);
 		cambiarContrasenaBtn.setContentAreaFilled(false);
 		cambiarContrasenaBtn.setBounds(buttonsX, cambiarContrasenaY, buttonsWidth, buttonsHeight);
@@ -341,7 +330,7 @@ public class PrincipalPanel extends JPanel {
 				toquesNames.add(line);
 			}
 		
-		//Melodías
+		//Melodï¿½as
 		executions.setFilename("melodias.int");
 		lines = executions.readFileLine();
 		fileEmpty = lines.length == 1 && lines[0].equals(""); 
@@ -527,7 +516,7 @@ public class PrincipalPanel extends JPanel {
                 break;
             case '6': letraD = "Vie";
                 break;
-            case '7': letraD = "Sáb";
+            case '7': letraD = "Sï¿½b";
                 break;
         }
         return letraD;

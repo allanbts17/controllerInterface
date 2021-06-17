@@ -32,10 +32,10 @@ public class Dialog extends JPanel {
 	JButton siBtn = new JButton();
 	JButton noBtn = new JButton();
 	JButton okBtn = new JButton();
-	JLabel seguroQueDeseaLabel = new JLabel("¿Seguro que desea");
-	JLabel eliminarLaEjecuciónLabel = new JLabel("eliminar la ejecución?");
-	JLabel contraseñaIncorrectaLabel = new JLabel("Contraseña incorrecta");
-	JLabel confirmaciónIncorrectaLabel = new JLabel("Confirmación incorrecta");
+	JLabel seguroQueDeseaLabel = new JLabel("ï¿½Seguro que desea");
+	JLabel eliminarLaEjecucionLabel = new JLabel("eliminar la ejecuciï¿½n?");
+	JLabel contrasenaIncorrectaLabel = new JLabel("Contraseï¿½a incorrecta");
+	JLabel confirmacionIncorrectaLabel = new JLabel("Confirmaciï¿½n incorrecta");
 	JLabel bigWindowBackground = new JLabel();
 	JLabel smallWindowBackground = new JLabel();
 	
@@ -136,23 +136,23 @@ public class Dialog extends JPanel {
 		seguroQueDeseaLabel.setBounds(0,labelUpY,windowWidth,labelHeight);
 		seguroQueDeseaLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		eliminarLaEjecuciónLabel.setFont(font);
-		eliminarLaEjecuciónLabel.setBounds(0,labelUpY+labelHeight-6,windowWidth,labelHeight);
-		eliminarLaEjecuciónLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		eliminarLaEjecucionLabel.setFont(font);
+		eliminarLaEjecucionLabel.setBounds(0,labelUpY+labelHeight-6,windowWidth,labelHeight);
+		eliminarLaEjecucionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		labelUpY = Math.round(40*scale);
-		contraseñaIncorrectaLabel.setFont(smallFont);
-		contraseñaIncorrectaLabel.setBounds(0,labelUpY,smallBackgroundWidth,Math.round(labelHeight/scale));
-		contraseñaIncorrectaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		contrasenaIncorrectaLabel.setFont(smallFont);
+		contrasenaIncorrectaLabel.setBounds(0,labelUpY,smallBackgroundWidth,Math.round(labelHeight/scale));
+		contrasenaIncorrectaLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		confirmaciónIncorrectaLabel.setFont(smallFont);
-		confirmaciónIncorrectaLabel.setBounds(0,labelUpY,smallBackgroundWidth,Math.round(labelHeight/scale));
-		confirmaciónIncorrectaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		confirmacionIncorrectaLabel.setFont(smallFont);
+		confirmacionIncorrectaLabel.setBounds(0,labelUpY,smallBackgroundWidth,Math.round(labelHeight/scale));
+		confirmacionIncorrectaLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		add(seguroQueDeseaLabel);
-		add(eliminarLaEjecuciónLabel);
-		add(contraseñaIncorrectaLabel);
-		add(confirmaciónIncorrectaLabel);
+		add(eliminarLaEjecucionLabel);
+		add(contrasenaIncorrectaLabel);
+		add(confirmacionIncorrectaLabel);
 		add(okBtn);
 		add(siBtn);
 		add(noBtn);
@@ -188,27 +188,27 @@ public class Dialog extends JPanel {
 				,Math.round(screenHeight/2)-Math.round(bigWindowHeight/2));
 		setBigWindow();
 		seguroQueDeseaLabel.setVisible(true);
-		eliminarLaEjecuciónLabel.setVisible(true);
-		contraseñaIncorrectaLabel.setVisible(false);
-		confirmaciónIncorrectaLabel.setVisible(false);
+		eliminarLaEjecucionLabel.setVisible(true);
+		contrasenaIncorrectaLabel.setVisible(false);
+		confirmacionIncorrectaLabel.setVisible(false);
 		setVisible(true);
 	}
 	
 	public void incorrectPasswordMessage() {
 		setSmallWindow();
 		seguroQueDeseaLabel.setVisible(false);
-		eliminarLaEjecuciónLabel.setVisible(false);
-		contraseñaIncorrectaLabel.setVisible(true);
-		confirmaciónIncorrectaLabel.setVisible(false);
+		eliminarLaEjecucionLabel.setVisible(false);
+		contrasenaIncorrectaLabel.setVisible(true);
+		confirmacionIncorrectaLabel.setVisible(false);
 		setVisible(true);
 	}
 	
 	public void incorrectConfirmationMessage() {
 		setSmallWindow();
 		seguroQueDeseaLabel.setVisible(false);
-		eliminarLaEjecuciónLabel.setVisible(false);
-		contraseñaIncorrectaLabel.setVisible(false);
-		confirmaciónIncorrectaLabel.setVisible(true);
+		eliminarLaEjecucionLabel.setVisible(false);
+		contrasenaIncorrectaLabel.setVisible(false);
+		confirmacionIncorrectaLabel.setVisible(true);
 		setVisible(true);
 	}
 

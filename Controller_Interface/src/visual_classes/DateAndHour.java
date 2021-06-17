@@ -3,14 +3,10 @@ package visual_classes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,7 +44,7 @@ public class DateAndHour extends JPanel {
 	public DateAndHour() {
 		Dimension screenSize = os.setDimension();
 		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
+		//int screenHeight = (int)screenSize.getHeight();
 		
 		//Texto fecha y hora
 		int date_panel_w = 700;
@@ -89,7 +85,7 @@ public class DateAndHour extends JPanel {
 		
 		//Hora
 		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
-		String test = hourFormat.format(date);
+		//String test = hourFormat.format(date);
 		/*for(int i=0;i<test.length();i++){
 			System.out.println(i+": "+test.charAt(i)+", "+(int)test.charAt(i));
 		}*/
@@ -163,7 +159,7 @@ public class DateAndHour extends JPanel {
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "Sábado";
+            case 7: letraD = "Sï¿½bado";
                 break;
         }
         return letraD;

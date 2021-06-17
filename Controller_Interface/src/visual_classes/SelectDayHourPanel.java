@@ -127,7 +127,7 @@ public class SelectDayHourPanel extends JPanel {
 	}
 	DayButton[] days = new DayButton[7];
 	String[] dayNames = new String[] {
-		"Dom","Lun","Mar","Mie","Jue","Vie","Sáb"
+		"Dom","Lun","Mar","Mie","Jue","Vie","Sï¿½b"
 	};
 	public SelectDayHourPanel() {
 		//Setting size parameters
@@ -283,7 +283,7 @@ public class SelectDayHourPanel extends JPanel {
 				main.selectExecutionPane.setExtensionNameList(".toc");
 				break;
 			case CARRILLON:
-				main.selectExecutionPane.setType("la melodía");
+				main.selectExecutionPane.setType("la melodÃ­a");
 				main.selectExecutionPane.setExtensionNameList(".mp3");
 				break;
 			case BANDEO:

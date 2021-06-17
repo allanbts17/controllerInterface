@@ -3,11 +3,9 @@ package visual_classes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,15 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-
 import useful_classes.*;
-
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -199,9 +189,9 @@ public class StartSessionPanel extends JPanel {
 				
 				main.principalPane.dialog.setVisible(false);
 				main.principalPane.selectedData="";
-				//Habilitando la encriptación
-				Encryption hash = new Encryption();
-				String enc_pass = hash.sha1(password_fld.getPassword());
+				//Habilitando la encriptaciï¿½n
+				//Encryption hash = new Encryption();
+				String enc_pass = Encryption.sha1(password_fld.getPassword());
 				String[] passLine = passRead.readFileLine(1).trim().split("\\s+");
 				
 				correct = passwordCorrect(stringToChar(passLine[1]),stringToChar(enc_pass));
@@ -249,7 +239,7 @@ public class StartSessionPanel extends JPanel {
 		}
 		else {
 			show_password_img.setIcon(off);
-			password_fld.setEchoChar('•');
+			password_fld.setEchoChar('*');
 		}
 	}
 	

@@ -1,13 +1,11 @@
 package visual_classes;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import useful_classes.MenuOptionsTime;
@@ -128,7 +126,7 @@ public class ExecutionTimePanel extends JPanel {
 					main.selectExecutionPane.setExtensionNameList(".toc");
 					break;
 				case CARRILLON:
-					main.selectExecutionPane.setType("la melodía");
+					main.selectExecutionPane.setType("la melodï¿½a");
 					main.selectExecutionPane.setExtensionNameList(".mp3");
 					break;
 				case BANDEO:

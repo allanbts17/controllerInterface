@@ -7,13 +7,8 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import useful_classes.MenuOptionsTime;
 import useful_classes.osChange;
 import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -170,7 +165,7 @@ public class SelectHourPanel extends JPanel {
 			main.selectExecutionPane.setExtensionNameList(".toc");
 			break;
 		case CARRILLON:
-			main.selectExecutionPane.setType("la melodía");
+			main.selectExecutionPane.setType("la melodï¿½a");
 			main.selectExecutionPane.setExtensionNameList(".mp3");
 			break;
 		case BANDEO:

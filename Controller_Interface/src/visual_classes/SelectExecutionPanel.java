@@ -1,11 +1,7 @@
 package visual_classes;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -91,12 +87,12 @@ public class SelectExecutionPanel extends JPanel {
 	int gap = 10;
 	int buttonGap = 0;
 
-	private String type = "la melodía";
+	private String type = "la melodï¿½a";
 	private String[] nameList;
 	FileHandler fl = new FileHandler();
 
 	MainPane main;
-	String test = "Selecione la melodía";
+	String test = "Selecione la melodï¿½a";
 	osChange os = new osChange();
 	boolean anExecutionIsSelected = false;
 	boolean labelPressed = false;
@@ -181,7 +177,7 @@ public class SelectExecutionPanel extends JPanel {
 		boolean addReminder = true;
 		switch(main.atribute.time) {
 		case INMEDIATAS:
-			//iniciar ejecución ya
+			//iniciar ejecuciï¿½n ya
 			addReminder = false;
 			main.message = filename+extension;
 			main.sendExecution.prepareForExecution(main.message);

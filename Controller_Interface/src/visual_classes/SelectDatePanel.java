@@ -1,7 +1,6 @@
 package visual_classes;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,14 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.AbstractButton;
-import javax.swing.GroupLayout.Alignment;
-
-import useful_classes.MenuOptionsTime;
 import useful_classes.osChange;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -531,12 +525,8 @@ public class SelectDatePanel extends JPanel {
 	}
 	private void setActionsToCalendar() {
 		count=0;
-		JLabel otherDay;
 		JLabel dayBtn;
 		JLabel multiBtn;
-		JLabel overlapedCalendarDayLabel;	
-		JLabel calendarDayLabel;
-		JPanel dayPane;
 		for(int row=0;row<5;row++) {
 			for(int column=0;column<7;column++) {
 				otherDay = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[4];
@@ -620,7 +610,6 @@ public class SelectDatePanel extends JPanel {
 		JLabel multiBtn;
 		JLabel overlapedCalendarDayLabel;	
 		JLabel calendarDayLabel;
-		JPanel dayPane;
 		for(int row=0;row<5;row++) {
 			for(int column=0;column<7;column++) {
 				otherDay = (JLabel) ((JPanel) calendarDaysPane.getComponents()[count]).getComponents()[4];
@@ -711,7 +700,6 @@ public class SelectDatePanel extends JPanel {
 	}
 	int weekDay (int dia, int mes, int ano)
     {
-        String letraD="";
         TimeZone timezone = TimeZone.getDefault();
         Calendar calendar = new GregorianCalendar(timezone);
         calendar.set(ano, mes-1, dia);

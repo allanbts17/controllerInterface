@@ -1,11 +1,9 @@
 package visual_classes;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +11,6 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 
 import useful_classes.Encryption;
 import useful_classes.FileHandler;
@@ -298,10 +295,10 @@ public class ChangePasswordPanel extends JPanel {
 				boolean correct;
 				main.dateAndHour.update();
 				
-				//Habilitando la encriptación
+				//Habilitando la encriptaciï¿½n
 				FileHandler passRead = main.passRead;
-				Encryption hash = new Encryption();
-				String enc_pass = hash.sha1(current_password_fld.getPassword());
+				//Encryption hash = new Encryption();
+				String enc_pass = Encryption.sha1(current_password_fld.getPassword());
 				String[] passLine = passRead.readFileLine(1).trim().split("\\s+");
 				
 				correct = main.startSessionPane.passwordCorrect(
@@ -317,11 +314,11 @@ public class ChangePasswordPanel extends JPanel {
 					show_pass = false;
 					showPassword(show_pass,conOn,conOff);
 					
-					//Habilitando la encriptación
+					//Habilitando la encriptaciï¿½n
 					//Encryption hash = new Encryption();
-					enc_pass = hash.sha1(password_fld.getPassword());
+					enc_pass = Encryption.sha1(password_fld.getPassword());
 					
-					//Guardando la contraseña
+					//Guardando la contraseï¿½a
 					FileHandler fl = new FileHandler();
 					fl.setDirection("src/sav/");
 					fl.setFilename("main_data.int");
@@ -356,9 +353,9 @@ public class ChangePasswordPanel extends JPanel {
 		}
 		else {
 			show_password_img.setIcon(off);
-			current_password_fld.setEchoChar('•');
-			password_fld.setEchoChar('•');
-			confirmation_fld.setEchoChar('•');
+			current_password_fld.setEchoChar('*');
+			password_fld.setEchoChar('*');
+			confirmation_fld.setEchoChar('*');
 		}
 	}
 	

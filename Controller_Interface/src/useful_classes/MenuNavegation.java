@@ -1,13 +1,8 @@
 package useful_classes;
 
 import java.awt.Component;
-import java.awt.List;
 import java.util.ArrayList;
-
-import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import visual_classes.*;
 
 public class MenuNavegation {
 	private MenuItemTree menu = new MenuItemTree();
