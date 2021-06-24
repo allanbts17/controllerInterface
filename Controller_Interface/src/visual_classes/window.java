@@ -6,6 +6,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import useful_classes.Movement;
 import useful_classes.osChange;
 import java.awt.Point;
 
@@ -73,8 +75,7 @@ public class window extends JFrame {
 
 		mainPane = new MainPane(this);
 		
-		//Movement m = new Movement();
-		//Movement m1 = new Movement();
+		System.out.println("tesst");
 		
 		
 		contentPane.add(mainPane);
