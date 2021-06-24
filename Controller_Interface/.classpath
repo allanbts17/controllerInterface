@@ -9,5 +9,18 @@
 	<classpathentry kind="lib" path="library/jSerialComm-2.7.0.jar" sourcepath="D:/JavaSource/jSerialComm-master"/>
 	<classpathentry kind="lib" path="library/jlayer-1.0.1.4.jar" sourcepath="D:/JavaSource/JLayer-master"/>
 	<classpathentry kind="lib" path="library/junit-3.8.2.jar"/>
+	<classpathentry kind="lib" path="library/junit.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-core.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-core-javadoc.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-core-sources.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-device.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-device-javadoc.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-device-sources.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-example.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-example-javadoc.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-example-sources.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-gpio-extension.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-gpio-extension-javadoc.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-gpio-extension-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
