@@ -9,6 +9,12 @@ import javax.swing.JPanel;
 import useful_classes.osChange;
 import java.awt.Point;
 
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+
 public class window extends JFrame {
 	osChange os = new osChange();
 	MainPane mainPane;
