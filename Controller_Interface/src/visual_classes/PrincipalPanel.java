@@ -19,7 +19,7 @@ import java.util.Collections;
 
 public class PrincipalPanel extends JPanel {
 	JButton nuevoBtn = new JButton();
-	JButton editarBtn = new JButton();
+	JButton detenerEjecucionBtn = new JButton();
 	JButton eliminarBtn = new JButton();
 	JButton cambiarContrasenaBtn = new JButton();
 	JPanel container = new JPanel();
@@ -41,8 +41,8 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon scrollBarIco = new ImageIcon(this.getClass().getResource("/icons/scroll_bar.png"));
 	ImageIcon nuevoBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/nuevo_btn_unpressed.png"));
 	ImageIcon nuevoBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/nuevo_btn_pressed.png"));
-	ImageIcon editarBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/editar_btn_unpressed.png"));
-	ImageIcon editarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/editar_btn_pressed.png"));
+	ImageIcon detenerEjecucionBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/detener_ejecucion_btn_unpressed.png"));
+	ImageIcon detenerEjecucionBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/detener_ejecucion_btn_pressed.png"));
 	ImageIcon eliminarBtnIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_unpressed.png"));
 	ImageIcon eliminarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_pressed.png"));	
 	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_unpressed.png"));
@@ -57,7 +57,7 @@ public class PrincipalPanel extends JPanel {
 	int buttonsWidth;
 	int buttonsHeight;
 	int nuevoBtnY;
-	int editarBtnY;
+	int detenerEjecucionBtnY;
 	int eliminarBtnY;
 	int cambiarContrasenaY;
 	//Container
@@ -203,9 +203,11 @@ public class PrincipalPanel extends JPanel {
 		buttonsX = (containerX + containerWidth)+((screenWidth-(containerX + containerWidth))/2)-buttonsWidth/2;
 		//buttonsX=500;
 		nuevoBtnY = 100;
-		editarBtnY = nuevoBtnY+buttonsHeight+buttonsGap;
-		eliminarBtnY = editarBtnY+buttonsHeight+buttonsGap;
+		detenerEjecucionBtnY = nuevoBtnY+buttonsHeight+buttonsGap;
+		eliminarBtnY = detenerEjecucionBtnY+buttonsHeight+buttonsGap;
 		cambiarContrasenaY = eliminarBtnY+buttonsHeight+buttonsGap;
+		
+		placeBtns(false);
 		
 		//selection
 		selectionX=0;
@@ -231,8 +233,8 @@ public class PrincipalPanel extends JPanel {
 		scrollBarIco = new ImageIcon(scrollBarIco.getImage().getScaledInstance(baseWidth, baseHeight,java.awt.Image.SCALE_SMOOTH));
 		nuevoBtnIcoUnpressed = new ImageIcon(nuevoBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		nuevoBtnIcoPressed = new ImageIcon(nuevoBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
-		editarBtnIcoUnpressed = new ImageIcon(editarBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
-		editarBtnIcoPressed = new ImageIcon(editarBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		detenerEjecucionBtnIcoUnpressed = new ImageIcon(detenerEjecucionBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
+		detenerEjecucionBtnIcoPressed = new ImageIcon(detenerEjecucionBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		eliminarBtnIcoUnpressed = new ImageIcon(eliminarBtnIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		eliminarBtnIcoPressed = new ImageIcon(eliminarBtnIcoPressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
 		cambiarContrasenaIcoUnpressed = new ImageIcon(cambiarContrasenaIcoUnpressed.getImage().getScaledInstance(buttonsWidth, buttonsHeight,java.awt.Image.SCALE_SMOOTH));
@@ -244,8 +246,8 @@ public class PrincipalPanel extends JPanel {
 		base.setIcon(baseIco);
 		nuevoBtn.setIcon(nuevoBtnIcoUnpressed);
 		nuevoBtn.setPressedIcon(nuevoBtnIcoPressed);
-		editarBtn.setIcon(editarBtnIcoUnpressed);
-		editarBtn.setPressedIcon(editarBtnIcoPressed);
+		detenerEjecucionBtn.setIcon(detenerEjecucionBtnIcoUnpressed);
+		detenerEjecucionBtn.setPressedIcon(detenerEjecucionBtnIcoPressed);
 		eliminarBtn.setIcon(eliminarBtnIcoUnpressed);
 		eliminarBtn.setPressedIcon(eliminarBtnIcoPressed);
 		cambiarContrasenaBtn.setIcon(cambiarContrasenaIcoUnpressed);
@@ -258,10 +260,10 @@ public class PrincipalPanel extends JPanel {
 		add(nuevoBtn);
 		
 		//editar
-		editarBtn.setBorder(null);
-		editarBtn.setContentAreaFilled(false);
-		editarBtn.setBounds(buttonsX, editarBtnY, buttonsWidth, buttonsHeight);
-		add(editarBtn);
+		detenerEjecucionBtn.setBorder(null);
+		detenerEjecucionBtn.setContentAreaFilled(false);
+		detenerEjecucionBtn.setBounds(buttonsX, detenerEjecucionBtnY, buttonsWidth, buttonsHeight);
+		add(detenerEjecucionBtn);
 		
 		//eliminar
 		eliminarBtn.setBorder(null);
@@ -288,6 +290,20 @@ public class PrincipalPanel extends JPanel {
 		this.main = main;
 		fillNameList();
 		setActions();
+	}
+	
+	public void placeBtns(boolean fourthBtnVisible) {
+		nuevoBtnY = fourthBtnVisible? 100:150; //100
+		eliminarBtnY = nuevoBtnY+buttonsHeight+buttonsGap;
+		cambiarContrasenaY = eliminarBtnY+buttonsHeight+buttonsGap;
+		detenerEjecucionBtnY = cambiarContrasenaY+buttonsHeight+buttonsGap;
+		detenerEjecucionBtn.setVisible(fourthBtnVisible);
+		
+		nuevoBtn.setLocation(nuevoBtn.getLocation().x,nuevoBtnY);
+		eliminarBtn.setLocation(eliminarBtn.getLocation().x,eliminarBtnY);
+		cambiarContrasenaBtn.setLocation(cambiarContrasenaBtn.getLocation().x,cambiarContrasenaY);
+		detenerEjecucionBtn.setLocation(detenerEjecucionBtn.getLocation().x,detenerEjecucionBtnY);
+		
 	}
 	
 	public void reset(boolean resetTabNumber) {	
@@ -603,6 +619,14 @@ public class PrincipalPanel extends JPanel {
 				main.menuNavegation.next(main.atribute);
 				dialog.setVisible(false);
 				selectedData="";
+			}
+		});
+		
+		detenerEjecucionBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				main.sendExecution.stopArduinoExecution();
+				main.sendExecution.stopSong();
 			}
 		});
 		

@@ -34,7 +34,9 @@ public class DateAndHour extends JPanel {
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
 			"octubre", "noviembre", "diciembre"};
+	Date date = new Date();
 	boolean minuteChange = false;
+	boolean testOnce = true;
 	osChange os = new osChange();
 	SendExecution sendExecution = new SendExecution();
 	MainPane main;
@@ -82,6 +84,9 @@ public class DateAndHour extends JPanel {
 	
 	private void getDate() {
 		Date date = new Date();
+		//date.setHours(18);
+		//date.setMinutes(0);
+		DateFormat secondFormat = new SimpleDateFormat("ss");
 		
 		//Hora
 		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
@@ -166,26 +171,70 @@ public class DateAndHour extends JPanel {
     }
 	
 	public void time_date_update() {
+		Date date = new Date();
+		DateFormat secondFormat = new SimpleDateFormat("ss");
+		String firstSeconds = secondFormat.format(date);
+		String seconds = firstSeconds;
+		
+		while(seconds.equals(firstSeconds)) {
+			Date date1 = new Date();
+			seconds = secondFormat.format(date1);
+		}
+		
 	    TimerTask repeatedTask = new TimerTask() {
 	        public void run() {    	
 	        	getDate();
 	        	if(minuteChange) {
 	        		System.out.println("it do a minuteChange: "+minuteChange);
-	        		try {
+	        		minuteChange=false;
+					try {
 						main.sendExecution.compareDateStrings(dateForCompare);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JavaLayerException e) {
+					} catch (FileNotFoundException | JavaLayerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	        		minuteChange=false;
+	        		//Clock pulse
+	        		main.sendExecution.clockPulseA();
+	        		
+	        		//testOnce = false;
+	        		/*if(testOnce) {
+		        		Date date = new Date();
+		        		date.setHours(18);
+		        		date.setMinutes(0);
+		        		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
+		        		char replaceDigit = os.ifWindows()? (char)160:(char)32;
+		        		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
+		        		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);
+		        		minuteChange = !replacedText.equals(texto_hora);
+		        		texto_hora = replacedText;
+		        		System.out.println("Hour: "+texto_hora);
+		        		testOnce = false;
+	        		}
+	        		else {
+	        			Date date = new Date();
+		        		date.setHours(6);
+		        		date.setMinutes(0);
+		        		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
+		        		char replaceDigit = os.ifWindows()? (char)160:(char)32;
+		        		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
+		        		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);
+		        		minuteChange = !replacedText.equals(texto_hora);
+		        		texto_hora = replacedText;
+		        		System.out.println("Hour: "+texto_hora);
+		        		testOnce = false;
+	        		}*/
+	        		
+	        		if(texto_hora.equals("06:00 p.m.")) {
+	        			System.out.println("ON");
+	        			main.sendExecution.backlightOn();
+	        		}
+	        		else if(texto_hora.equals("06:00 a.m.")) {
+	        			System.out.println("OFF");
+	        			main.sendExecution.backlightOff();
+	        		}
 	        	}
 	    		fecha.setText(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]); 		
 	    		hora.setText(texto_hora);
-	    		
-	    		
 	        }
 	    };
 	    Timer timer = new Timer("Timer");

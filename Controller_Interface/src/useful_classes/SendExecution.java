@@ -15,7 +15,8 @@ public class SendExecution {
 	MainPane main;
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
-	boolean playSong = false;
+	public boolean playSong = false;
+	public boolean arduinoExecution = false;
 	String executionToSend;
 	String extension;
 	SerialPort arduinoPort;
@@ -128,13 +129,19 @@ public class SendExecution {
 	}
 
 	private void startExecution() throws FileNotFoundException, JavaLayerException{
-		if(extension.equals("mp3")){
-			stopSong();
-			playSong();
-		} else {
-			//System.out.println("Its gonna send to Arduino");
-			sendToArduino();
-		}
+		main.principalPane.placeBtns(true);
+		if(!playSong && !arduinoExecution)
+			if(extension.equals("mp3")){
+				//stopSong();
+				//if(!playSong)
+					playSong();
+			} else {
+				//System.out.println("Its gonna send to Arduino");
+				//if(!arduinoExecution) {
+					arduinoExecution = true;
+					sendToArduino();
+				//}
+			}
 	}
 
 	private void deleteExecution(int index) {
@@ -169,7 +176,7 @@ public class SendExecution {
 	}
 	
 	private void openSerialPort() throws IOException{
-		String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
+		String port = os.ifWindows()? "COM4":"/dev/ttyUSB0";
 	    arduinoPort = SerialPort.getCommPort(port);
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
@@ -201,13 +208,18 @@ public class SendExecution {
 		        return;
 		        byte[] newData = new byte[arduinoPort.bytesAvailable()];
 		        int numRead = arduinoPort.readBytes(newData, newData.length);
-		        int num=Character.getNumericValue(newData[0]);
-		        System.out.println("Bytes number: "+numRead);
-		        System.out.println("Data: "+num);
 		        
-		        playMelodiasByPhone(num);
-		        
-		        
+		        if(newData[0]=='f') {
+		        	arduinoExecution = false;
+		        	main.principalPane.placeBtns(false);
+		        	System.out.println((char)newData[0]);
+		        }else {
+			        int num=Character.getNumericValue(newData[0]);
+			        System.out.println("Bytes number: "+numRead);
+			        System.out.println("Data: "+num);
+			        
+			        playMelodiasByPhone(num);
+		        }
 		      }
 		    });
 	}
@@ -220,9 +232,9 @@ public class SendExecution {
 			
 			if(line.contains("#"))
 				line = line.replace("#","");
-			System.out.print(line+" ");
+			//System.out.print(line+" ");
 			byte[] byteArrray = line.getBytes();
-			System.out.println(byteArrray);
+			System.out.println(line);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 		}
 		
@@ -243,29 +255,50 @@ public class SendExecution {
 		FileInputStream relative = new FileInputStream(fl.getFilePath());
 		musicFilePlayer = new Player(relative);
 		playSong = true;
-		//System.out.println("enter on playSong");
 	      new Thread() {
 	          public void run() {
-					try {
-						//System.out.println("playing");
-						
+					try {						
 						while(playSong) {
 							musicFilePlayer.play(1);
-						}
-						
-						//System.out.println("finished: "+playingFinished);
+						}	
 					} catch (JavaLayerException e) {
 					   e.printStackTrace();
 					}
-				  
 	          }
 	       }.start();      
 	}
+	public void stopArduinoExecution() {
+		if(arduinoExecution) {
+			byte[] byteArrray = new byte[1];
+			byteArrray[0] = 's';
+			arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		}
+	}
 	
-	private void stopSong() {
+	public void clockPulseA() {
+		byte[] byteArrray = new byte[1];
+		byteArrray[0] = 'A';
+		System.out.println((char)byteArrray[0]);
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+	}
+	
+	public void backlightOn() {
+		byte[] byteArrray = new byte[1];
+		byteArrray[0] = 'L';
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+	}
+	
+	public void backlightOff() {
+		byte[] byteArrray = new byte[1];
+		byteArrray[0] = 'l';
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+	}
+	
+	public void stopSong() {
 		if(playSong) {
 			playSong = false;
 			musicFilePlayer.close();
+			main.principalPane.placeBtns(false);
 		}
 	}
 
