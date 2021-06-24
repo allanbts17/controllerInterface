@@ -692,11 +692,14 @@ public class SelectDatePanel extends JPanel {
 	}
 	private boolean isToday(int day) {
 		boolean today;
-		today = selectedYear == actualYear && selectedMonth == actualMonth && day == actualDay;
+		today = selectedYear.equals(actualYear) && selectedMonth == actualMonth && day == actualDay;
 		return today;
 	}
 	private void updatePreviousMonthBlocking() {
-		blockPreviousMonths = selectedYear == actualYear && selectedMonth == actualMonth;
+		blockPreviousMonths = selectedYear.equals(actualYear) && selectedMonth == actualMonth;
+		/*System.out.println("SelYear: "+selectedYear+", actualYear: "+actualYear
+				+", selMonth: "+selectedMonth+", actualMonth: "+actualMonth+", Years: "+
+				selectedYear.equals(actualYear)+", Months: "+(selectedMonth == actualMonth));*/
 	}
 	int weekDay (int dia, int mes, int ano)
     {
