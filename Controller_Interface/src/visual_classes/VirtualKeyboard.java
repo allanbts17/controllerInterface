@@ -171,6 +171,9 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
     	for(Component row: rows) {
     		setRowHeight((JPanel)row,height);
     	}
+    	Dimension screenSize = os.setDimension();
+    	int screenHeight = (int)screenSize.getHeight();
+    	finalHeight = screenHeight - height;
     	setPanel(height);	
     }
         

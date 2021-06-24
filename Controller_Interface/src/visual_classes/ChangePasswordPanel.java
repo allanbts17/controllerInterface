@@ -14,6 +14,7 @@ import javax.swing.border.LineBorder;
 
 import useful_classes.Encryption;
 import useful_classes.FileHandler;
+import useful_classes.Movement;
 import useful_classes.osChange;
 import visual_classes.VisualElements.CustomButton;
 
@@ -24,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 public class ChangePasswordPanel extends JPanel {
+	JPanel componentsPane = new JPanel();
 	JLabel current_password_lbl;
 	JLabel password_lbl;
 	JLabel password_confirmation_lbl;
@@ -83,6 +85,12 @@ public class ChangePasswordPanel extends JPanel {
 		//setBounds(0,0,400,250);
 		setLayout(null);
 		
+		//ComponentPane
+		componentsPane.setSize(getSize());
+		componentsPane.setLocation(0,0);
+		componentsPane.setLayout(null);
+		componentsPane.setOpaque(false);
+		
 		//Position and size parameters
 		componentsX = (panelWidth/2)-(componentsWidth/2);
 		currPasslblY = (getHeight()/2)-(componentsHeight*7+gap*2)/2;
@@ -100,7 +108,7 @@ public class ChangePasswordPanel extends JPanel {
 		current_password_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 35));
 		current_password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
 		current_password_lbl.setBounds(componentsX, currPasslblY, componentsWidth, componentsHeight);
-		add(current_password_lbl);
+		componentsPane.add(current_password_lbl);
 		
 		//Password label
 		password_lbl = new JLabel("Nueva contrase\u00F1a");
@@ -109,7 +117,7 @@ public class ChangePasswordPanel extends JPanel {
 		password_lbl.setHorizontalAlignment(SwingConstants.LEFT);
 		//password_lbl.setBounds(28, 39, 320, 27);
 		password_lbl.setBounds(componentsX, passlblY, componentsWidth, componentsHeight);
-		add(password_lbl);
+		componentsPane.add(password_lbl);
 		
 		//Password confirmation label
 		password_confirmation_lbl = new JLabel("Confirmaci\u00F3n");
@@ -118,7 +126,7 @@ public class ChangePasswordPanel extends JPanel {
 		password_confirmation_lbl.setFont(new Font("Alegreya Sans SC", Font.BOLD, 35));
 		//password_confirmation_lbl.setBounds(29, 99, 254, 27);
 		password_confirmation_lbl.setBounds(componentsX, conflblY, componentsWidth, componentsHeight);
-		add(password_confirmation_lbl);
+		componentsPane.add(password_confirmation_lbl);
 		
 		//Password field
 		current_password_fld = new JPasswordField(passFieldLimit);
@@ -128,7 +136,7 @@ public class ChangePasswordPanel extends JPanel {
 		current_password_fld.setBorder(new LineBorder(Color.WHITE, 2, true));
 		//password_fld.setBounds(28, 74, 155, 20);
 		current_password_fld.setBounds(componentsX, currPassfldY, componentsWidth, componentsHeight);
-		add(current_password_fld);
+		componentsPane.add(current_password_fld);
 		
 		//Password field
 		password_fld = new JPasswordField(passFieldLimit);
@@ -138,7 +146,7 @@ public class ChangePasswordPanel extends JPanel {
 		password_fld.setBorder(new LineBorder(Color.WHITE, 2, true));
 		//password_fld.setBounds(28, 74, 155, 20);
 		password_fld.setBounds(componentsX, passfldY, componentsWidth, componentsHeight);
-		add(password_fld);
+		componentsPane.add(password_fld);
 		
 		//Confirmation field
 		confirmation_fld = new JPasswordField(passFieldLimit);
@@ -148,7 +156,7 @@ public class ChangePasswordPanel extends JPanel {
 		confirmation_fld.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		//confirmation_fld.setBounds(27, 124, 156, 25);
 		confirmation_fld.setBounds(componentsX, conffldY, componentsWidth, componentsHeight);
-		add(confirmation_fld);
+		componentsPane.add(confirmation_fld);
 		
 		//Image icon and button parameters
 		int scale = 15;
@@ -172,7 +180,7 @@ public class ChangePasswordPanel extends JPanel {
 		show_password_img.setOpaque(false);
 		show_password_img.setIcon(conOff);
 		show_password_img.setBounds(componentsX, buttonsY, conOffWidth, conOffHeight);
-		add(show_password_img);
+		componentsPane.add(show_password_img);
 		
 		//Start button
 		inicio_btn = new JButton();
@@ -186,9 +194,12 @@ public class ChangePasswordPanel extends JPanel {
 		inicio_btn.setPressedIcon(inicioIconPressed);
 		inicio_btn.setBorder(null);
 		inicio_btn.setContentAreaFilled(false);
-		add(inicio_btn);
-		add(back_btn);
+		componentsPane.add(inicio_btn);
+		componentsPane.add(back_btn);
 		add(dialog);
+		add(componentsPane);
+		
+		
 	}
 	public void setMainPane(MainPane main) {
 		this.main = main;
@@ -204,14 +215,22 @@ public class ChangePasswordPanel extends JPanel {
 		int move = (componentsUp)? -150:0;
 		//int backMove = (componentsUp)? -350:0;
 		
-		current_password_lbl.setLocation(componentsX, currPasslblY+move);
-		current_password_fld.setLocation(componentsX, currPassfldY+move);
-		password_lbl.setLocation(componentsX, passlblY+move);
-		password_confirmation_lbl.setLocation(componentsX, conflblY+move);
-		password_fld.setLocation(componentsX, passfldY+move);
-		confirmation_fld.setLocation(componentsX, conffldY+move);
-		show_password_img.setLocation(componentsX, buttonsY+move);
-		inicio_btn.setLocation(inicioBtnX, buttonsY+move);
+		Movement keyboardMove = new Movement(main.virtualKeyboard);
+		Movement componentMove = new Movement(this.componentsPane);
+		//componentsPane.setLocation(0,move);
+		
+		
+		int pos[] = main.virtualKeyboard.getHeights();
+		main.virtualKeyboard.moveToInitialHeight();
+		keyboardMove.setSlowedDownMovement(pos[1],100,0.10f,'y');
+		keyboardMove.start();
+		
+		if(componentsUp) {
+			componentMove.setSlowedDownMovement(move,100,0.50f,'y');
+			componentMove.start();
+		}else
+			componentsPane.setLocation(componentsPane.getLocation().x,move);
+		
 		
 		main.virtualKeyboard.setVisible(componentsUp);
 		main.back_btn.setVisible(!componentsUp && !leaving);
