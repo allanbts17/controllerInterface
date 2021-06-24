@@ -167,8 +167,8 @@ public class StartSessionPanel extends JPanel {
 				if(!moveOnce) {
 					int pos[] = main.virtualKeyboard.getHeights();
 					main.virtualKeyboard.moveToInitialHeight();
-					System.out.println("Initial pos: "+main.virtualKeyboard.getLocation().y);
-					System.out.println("Final pos: "+pos[1]);
+					//System.out.println("Initial pos: "+main.virtualKeyboard.getLocation().y);
+					//System.out.println("Final pos: "+pos[1]);
 					main.virtualKeyboard.setVisible(true);
 					Movement move = new Movement(main.virtualKeyboard);
 					move.setSlowedDownMovement(pos[1],100,0.10f,'y');
@@ -239,7 +239,7 @@ public class StartSessionPanel extends JPanel {
 		}
 		else {
 			show_password_img.setIcon(off);
-			password_fld.setEchoChar('•');
+			password_fld.setEchoChar('*');
 		}
 	}
 	

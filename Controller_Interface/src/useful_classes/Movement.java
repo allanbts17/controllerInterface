@@ -16,7 +16,7 @@ public class Movement extends Thread {
 	private String selectedMovementType;
 	private char positionComponent;
 	private float actualPosition;
-	private long timeInterval = 1;
+	private long timeInterval = 5;
 	private int componentX;
 	private int componentY;
 	private int compensation = 300; //386
@@ -55,8 +55,8 @@ public class Movement extends Thread {
 			initialPosition = componentY;
 		finalPosition = x1;
 		initialVelocity = (float)(finalPosition - initialPosition)/(float)this.duration;
-		System.out.println("Velocity: "+initialVelocity);
-		System.out.println("selectedMovementType: "+selectedMovementType);
+		//System.out.println("Velocity: "+initialVelocity);
+		//System.out.println("selectedMovementType: "+selectedMovementType);
 	}
 	
 	public void setSmoothFinal(int x1,int duration,char positionComponent) {
@@ -73,7 +73,7 @@ public class Movement extends Thread {
 		difference = finalPosition - initialPosition;
 		actualPosition = initialPosition;
 		increase = initialPosition < finalPosition;
-		System.out.println("increase: "+increase);
+		//System.out.println("increase: "+increase);
 	}
 	
 	private boolean notReachedToFinalPosition() {
@@ -97,8 +97,8 @@ public class Movement extends Thread {
 		halfTime = duration * percentage;
 		float totalTime = ((((pow2(duration)/2)-halfTime*duration)/(halfTime-duration)) + duration + (-pow2(halfTime)/(2*(duration-halfTime))));
 		initialVelocity = (float)(finalPosition - initialPosition)/totalTime;
-		System.out.println("Velocity: "+initialVelocity);
-		System.out.println("selectedMovementType: "+selectedMovementType);
+		//System.out.println("Velocity: "+initialVelocity);
+		//System.out.println("selectedMovementType: "+selectedMovementType);
 	}
 	
 	public void setAcceleratedMovement(int x1,int duration, int acceleration, char positionComponent) {
@@ -114,8 +114,8 @@ public class Movement extends Thread {
 			initialPosition = componentY;
 		finalPosition = x1;
 		initialVelocity = (float)(finalPosition - initialPosition)/(float)this.duration;
-		System.out.println("Velocity: "+initialVelocity);
-		System.out.println("selectedMovementType: "+selectedMovementType);
+		//System.out.println("Velocity: "+initialVelocity);
+		//System.out.println("selectedMovementType: "+selectedMovementType);
 	}
 	
 	@Override
@@ -196,7 +196,7 @@ public class Movement extends Thread {
 	}
 	
 	private void uniformMovement() {
-		long mil = System.currentTimeMillis();
+		//long mil = System.currentTimeMillis();
 		while(actualPosition < finalPosition) {
 			actualPosition = (actualPosition > finalPosition)? finalPosition:initialVelocity * time + initialPosition;
 			actualPosition = Math.round(actualPosition);
@@ -208,8 +208,8 @@ public class Movement extends Thread {
 				objetiveElement.setLocation(componentX,(int)actualPosition);
 			pause(timeInterval);
 		}
-		long c = System.currentTimeMillis()-mil;
-		System.out.println(c);
+		//long c = System.currentTimeMillis()-mil;
+		//System.out.println(c);
 	}
 	
 	private void acceleratedMovement() {
