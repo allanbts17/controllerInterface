@@ -252,19 +252,11 @@ public class MainPane extends JPanelBackground {
 	}
 	
 	public void resetArduino() {
-		String openFileCmd = "python3 ledtest.py";
-		String tmp;
-		String s = new String();
+		String openFileCmd = "python3 GPIOLedPulse.py";
 		Process p;
-		
 		try{
 			p = Runtime.getRuntime().exec(openFileCmd);
-			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			while((tmp = br.readLine()) != null)
-				System.out.println("[LINE]: " + tmp);
-				s += tmp + "\n";
 			p.waitFor();
-			System.out.println("[EXIT]: "+p.exitValue());
 			p.destroy();
 		} catch(Exception e){}
 	}
