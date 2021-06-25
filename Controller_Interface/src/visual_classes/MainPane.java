@@ -3,6 +3,8 @@ package visual_classes;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -247,6 +249,24 @@ public class MainPane extends JPanelBackground {
             ch[i] = str.charAt(i);
         }
         return ch;
+	}
+	
+	public void resetArduino() {
+		String openFileCmd = "python3 ledtest.py";
+		String tmp;
+		String s = new String();
+		Process p;
+		
+		try{
+			p = Runtime.getRuntime().exec(openFileCmd);
+			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			while((tmp = br.readLine()) != null)
+				System.out.println("[LINE]: " + tmp);
+				s += tmp + "\n";
+			p.waitFor();
+			System.out.println("[EXIT]: "+p.exitValue());
+			p.destroy();
+		} catch(Exception e){}
 	}
 	
 	

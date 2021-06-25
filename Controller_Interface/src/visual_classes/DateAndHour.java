@@ -78,7 +78,9 @@ public class DateAndHour extends JPanel {
 	public void setMainPane(MainPane main) {
 		this.main = main;
 		startTimer(time);
-		time_date_update();
+		timeDateUpdate();
+		resetArduinoUpdate();
+		
 		
 	}
 	
@@ -170,7 +172,7 @@ public class DateAndHour extends JPanel {
         return letraD;
     }
 	
-	public void time_date_update() {
+	public void timeDateUpdate() {
 		Date date = new Date();
 		DateFormat secondFormat = new SimpleDateFormat("ss");
 		String firstSeconds = secondFormat.format(date);
@@ -196,40 +198,10 @@ public class DateAndHour extends JPanel {
 	        		//Clock pulse
 	        		main.sendExecution.clockPulseA();
 	        		
-	        		//testOnce = false;
-	        		/*if(testOnce) {
-		        		Date date = new Date();
-		        		date.setHours(18);
-		        		date.setMinutes(0);
-		        		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
-		        		char replaceDigit = os.ifWindows()? (char)160:(char)32;
-		        		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
-		        		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);
-		        		minuteChange = !replacedText.equals(texto_hora);
-		        		texto_hora = replacedText;
-		        		System.out.println("Hour: "+texto_hora);
-		        		testOnce = false;
-	        		}
-	        		else {
-	        			Date date = new Date();
-		        		date.setHours(6);
-		        		date.setMinutes(0);
-		        		DateFormat hourFormat = new SimpleDateFormat("hh:mm aa");
-		        		char replaceDigit = os.ifWindows()? (char)160:(char)32;
-		        		String replacedText = hourFormat.format(date).replace(String.valueOf(replaceDigit),"");
-		        		replacedText = os.ifWindows()? replacedText:replacedText.substring(0,5)+" "+replacedText.substring(5);
-		        		minuteChange = !replacedText.equals(texto_hora);
-		        		texto_hora = replacedText;
-		        		System.out.println("Hour: "+texto_hora);
-		        		testOnce = false;
-	        		}*/
-	        		
 	        		if(texto_hora.equals("06:00 p.m.")) {
-	        			System.out.println("ON");
 	        			main.sendExecution.backlightOn();
 	        		}
 	        		else if(texto_hora.equals("06:00 a.m.")) {
-	        			System.out.println("OFF");
 	        			main.sendExecution.backlightOff();
 	        		}
 	        	}
@@ -242,6 +214,22 @@ public class DateAndHour extends JPanel {
 	    long delay = 0L;
 	    long period = 1000L;
 	    timer.scheduleAtFixedRate(repeatedTask, delay, period);
+	}
+	
+	public void resetArduinoUpdate() {
+		 TimerTask repeatedTask = new TimerTask() {
+		        public void run() {
+		        	main.resetArduino();
+		        }
+		 };
+		 Timer timer = new Timer("Timer");
+		
+		long delay = 0L;
+		long second = 1000L;
+		long hour = second * 3600;
+		long day = hour * 24;
+		long period = day * 7;
+		timer.scheduleAtFixedRate(repeatedTask, delay, period);
 	}
 
 }
