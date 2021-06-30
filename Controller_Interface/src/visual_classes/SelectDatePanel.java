@@ -432,7 +432,7 @@ public class SelectDatePanel extends JPanel {
 				.getScaledInstance(bigCalendarLeftArrowPressedWidth, bigCalendarLeftArrowPressedHeight,java.awt.Image.SCALE_SMOOTH));
 		bigCalendarRightArrowPressedWidth = reDimensionAdd+(int)Math.round(bigCalendarRightArrowPressedIco.getIconWidth()/bigScale);
 		bigCalendarRightArrowPressedHeight = reDimensionAdd+(int)Math.round(bigCalendarRightArrowPressedIco.getIconHeight()/bigScale);
-		bigCalendarRightArrowPressedIco = new ImageIcon(calendarRightArrowPressedIco.getImage()
+		bigCalendarRightArrowPressedIco = new ImageIcon(bigCalendarRightArrowPressedIco.getImage()
 				.getScaledInstance(bigCalendarRightArrowPressedWidth, bigCalendarRightArrowPressedHeight,java.awt.Image.SCALE_SMOOTH));
 		bigCalendarLeftArrowBloquedIco = new ImageIcon(bigCalendarLeftArrowBloquedIco.getImage()
 				.getScaledInstance(bigCalendarLeftArrowUnpressedWidth, bigCalendarLeftArrowUnpressedHeight,java.awt.Image.SCALE_SMOOTH));
