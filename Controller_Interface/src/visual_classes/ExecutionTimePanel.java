@@ -126,7 +126,7 @@ public class ExecutionTimePanel extends JPanel {
 					main.selectExecutionPane.setExtensionNameList(".toc");
 					break;
 				case CARRILLON:
-					main.selectExecutionPane.setType("la melod�a");
+					main.selectExecutionPane.setType("la melodía");
 					main.selectExecutionPane.setExtensionNameList(".mp3");
 					break;
 				case BANDEO:
