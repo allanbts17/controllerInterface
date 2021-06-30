@@ -87,12 +87,12 @@ public class SelectExecutionPanel extends JPanel {
 	int gap = 10;
 	int buttonGap = 0;
 
-	private String type = "la melod�a";
+	private String type = "la melodía";
 	private String[] nameList;
 	FileHandler fl = new FileHandler();
 
 	MainPane main;
-	String test = "Selecione la melod�a";
+	String test = "Selecione la melodía";
 	osChange os = new osChange();
 	boolean anExecutionIsSelected = false;
 	boolean labelPressed = false;
