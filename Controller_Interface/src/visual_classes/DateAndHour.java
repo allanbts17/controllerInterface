@@ -160,13 +160,13 @@ public class DateAndHour extends JPanel {
                 break;
             case 3: letraD = "Martes";
                 break;
-            case 4: letraD = "Miercoles";
+            case 4: letraD = "Miércoles";
                 break;
             case 5: letraD = "Jueves";
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "S�bado";
+            case 7: letraD = "Sábado";
                 break;
         }
         return letraD;
