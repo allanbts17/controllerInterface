@@ -32,10 +32,10 @@ public class Dialog extends JPanel {
 	JButton siBtn = new JButton();
 	JButton noBtn = new JButton();
 	JButton okBtn = new JButton();
-	JLabel seguroQueDeseaLabel = new JLabel("�Seguro que desea");
-	JLabel eliminarLaEjecucionLabel = new JLabel("eliminar la ejecuci�n?");
-	JLabel contrasenaIncorrectaLabel = new JLabel("Contrase�a incorrecta");
-	JLabel confirmacionIncorrectaLabel = new JLabel("Confirmaci�n incorrecta");
+	JLabel seguroQueDeseaLabel = new JLabel("¿Seguro que desea");
+	JLabel eliminarLaEjecucionLabel = new JLabel("eliminar la ejecución?");
+	JLabel contrasenaIncorrectaLabel = new JLabel("Contraseña incorrecta");
+	JLabel confirmacionIncorrectaLabel = new JLabel("Confirmación incorrecta");
 	JLabel bigWindowBackground = new JLabel();
 	JLabel smallWindowBackground = new JLabel();
 	
