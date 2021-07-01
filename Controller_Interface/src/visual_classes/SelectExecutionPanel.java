@@ -177,7 +177,7 @@ public class SelectExecutionPanel extends JPanel {
 		boolean addReminder = true;
 		switch(main.atribute.time) {
 		case INMEDIATAS:
-			//iniciar ejecuci�n ya
+			//iniciar ejecucin ya
 			addReminder = false;
 			main.message = filename+extension;
 			main.sendExecution.prepareForExecution(main.message);

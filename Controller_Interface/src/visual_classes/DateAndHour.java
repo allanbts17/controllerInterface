@@ -102,7 +102,7 @@ public class DateAndHour extends JPanel {
 		minuteChange = !replacedText.equals(texto_hora);
 		texto_hora = replacedText;
 		
-		//D�a
+		//Da
 		DateFormat dayFormat = new SimpleDateFormat("d");
 		texto_dia = Integer.parseInt(dayFormat.format(date));
 		
@@ -110,11 +110,11 @@ public class DateAndHour extends JPanel {
 		DateFormat dateFormat = new SimpleDateFormat("M");
 		texto_mes = dateFormat.format(date);
 		//System.out.println("dia: "+dayFormat.format(date)+", month: "+dateFormat.format(date));
-		//A�o
+		//Ao
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		texto_ano = yearFormat.format(date);
 		
-		//D�a semana
+		//Da semana
 		DateFormat dayOfWeekFormat = new SimpleDateFormat("u");
 		int weekCorrect = Integer.parseInt(dayOfWeekFormat.format(date))+1;
 		weekCorrect = weekCorrect==8? 1:weekCorrect;

@@ -346,7 +346,7 @@ public class PrincipalPanel extends JPanel {
 				toquesNames.add(line);
 			}
 		
-		//Melod�as
+		//Melodas
 		executions.setFilename("melodias.int");
 		lines = executions.readFileLine();
 		fileEmpty = lines.length == 1 && lines[0].equals(""); 

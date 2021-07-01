@@ -415,7 +415,7 @@ public class SelectDatePanel extends JPanel {
 	private void getActualDate() {
 		Date date = new Date();
 
-		//D�a
+		//Da
 		DateFormat dayFormat = new SimpleDateFormat("dd");
 		actualDay = Integer.parseInt(dayFormat.format(date));
 		
@@ -423,7 +423,7 @@ public class SelectDatePanel extends JPanel {
 		DateFormat monthFormat = new SimpleDateFormat("MM");
 		actualMonth = Integer.parseInt(monthFormat.format(date));
 
-		//A�o
+		//Ao
 		DateFormat yearFormat = new SimpleDateFormat("yyyy");
 		actualYear = yearFormat.format(date);
 		
@@ -735,23 +735,7 @@ public class SelectDatePanel extends JPanel {
         calendar.set(ano, mes-1, dia);
         int nD=calendar.get(Calendar.DAY_OF_WEEK);
      
-        /*switch (nD){
-            case 1: letraD = "Domingo";
-                break;
-            case 2: letraD = "Lunes";
-                break;
-            case 3: letraD = "Martes";
-                break;
-            case 4: letraD = "Miercoles";
-                break;
-            case 5: letraD = "Jueves";
-                break;
-            case 6: letraD = "Viernes";
-                break;
-            case 7: letraD = "S�bado";
-                break;
-        }
-       	*/
+    
         return nD;
     }
 	public static int daysInAMonth(int mes, int ano){
@@ -773,7 +757,7 @@ public class SelectDatePanel extends JPanel {
             case 1:  // Febrero
                 if ( ((ano%100 == 0) && (ano%400 == 0)) ||
                         ((ano%100 != 0) && (ano%  4 == 0))   )
-                    return 29;  // A�o Bisiesto
+                    return 29;  // Ao Bisiesto
                 else
                     return 28;
             default:

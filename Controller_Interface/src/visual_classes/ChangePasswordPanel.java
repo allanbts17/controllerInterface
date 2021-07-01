@@ -314,7 +314,7 @@ public class ChangePasswordPanel extends JPanel {
 				boolean correct;
 				main.dateAndHour.update();
 				
-				//Habilitando la encriptaci�n
+				//Habilitando la encriptacin
 				FileHandler passRead = main.passRead;
 				//Encryption hash = new Encryption();
 				String enc_pass = Encryption.sha1(current_password_fld.getPassword());
@@ -333,11 +333,11 @@ public class ChangePasswordPanel extends JPanel {
 					show_pass = false;
 					showPassword(show_pass,conOn,conOff);
 					
-					//Habilitando la encriptaci�n
+					//Habilitando la encriptacin
 					//Encryption hash = new Encryption();
 					enc_pass = Encryption.sha1(password_fld.getPassword());
 					
-					//Guardando la contrase�a
+					//Guardando la contrasea
 					FileHandler fl = new FileHandler();
 					fl.setDirection("src/sav/");
 					fl.setFilename("main_data.int");

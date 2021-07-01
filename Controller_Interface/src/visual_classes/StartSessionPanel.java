@@ -189,7 +189,7 @@ public class StartSessionPanel extends JPanel {
 				
 				main.principalPane.dialog.setVisible(false);
 				main.principalPane.selectedData="";
-				//Habilitando la encriptaci�n
+				//Habilitando la encriptacin
 				//Encryption hash = new Encryption();
 				String enc_pass = Encryption.sha1(password_fld.getPassword());
 				String[] passLine = passRead.readFileLine(1).trim().split("\\s+");

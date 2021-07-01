@@ -221,11 +221,11 @@ public class FirstTimePanel extends JPanel {
 					main.principalPane.reset(true);	
 					main.menuNavegation.next(main.atribute);
 					
-					//Habilitando la encriptaci�n
+					//Habilitando la encriptacin
 					//Encryption hash = new Encryption();
 					String enc_pass = Encryption.sha1(password_fld.getPassword());
 					
-					//Guardando la contrase�a
+					//Guardando la contrasea
 					FileHandler fl = new FileHandler();
 					fl.setDirection("src/sav/");
 					fl.setFilename("main_data.int");
