@@ -84,6 +84,7 @@ public class SelectDayHourPanel extends JPanel {
 				pressedLabel.setVisible(false);
 			}
 		}
+		
 		public DayButton(int x, int y, int width, int height,int num){
 			this.temporalDayNum = String.valueOf(num);
 			this.x = x;
@@ -116,18 +117,20 @@ public class SelectDayHourPanel extends JPanel {
 			
 			addMouseListener(new MouseAdapter() {
 				@Override
-				public void mousePressed(MouseEvent e) {
+				public void mouseClicked(MouseEvent e) {
 					selected = !selected;
 					dayNum = selected? temporalDayNum:"";
 					changeBackground();
+					System.out.println("background changed");
 				}
 				
 			});
 		}
 	}
+	
 	DayButton[] days = new DayButton[7];
 	String[] dayNames = new String[] {
-		"Dom","Lun","Mar","Mie","Jue","Vie","S�b"
+		"Dom","Lun","Mar","Mie","Jue","Vie","Sáb"
 	};
 	public SelectDayHourPanel() {
 		//Setting size parameters

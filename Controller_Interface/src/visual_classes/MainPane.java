@@ -1,11 +1,13 @@
 package visual_classes;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -64,6 +66,7 @@ public class MainPane extends JPanelBackground {
 	VirtualKeyboard virtualKeyboard = new VirtualKeyboard();
 	//private boolean keyboardOn = true;
 	JLabel l;
+	MouseAdapter updateAdapter;
 	
 	public MainPane(JFrame f) {
 		frame = f;
@@ -108,6 +111,7 @@ public class MainPane extends JPanelBackground {
 		dateAndHour.setMainPane(this);
 		sendExecution.setMainPane(this);
 		virtualKeyboard.setFrame(frame);
+		setUpdateAdapter();
 		
 		//////////////
 		/*selectDatePane.showCalendar();
@@ -124,6 +128,12 @@ public class MainPane extends JPanelBackground {
 		move.setSmoothFinal(350,1000,'x');
 		move.start();*/
 		//virtualKeyboard
+		/*
+		Component[] comp = getComponents();	
+		for(Component c: comp) {
+			System.out.println(c);
+		}*/
+		//main.addListenerToUpdate(this);
 		
 		back_btn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -257,6 +267,27 @@ public class MainPane extends JPanelBackground {
 			p.waitFor();
 			p.destroy();
 		} catch(Exception e){}
+	}
+	
+	public void setUpdateAdapter() {
+		updateAdapter = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dateAndHour.update();
+			}
+		};
+	}
+	
+	public void addListenerToUpdate(JComponent component) {
+		Component[] comp = component.getComponents();
+		if(comp.length == 0) {
+			System.out.println(component);
+			component.addMouseListener(updateAdapter);
+		}
+		else
+			for(Component c: comp) {			
+				addListenerToUpdate((JComponent) c);
+			}
 	}
 	
 	
