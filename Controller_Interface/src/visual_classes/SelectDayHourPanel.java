@@ -127,7 +127,7 @@ public class SelectDayHourPanel extends JPanel {
 	}
 	DayButton[] days = new DayButton[7];
 	String[] dayNames = new String[] {
-		"Dom","Lun","Mar","Mie","Jue","Vie","S�b"
+		"Dom","Lun","Mar","Mie","Jue","Vie","Sáb"
 	};
 	public SelectDayHourPanel() {
 		//Setting size parameters
