@@ -81,7 +81,11 @@ public class DateAndHour extends JPanel {
 		startTimer(time);
 		timeDateUpdate();
 		resetArduinoUpdate();
+<<<<<<< HEAD
 	//	this.main.addListenerToUpdate(this);
+=======
+		this.main.addListenerToUpdate(this);
+>>>>>>> 848819e3572b193a65d1183b230398ca95f4834e
 		
 		
 	}

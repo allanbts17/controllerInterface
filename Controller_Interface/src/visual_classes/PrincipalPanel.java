@@ -290,7 +290,11 @@ public class PrincipalPanel extends JPanel {
 		this.main = main;
 		fillNameList();
 		setActions();
+		//System.out.println("Principal pane components: ");
+		//this.main.addListenerToUpdate(this);
+		//System.out.println("End of Principal pane components: ");
 	}
+	
 	
 	public void placeBtns(boolean fourthBtnVisible) {
 		nuevoBtnY = fourthBtnVisible? 100:150; //100
@@ -614,6 +618,7 @@ public class PrincipalPanel extends JPanel {
 		nuevoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				reset(true);
 				main.atribute.setup = false;
 				main.menuNavegation.next(main.atribute);
@@ -625,6 +630,7 @@ public class PrincipalPanel extends JPanel {
 		detenerEjecucionBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				main.sendExecution.stopArduinoExecution();
 				main.sendExecution.stopSong();
 			}
@@ -633,6 +639,7 @@ public class PrincipalPanel extends JPanel {
 		eliminarBtnEvent = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				System.out.println("selectedData: "+selectedData+" "+!selectedData.equals(""));
 				if(!selectedData.equals("")) {
 					executions.setDirection("src/sav");
@@ -673,6 +680,7 @@ public class PrincipalPanel extends JPanel {
 		eliminarBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				if(!selectedData.equals(""))
 				dialog.executionEliminationMessage(screenWidth,screenHeight);
 			}
@@ -681,6 +689,7 @@ public class PrincipalPanel extends JPanel {
 		cambiarContrasenaBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				reset(true);
 				main.atribute.setup = true;
 				main.menuNavegation.next(main.atribute);
@@ -693,6 +702,7 @@ public class PrincipalPanel extends JPanel {
 		tabs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				main.dateAndHour.update();
 				int x = e.getX();
 				System.out.println("x: "+x);
 				if(x<=90) {
