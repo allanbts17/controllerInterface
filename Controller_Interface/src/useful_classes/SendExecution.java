@@ -2,6 +2,8 @@ package useful_classes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -21,6 +23,8 @@ public class SendExecution {
 	String extension;
 	SerialPort arduinoPort;
 	Player musicFilePlayer;
+	Timer timer;
+	public boolean okMessage = false;
 	//ExecutionHandler executionHandler = new ExecutionHandler();
 	osChange os = new osChange();
 
@@ -203,6 +207,8 @@ public class SendExecution {
 		      public int getListeningEvents() {
 		        return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 		      }
+		      
+		      //Mensajes enviados por el arduino
 		      public void serialEvent(SerialPortEvent event) {
 		        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
 		        return;
@@ -210,10 +216,14 @@ public class SendExecution {
 		        int numRead = arduinoPort.readBytes(newData, newData.length);
 		        
 		        if(newData[0]=='f') {
-		        	arduinoExecution = false;
-		        	main.principalPane.placeBtns(false);
+		        /*	arduinoExecution = false;
+		        	main.principalPane.placeBtns(false); */
 		        	System.out.println((char)newData[0]);
-		        }else {
+		        }
+		        else if(newData[0]=='?'){
+		        	okMessage = true;
+		        }
+		        else {
 			        int num=Character.getNumericValue(newData[0]);
 			        System.out.println("Bytes number: "+numRead);
 			        System.out.println("Data: "+num);
@@ -271,8 +281,35 @@ public class SendExecution {
 		if(arduinoExecution) {
 			byte[] byteArrray = new byte[1];
 			byteArrray[0] = 's';
+			arduinoExecution = false; //
+        	main.principalPane.placeBtns(false);
+			System.out.println(byteArrray[0]);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 		}
+	}
+	
+	public void arduinoVerify() {
+		byte[] byteArrray = new byte[1];
+		byteArrray[0] = '?';
+		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		startTimer(100L);
+	}
+	
+	public void startTimer(long mili) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	            if(okMessage) {
+	            	okMessage = false;
+	            }
+	            else {
+	            	main.resetArduino();
+	            }
+	        }
+	    };
+	    timer = new Timer("Timer");
+	    
+	    long delay = mili;
+	    timer.schedule(task, delay);
 	}
 	
 	public void clockPulseA() {
@@ -295,6 +332,8 @@ public class SendExecution {
 	}
 	
 	public void stopSong() {
+		System.out.println("entré ");
+		System.out.print(playSong);
 		if(playSong) {
 			playSong = false;
 			musicFilePlayer.close();
