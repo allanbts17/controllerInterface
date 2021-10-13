@@ -216,8 +216,8 @@ public class SendExecution {
 		        int numRead = arduinoPort.readBytes(newData, newData.length);
 		        
 		        if(newData[0]=='f') {
-		        /*	arduinoExecution = false;
-		        	main.principalPane.placeBtns(false); */
+		        	arduinoExecution = false;
+		        	main.principalPane.placeBtns(false); 
 		        	System.out.println((char)newData[0]);
 		        }
 		        else if(newData[0]=='?'){
