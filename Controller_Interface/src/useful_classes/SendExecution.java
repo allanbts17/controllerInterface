@@ -24,7 +24,9 @@ public class SendExecution {
 	SerialPort arduinoPort;
 	Player musicFilePlayer;
 	Timer timer;
+	Timer executionTimer;
 	public boolean okMessage = false;
+	ExecutionDurationHandler executionDurationHandler;
 	//ExecutionHandler executionHandler = new ExecutionHandler();
 	osChange os = new osChange();
 
@@ -222,6 +224,7 @@ public class SendExecution {
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
+		        	System.out.println("Received ? from arduino");
 		        }
 		        else {
 			        int num=Character.getNumericValue(newData[0]);
@@ -238,14 +241,21 @@ public class SendExecution {
 		String[] fileLines;
 		fileLines = fl.readFileLine();
 		System.out.println("Sending to arduino");
+		executionDurationHandler = new ExecutionDurationHandler();
+		executionDurationHandler.setExecutionLines(fileLines);
+		long executionDuration = executionDurationHandler.getDuration();
+		System.out.println("Total duration: "+executionDuration);
+		startExecutionTimer(executionDuration);
+
 		for(String line: fileLines){
 			
 			if(line.contains("#"))
 				line = line.replace("#","");
 			//System.out.print(line+" ");
-			byte[] byteArrray = line.getBytes();
+			byte[] byteArray = line.getBytes();
 			System.out.println(line);
-			arduinoPort.writeBytes(byteArrray,byteArrray.length);
+			arduinoPort.writeBytes(byteArray,byteArray.length);
+			//arduinoVerify(byteArray);
 		}
 		
 	}
@@ -284,15 +294,17 @@ public class SendExecution {
 			arduinoExecution = false; //
         	main.principalPane.placeBtns(false);
 			System.out.println(byteArrray[0]);
+			//arduinoVerify(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
+			arduinoVerify();
 		}
 	}
 	
 	public void arduinoVerify() {
-		byte[] byteArrray = new byte[1];
-		byteArrray[0] = '?';
-		arduinoPort.writeBytes(byteArrray,byteArrray.length);
-		startTimer(100L);
+		byte[] byteArray = new byte[1];
+		byteArray[0] = '?';
+		arduinoPort.writeBytes(byteArray,byteArray.length);
+		startTimer(500L);
 	}
 	
 	public void startTimer(long mili) {
@@ -300,10 +312,43 @@ public class SendExecution {
 	        public void run() {
 	            if(okMessage) {
 	            	okMessage = false;
+	            	System.out.println("Arduino says ok");
+	            }
+	            else {
+	            	System.out.println("Reseting arduino");
+	            	main.resetArduino();
+	            }
+	        }
+	    };
+	    timer = new Timer("Timer");
+	    
+	    long delay = mili;
+	    timer.schedule(task, delay);
+	}
+	
+	public void startTimer(long mili,byte[] byteArray) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	            if(okMessage) {
+	            	okMessage = false;
+	            	arduinoPort.writeBytes(byteArray,byteArray.length);
 	            }
 	            else {
 	            	main.resetArduino();
+	            	startTimer(3000L,byteArray); //Por ahora no verifica
 	            }
+	        }
+	    };
+	    timer = new Timer("Timer");
+	    
+	    long delay = mili;
+	    timer.schedule(task, delay);
+	}
+	
+	public void startExecutionTimer(long mili) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	stopArduinoExecution();
 	        }
 	    };
 	    timer = new Timer("Timer");
