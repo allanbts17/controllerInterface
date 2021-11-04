@@ -60,7 +60,8 @@ public class DateAndHour extends JPanel {
 		setBounds(screenWidth - date_panel_w - date_gap, date_gap, date_panel_w, date_panel_h);
 		
 		getDate();
-		fecha = new JLabel(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]);
+		String date = text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1];
+		fecha = new JLabel(date);
 		fecha.setForeground(Color.WHITE);
 		fecha.setHorizontalAlignment(SwingConstants.RIGHT);
 		fecha.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 30));
@@ -153,10 +154,10 @@ public class DateAndHour extends JPanel {
 	        	//Clock pulse
         		main.sendExecution.clockPulseA();
         		
-        		if(texto_hora.equals("06:00 p.m.")) {
+        		if(texto_hora.equals("06:05 p.m.")) {
         			main.sendExecution.backlightOn();
         		}
-        		else if(texto_hora.equals("06:00 a.m.")) {
+        		else if(texto_hora.equals("06:05 a.m.")) {
         			main.sendExecution.backlightOff();
         		}
 	        }
@@ -223,7 +224,11 @@ public class DateAndHour extends JPanel {
 					arduinoClockPulseDaley(30);
 				
 	        	}
-	    		fecha.setText(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]); 		
+	        	String date = text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1];
+	        	if(date.length() > 24) {
+	        		date = texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1];
+	        	}
+	    		fecha.setText(date); 
 	    		hora.setText(texto_hora);
 	        }
 	    };
