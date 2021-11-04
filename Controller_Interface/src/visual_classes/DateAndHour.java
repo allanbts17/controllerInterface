@@ -24,6 +24,7 @@ public class DateAndHour extends JPanel {
 	JLabel fecha;
 	JLabel hora;
 	Timer timer;
+	Timer arduinoDelayTimer;
 	int time = 20*1 + 60*3+60*60*1;
 	String dateForCompare = "";
 	String texto_hora;
@@ -80,7 +81,9 @@ public class DateAndHour extends JPanel {
 		startTimer(time);
 		timeDateUpdate();
 		resetArduinoUpdate();
+
 		this.main.addListenerToUpdate(this);
+
 		
 		
 	}
@@ -144,6 +147,26 @@ public class DateAndHour extends JPanel {
 	    timer.schedule(task, delay);
 	}
 	
+	public void arduinoClockPulseDaley(int seg) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	//Clock pulse
+        		main.sendExecution.clockPulseA();
+        		
+        		if(texto_hora.equals("06:00 p.m.")) {
+        			main.sendExecution.backlightOn();
+        		}
+        		else if(texto_hora.equals("06:00 a.m.")) {
+        			main.sendExecution.backlightOff();
+        		}
+	        }
+	    };
+	    arduinoDelayTimer = new Timer("Timer");
+	    
+	    long delay = seg*1000L;
+	    arduinoDelayTimer.schedule(task, delay);
+	}
+	
 	public void update() {
 		System.out.println("update");
 		timer.cancel();
@@ -196,15 +219,9 @@ public class DateAndHour extends JPanel {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	        		//Clock pulse
-	        		main.sendExecution.clockPulseA();
-	        		
-	        		if(texto_hora.equals("06:00 p.m.")) {
-	        			main.sendExecution.backlightOn();
-	        		}
-	        		else if(texto_hora.equals("06:00 a.m.")) {
-	        			main.sendExecution.backlightOff();
-	        		}
+					//To handle to clock and backlight by arduino
+					arduinoClockPulseDaley(30);
+				
 	        	}
 	    		fecha.setText(text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1]); 		
 	    		hora.setText(texto_hora);
