@@ -296,7 +296,7 @@ public class SendExecution {
 			System.out.println(byteArrray[0]);
 			//arduinoVerify(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
-			arduinoVerify();
+			//arduinoVerify();
 		}
 	}
 	
@@ -348,7 +348,14 @@ public class SendExecution {
 	public void startExecutionTimer(long mili) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
-	        	stopArduinoExecution();
+	        	//stopArduinoExecution();
+	        	byte[] byteArrray = new byte[1];
+				byteArrray[0] = 's';
+				arduinoExecution = false; //
+	        	main.principalPane.placeBtns(false);
+				System.out.println(byteArrray[0]);
+				//arduinoVerify(byteArrray);
+				arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	        }
 	    };
 	    timer = new Timer("Timer");
