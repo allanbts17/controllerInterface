@@ -217,6 +217,7 @@ public class SendExecution {
 		        byte[] newData = new byte[arduinoPort.bytesAvailable()];
 		        int numRead = arduinoPort.readBytes(newData, newData.length);
 		        
+		        //System.out.println(new String(newData));
 		        if(newData[0]=='f') {
 		        	arduinoExecution = false;
 		        	main.principalPane.placeBtns(false); 
@@ -224,7 +225,10 @@ public class SendExecution {
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
-		        	System.out.println("Received ? from arduino");
+		        	//System.out.println("Received ? from arduino");
+		        }
+		        else if(newData[0]=='R') {
+		        	System.out.println("Arduino reseted");
 		        }
 		        else {
 			        int num=Character.getNumericValue(newData[0]);
@@ -297,6 +301,7 @@ public class SendExecution {
 			//arduinoVerify(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 			//arduinoVerify();
+			testTimer(2000);
 		}
 	}
 	
@@ -304,7 +309,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
-		startTimer(500L);
+		startTimer(100L);
 	}
 	
 	public void startTimer(long mili) {
@@ -357,6 +362,18 @@ public class SendExecution {
 				//arduinoVerify(byteArrray);
 				arduinoPort.writeBytes(byteArrray,byteArrray.length);*/
 	        	stopArduinoExecution();
+	        }
+	    };
+	    timer = new Timer("Timer");
+	    
+	    long delay = mili;
+	    timer.schedule(task, delay);
+	}
+	
+	public void testTimer(long mili) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	arduinoVerify();
 	        }
 	    };
 	    timer = new Timer("Timer");
