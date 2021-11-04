@@ -24,7 +24,9 @@ public class SendExecution {
 	SerialPort arduinoPort;
 	Player musicFilePlayer;
 	Timer timer;
+	Timer executionTimer;
 	public boolean okMessage = false;
+	ExecutionDurationHandler executionDurationHandler;
 	//ExecutionHandler executionHandler = new ExecutionHandler();
 	osChange os = new osChange();
 
@@ -222,6 +224,7 @@ public class SendExecution {
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
+		        	System.out.println("Received ? from arduino");
 		        }
 		        else {
 			        int num=Character.getNumericValue(newData[0]);
@@ -238,15 +241,21 @@ public class SendExecution {
 		String[] fileLines;
 		fileLines = fl.readFileLine();
 		System.out.println("Sending to arduino");
+		executionDurationHandler = new ExecutionDurationHandler();
+		executionDurationHandler.setExecutionLines(fileLines);
+		long executionDuration = executionDurationHandler.getDuration();
+		System.out.println("Total duration: "+executionDuration);
+		startExecutionTimer(executionDuration);
+
 		for(String line: fileLines){
 			
 			if(line.contains("#"))
 				line = line.replace("#","");
 			//System.out.print(line+" ");
-			byte[] byteArrray = line.getBytes();
+			byte[] byteArray = line.getBytes();
 			System.out.println(line);
-			//arduinoPort.writeBytes(byteArrray,byteArrray.length);
-			arduinoVerify(byteArrray);
+			arduinoPort.writeBytes(byteArray,byteArray.length);
+			//arduinoVerify(byteArray);
 		}
 		
 	}
@@ -285,10 +294,9 @@ public class SendExecution {
 			arduinoExecution = false; //
         	main.principalPane.placeBtns(false);
 			System.out.println(byteArrray[0]);
-			arduinoExecution = false; //
-        	main.principalPane.placeBtns(false);
-			System.out.println(byteArrray[0]);			arduinoVerify(byteArrray);
-			//arduinoPort.writeBytes(byteArrray,byteArrray.length);
+			//arduinoVerify(byteArrray);
+			arduinoPort.writeBytes(byteArrray,byteArrray.length);
+			arduinoVerify();
 		}
 	}
 	
@@ -296,7 +304,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
-		startTimer(100L);
+		startTimer(500L);
 	}
 	
 	public void arduinoVerify(byte[] msgByteArray) {
@@ -311,8 +319,10 @@ public class SendExecution {
 	        public void run() {
 	            if(okMessage) {
 	            	okMessage = false;
+	            	System.out.println("Arduino says ok");
 	            }
 	            else {
+	            	System.out.println("Reseting arduino");
 	            	main.resetArduino();
 	            }
 	        }
@@ -334,6 +344,18 @@ public class SendExecution {
 	            	main.resetArduino();
 	            	startTimer(3000L,byteArray); //Por ahora no verifica
 	            }
+	        }
+	    };
+	    timer = new Timer("Timer");
+	    
+	    long delay = mili;
+	    timer.schedule(task, delay);
+	}
+	
+	public void startExecutionTimer(long mili) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	stopArduinoExecution();
 	        }
 	    };
 	    timer = new Timer("Timer");
