@@ -217,7 +217,7 @@ public class SendExecution {
 		        byte[] newData = new byte[arduinoPort.bytesAvailable()];
 		        int numRead = arduinoPort.readBytes(newData, newData.length);
 		        
-		        //System.out.println(new String(newData));
+		        System.out.println("Raw: "+new String(newData));
 		        if(newData[0]=='f') {
 		        	arduinoExecution = false;
 		        	main.principalPane.placeBtns(false); 
@@ -309,7 +309,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
-		startTimer(100L);
+		startTimer(1000L);
 	}
 	
 	public void startTimer(long mili) {
