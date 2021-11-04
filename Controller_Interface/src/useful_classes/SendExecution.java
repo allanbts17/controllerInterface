@@ -225,7 +225,7 @@ public class SendExecution {
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
-		        	//System.out.println("Received ? from arduino");
+		        	System.out.println("Received ? from arduino");
 		        }
 		        else if(newData[0]=='R') {
 		        	System.out.println("Arduino reseted");
@@ -309,6 +309,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
+		System.out.println("Escribiendo ? al arduino");
 		startTimer(1000L);
 	}
 	
