@@ -222,6 +222,7 @@ public class SendExecution {
 		        	arduinoExecution = false;
 		        	main.principalPane.placeBtns(false); 
 		        	System.out.println((char)newData[0]);
+		        	testTimer(2000);
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
