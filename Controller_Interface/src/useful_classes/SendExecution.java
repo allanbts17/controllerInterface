@@ -243,7 +243,7 @@ public class SendExecution {
 		System.out.println("Sending to arduino");
 		executionDurationHandler = new ExecutionDurationHandler();
 		executionDurationHandler.setExecutionLines(fileLines);
-		long executionDuration = executionDurationHandler.getDuration();
+		long executionDuration = executionDurationHandler.getDuration()+3000;
 		System.out.println("Total duration: "+executionDuration);
 		startExecutionTimer(executionDuration);
 
@@ -349,13 +349,14 @@ public class SendExecution {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	        	//stopArduinoExecution();
-	        	byte[] byteArrray = new byte[1];
+	        	/*byte[] byteArrray = new byte[1];
 				byteArrray[0] = 's';
 				arduinoExecution = false; //
 	        	main.principalPane.placeBtns(false);
 				System.out.println(byteArrray[0]);
 				//arduinoVerify(byteArrray);
-				arduinoPort.writeBytes(byteArrray,byteArrray.length);
+				arduinoPort.writeBytes(byteArrray,byteArrray.length);*/
+	        	stopArduinoExecution();
 	        }
 	    };
 	    timer = new Timer("Timer");
