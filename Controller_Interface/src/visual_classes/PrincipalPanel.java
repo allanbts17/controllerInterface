@@ -631,7 +631,7 @@ public class PrincipalPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
-				main.sendExecution.stopArduinoExecution();
+				main.sendExecution.ButtonStopArduinoExecution();
 				main.sendExecution.stopSong();
 			}
 		});

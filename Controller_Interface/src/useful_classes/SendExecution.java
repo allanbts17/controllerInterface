@@ -292,7 +292,7 @@ public class SendExecution {
 	          }
 	       }.start();      
 	}
-	public void stopArduinoExecution() {
+	public void ButtonStopArduinoExecution() {
 		if(arduinoExecution) {
 			byte[] byteArrray = new byte[1];
 			byteArrray[0] = 's';
@@ -302,7 +302,15 @@ public class SendExecution {
 			//arduinoVerify(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 			//arduinoVerify();
-			testTimer(2000);
+			//testTimer(2000);
+		}
+	}
+	
+	public void stopArduinoExecution() {
+		if(arduinoExecution) {
+			arduinoExecution = false; //
+        	main.principalPane.placeBtns(false);
+			arduinoVerify();
 		}
 	}
 	

@@ -160,6 +160,10 @@ public class DateAndHour extends JPanel {
         		else if(texto_hora.equals("06:05 a.m.")) {
         			main.sendExecution.backlightOff();
         		}
+        		else if(texto_hora.equals("06:04 p.m.")) {
+        			main.resetArduino();
+        		}
+        		
 	        }
 	    };
 	    arduinoDelayTimer = new Timer("Timer");
