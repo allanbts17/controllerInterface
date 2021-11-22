@@ -136,7 +136,7 @@ public class DateAndHour extends JPanel {
 	        public void run() {
 	            main.save_screen_on = true;
 				main.menuNavegation.screenSaver();
-	        	System.out.println("Timer finished");
+	        	//System.out.println("Timer finished");
 	        }
 	    };
 	    timer = new Timer("Timer");
@@ -213,7 +213,7 @@ public class DateAndHour extends JPanel {
 	        public void run() {    	
 	        	getDate();
 	        	if(minuteChange) {
-	        		System.out.println("it do a minuteChange: "+minuteChange);
+	        		//System.out.println("it do a minuteChange: "+minuteChange);
 	        		minuteChange=false;
 					try {
 						main.sendExecution.compareDateStrings(dateForCompare);

@@ -110,7 +110,7 @@ public class SendExecution {
 	
 	public void  prepareForExecution(String executionName) throws FileNotFoundException, JavaLayerException {
 		executionToSend = executionName;
-		System.out.println("To execute: "+executionToSend);
+		//System.out.println("To execute: "+executionToSend);
 		setExtension();
 		setDirection();
 		setFilename();
@@ -131,7 +131,7 @@ public class SendExecution {
 
 	private void setFilename(){
 		fl.setFilename(executionToSend);
-		System.out.println("Filename: "+executionToSend);
+		//System.out.println("Filename: "+executionToSend);
 	}
 
 	private void startExecution() throws FileNotFoundException, JavaLayerException{
@@ -177,8 +177,8 @@ public class SendExecution {
 		main.principalPane.reset(false);
 		main.principalPane.repaint();
 		
-		for(String name: scheduledExecutionList)
-			System.out.println(name);
+		/*for(String name: scheduledExecutionList)
+			System.out.println(name);*/
 	}
 	
 	private void openSerialPort() throws IOException{
@@ -221,7 +221,7 @@ public class SendExecution {
 		        if(newData[0]=='f') {
 		        	arduinoExecution = false;
 		        	main.principalPane.placeBtns(false); 
-		        	System.out.println((char)newData[0]);
+		        	//System.out.println((char)newData[0]);
 		        	//testTimer(2000);
 		        }
 		        else if(newData[0]=='?'){
@@ -233,8 +233,8 @@ public class SendExecution {
 		        }
 		        else {
 			        int num=Character.getNumericValue(newData[0]);
-			        System.out.println("Bytes number: "+numRead);
-			        System.out.println("Data: "+num);
+			       // System.out.println("Bytes number: "+numRead);
+			       // System.out.println("Data: "+num);
 			        
 			        playMelodiasByPhone(num);
 		        }
@@ -245,11 +245,11 @@ public class SendExecution {
 	private void sendToArduino() {
 		String[] fileLines;
 		fileLines = fl.readFileLine();
-		System.out.println("Sending to arduino");
+		//System.out.println("Sending to arduino");
 		executionDurationHandler = new ExecutionDurationHandler();
 		executionDurationHandler.setExecutionLines(fileLines);
 		long executionDuration = executionDurationHandler.getDuration()+3000;
-		System.out.println("Total duration: "+executionDuration);
+		//System.out.println("Total duration: "+executionDuration);
 		startExecutionTimer(executionDuration);
 
 		for(String line: fileLines){
@@ -258,7 +258,7 @@ public class SendExecution {
 				line = line.replace("#","");
 			//System.out.print(line+" ");
 			byte[] byteArray = line.getBytes();
-			System.out.println(line);
+			//System.out.println(line);
 			arduinoPort.writeBytes(byteArray,byteArray.length);
 			//arduinoVerify(byteArray);
 		}
@@ -299,7 +299,7 @@ public class SendExecution {
 			byteArrray[0] = 's';
 			arduinoExecution = false; //
         	main.principalPane.placeBtns(false);
-			System.out.println(byteArrray[0]);
+			//System.out.println(byteArrray[0]);
 			//arduinoVerify(byteArrray);
 			arduinoPort.writeBytes(byteArrray,byteArrray.length);
 			//arduinoVerify();
@@ -319,7 +319,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
-		System.out.println("Escribiendo ? al arduino");
+		//System.out.println("Escribiendo ? al arduino");
 		startTimer(1000L);
 	}
 	
@@ -327,7 +327,7 @@ public class SendExecution {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
-		System.out.println("Escribiendo ? al arduino");
+		//System.out.println("Escribiendo ? al arduino");
 		startTimer(time);
 	}
 	
@@ -339,7 +339,7 @@ public class SendExecution {
 	            	System.out.println("Arduino says ok");
 	            }
 	            else {
-	            	System.out.println("Reseting arduino");
+	            	//System.out.println("Reseting arduino");
 	            	main.resetArduino();
 	            }
 	        }
@@ -404,7 +404,7 @@ public class SendExecution {
 	public void clockPulseA() {
 		byte[] byteArrray = new byte[1];
 		byteArrray[0] = 'A';
-		System.out.println((char)byteArrray[0]);
+		//System.out.println((char)byteArrray[0]);
 		arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	}
 	

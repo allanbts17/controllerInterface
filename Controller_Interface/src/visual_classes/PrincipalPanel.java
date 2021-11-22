@@ -489,7 +489,7 @@ public class PrincipalPanel extends JPanel {
 				
 				selectedBack.setVisible(true);
 				lastSelectedBack = selectedBack;
-				System.out.println("Selected data: "+selectedData);
+				//System.out.println("Selected data: "+selectedData);
 			}
 		});
 		execution.addMouseMotionListener(new MouseMotionAdapter() {
