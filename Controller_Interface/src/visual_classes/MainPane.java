@@ -278,7 +278,7 @@ public class MainPane extends JPanelBackground {
 		};
 	}
 	
-	public void addListenerToUpdate(JComponent component) {
+	/*public void addListenerToUpdate(JComponent component) {
 		Component[] comp = component.getComponents();
 		if(comp.length == 0) {
 			System.out.println(component);
@@ -288,7 +288,7 @@ public class MainPane extends JPanelBackground {
 			for(Component c: comp) {			
 				addListenerToUpdate((JComponent) c);
 			}
-	}
+	}*/
 	
 	
 }

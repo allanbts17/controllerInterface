@@ -87,10 +87,6 @@ public class window extends JFrame {
 		
 
 		mainPane = new MainPane(this);
-		
-		System.out.println("tesst");
-		
-		
 		contentPane.add(mainPane);
 		mainPane.setBounds(0,0, screenWidth,screenHeight);
 		setContentPane(contentPane);

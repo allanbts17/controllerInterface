@@ -222,7 +222,7 @@ public class SendExecution {
 		        	arduinoExecution = false;
 		        	main.principalPane.placeBtns(false); 
 		        	System.out.println((char)newData[0]);
-		        	testTimer(2000);
+		        	//testTimer(2000);
 		        }
 		        else if(newData[0]=='?'){
 		        	okMessage = true;
@@ -292,7 +292,8 @@ public class SendExecution {
 	          }
 	       }.start();      
 	}
-	public void ButtonStopArduinoExecution() {
+	
+	public void buttonStopArduinoExecution() {
 		if(arduinoExecution) {
 			byte[] byteArrray = new byte[1];
 			byteArrray[0] = 's';
@@ -307,9 +308,9 @@ public class SendExecution {
 	}
 	
 	public void stopArduinoExecution() {
-		if(arduinoExecution) {
 			arduinoExecution = false; //
         	main.principalPane.placeBtns(false);
+        if(arduinoExecution) {
 			arduinoVerify();
 		}
 	}
@@ -320,6 +321,14 @@ public class SendExecution {
 		arduinoPort.writeBytes(byteArray,byteArray.length);
 		System.out.println("Escribiendo ? al arduino");
 		startTimer(1000L);
+	}
+	
+	public void arduinoVerify(long time) {
+		byte[] byteArray = new byte[1];
+		byteArray[0] = '?';
+		arduinoPort.writeBytes(byteArray,byteArray.length);
+		System.out.println("Escribiendo ? al arduino");
+		startTimer(time);
 	}
 	
 	public void startTimer(long mili) {

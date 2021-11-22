@@ -83,10 +83,7 @@ public class DateAndHour extends JPanel {
 		timeDateUpdate();
 		resetArduinoUpdate();
 
-		this.main.addListenerToUpdate(this);
-
-		
-		
+		//this.main.addListenerToUpdate(this);
 	}
 	
 	private void getDate() {
@@ -173,10 +170,10 @@ public class DateAndHour extends JPanel {
 	}
 	
 	public void update() {
-		System.out.println("update");
-		timer.cancel();
+		//System.out.println("update");
+		/*timer.cancel();
 		timer.purge();
-		startTimer(time);
+		startTimer(time);*/
 	}
 	
 	private String diaSemana (int nD)

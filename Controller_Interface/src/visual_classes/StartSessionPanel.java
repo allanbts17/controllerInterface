@@ -183,7 +183,7 @@ public class StartSessionPanel extends JPanel {
 		inicio_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("clicked");
+				//System.out.println("clicked");
 				boolean correct;
 				main.dateAndHour.update();
 				
