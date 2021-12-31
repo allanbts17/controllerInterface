@@ -79,7 +79,7 @@ public class DateAndHour extends JPanel {
 	
 	public void setMainPane(MainPane main) {
 		this.main = main;
-		startTimer(time);
+		//startTimer(time);
 		timeDateUpdate();
 		resetArduinoUpdate();
 
@@ -252,7 +252,7 @@ public class DateAndHour extends JPanel {
 		long second = 1000L;
 		long hour = second * 3600;
 		long day = hour * 24;
-		long period = day * 7;
+		long period = day * 1;
 		timer.scheduleAtFixedRate(repeatedTask, delay, period);
 	}
 
