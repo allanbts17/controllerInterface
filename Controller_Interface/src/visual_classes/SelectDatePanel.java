@@ -210,7 +210,7 @@ public class SelectDatePanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if(!message.equals("")) {
 					main.dateForMessage = message;
-					System.out.println(main.dateForMessage);
+					//System.out.println(main.dateForMessage);
 					main.menuNavegation.next(main.atribute);
 				}
 				message="";
@@ -398,7 +398,7 @@ public class SelectDatePanel extends JPanel {
 		//daysAfterMonth = 7-endingWeekDay;
 		daysAfterMonth = 35 - (daysBeforeMonth + numberOfDays);
 		overlapedDays = (daysAfterMonth < 0)? -1*daysAfterMonth:0;
-		System.out.println("overlapedDays: "+overlapedDays);
+		//System.out.println("overlapedDays: "+overlapedDays);
 		dayCount = 1; ////////////////////////////////******
 		otherMonthDayCount = 0;
 	}
@@ -569,7 +569,7 @@ public class SelectDatePanel extends JPanel {
 
 						JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
 						message = calendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
-						System.out.println(message);
+						//System.out.println(message);
 					}
 					@Override
 					public void mousePressed(MouseEvent e) {
@@ -592,12 +592,12 @@ public class SelectDatePanel extends JPanel {
 								
 								JLabel calendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[0];
 								message = calendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
-								System.out.println(message);
+								//System.out.println(message);
 							}
 							else {
 								JLabel overlapedCalendarDayLabel = (JLabel) ((JLabel) e.getSource()).getParent().getComponents()[1];
 								message = overlapedCalendarDayLabel.getText()+"-"+selectedMonth+"-"+selectedYear;
-								System.out.println(message);
+								//System.out.println(message);
 							}
 						}
 						@Override

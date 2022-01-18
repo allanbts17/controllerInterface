@@ -158,14 +158,14 @@ public class SelectHourPanel extends JPanel {
 	
 	void ready() {
 		main.hourForMessage = hourData[0].getText()+":"+hourData[1].getText()+hourData[2].getText();
-		System.out.println(main.hourForMessage);
+		///System.out.println(main.hourForMessage);
 		switch(main.atribute.type) {
 		case TOQUES:
 			main.selectExecutionPane.setType("el toque");
 			main.selectExecutionPane.setExtensionNameList(".toc");
 			break;
 		case CARRILLON:
-			main.selectExecutionPane.setType("la melod�a");
+			main.selectExecutionPane.setType("la melodía");
 			main.selectExecutionPane.setExtensionNameList(".mp3");
 			break;
 		case BANDEO:

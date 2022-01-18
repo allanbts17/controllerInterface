@@ -131,7 +131,7 @@ public class DateAndHour extends JPanel {
 		//System.out.println(dateForCompare);
 	}
 	
-	public void startTimer(int seg) {
+	/*public void startTimer(int seg) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	            main.save_screen_on = true;
@@ -143,7 +143,7 @@ public class DateAndHour extends JPanel {
 	    
 	    long delay = seg*1000L;
 	    timer.schedule(task, delay);
-	}
+	}*/
 	
 	public void arduinoClockPulseDaley(int seg) {
 	    TimerTask task = new TimerTask() {
@@ -213,7 +213,7 @@ public class DateAndHour extends JPanel {
 	        public void run() {    	
 	        	getDate();
 	        	if(minuteChange) {
-	        		System.out.println("it do a minuteChange: "+minuteChange);
+	        		//System.out.println("it do a minuteChange: "+minuteChange);
 	        		minuteChange=false;
 					try {
 						main.sendExecution.compareDateStrings(dateForCompare);

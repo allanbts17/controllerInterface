@@ -44,7 +44,7 @@ public class window extends JFrame {
 		//Setting size parameters
 		//Screen
 		Dimension screenSize = os.setDimension();
-		System.out.println(screenSize);
+		//System.out.println(screenSize);
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
 		

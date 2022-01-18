@@ -121,7 +121,7 @@ public class SelectDayHourPanel extends JPanel {
 					selected = !selected;
 					dayNum = selected? temporalDayNum:"";
 					changeBackground();
-					System.out.println("background changed");
+					//System.out.println("background changed");
 				}
 				
 			});
@@ -274,12 +274,12 @@ public class SelectDayHourPanel extends JPanel {
 	}
 	void ready() {
 		fillSelectedWeekDaysWord();
-		System.out.println("selectedDaysOfWeek: "+selectedDaysOfWeek);
+		//System.out.println("selectedDaysOfWeek: "+selectedDaysOfWeek);
 		if(!selectedDaysOfWeek.equals("")) {
 			main.daysOfWeekForMessage = selectedDaysOfWeek;
 			selectedDaysOfWeek="";
 			main.hourForMessage=hourData[0].getText()+":"+hourData[1].getText()+hourData[2].getText();
-			System.out.println(main.message);
+			//System.out.println(main.message);
 			switch(main.atribute.type) {
 			case TOQUES:
 				main.selectExecutionPane.setType("el toque");

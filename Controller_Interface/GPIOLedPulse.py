@@ -4,10 +4,9 @@ import time
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setup(3,GPIO.OUT)
+GPIO.setup(11,GPIO.OUT)
 
-
-GPIO.output(3,True)
+GPIO.output(11,True)
 time.sleep(0.01)
-GPIO.output(3,False)
+GPIO.output(11,False)
     

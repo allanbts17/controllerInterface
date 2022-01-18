@@ -529,7 +529,7 @@ public class VirtualKeyboard  extends JPanel implements FocusListener{
 
     @Override
     public void focusGained(FocusEvent e) {
-    	System.out.println(e.getOppositeComponent());
+    	//System.out.println(e.getOppositeComponent());
         Component previousComponent = e.getOppositeComponent();
         if (previousComponent != null && !(previousComponent instanceof JButton
                 && buttons.values().contains((JButton) previousComponent))) {

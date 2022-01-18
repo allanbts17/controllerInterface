@@ -489,7 +489,7 @@ public class PrincipalPanel extends JPanel {
 				
 				selectedBack.setVisible(true);
 				lastSelectedBack = selectedBack;
-				System.out.println("Selected data: "+selectedData);
+				//System.out.println("Selected data: "+selectedData);
 			}
 		});
 		execution.addMouseMotionListener(new MouseMotionAdapter() {
@@ -536,7 +536,7 @@ public class PrincipalPanel extends JPanel {
                 break;
             case '6': letraD = "Vie";
                 break;
-            case '7': letraD = "S�b";
+            case '7': letraD = "Sab";
                 break;
         }
         return letraD;
@@ -640,13 +640,13 @@ public class PrincipalPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
-				System.out.println("selectedData: "+selectedData+" "+!selectedData.equals(""));
+				//System.out.println("selectedData: "+selectedData+" "+!selectedData.equals(""));
 				if(!selectedData.equals("")) {
 					executions.setDirection("src/sav");
 					String[] fileLines;
 					
 					String extension = selectedData.split(";")[2].split("\\.")[1];
-					System.out.println("extension: "+extension);
+					//System.out.println("extension: "+extension);
 					switch(extension) {
 					case "mp3":
 						executions.setFilename("melodias.int");
@@ -704,7 +704,7 @@ public class PrincipalPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				main.dateAndHour.update();
 				int x = e.getX();
-				System.out.println("x: "+x);
+				//System.out.println("x: "+x);
 				if(x<=90) {
 					if(tabNumber!=0) {
 						tabNumber = 0;

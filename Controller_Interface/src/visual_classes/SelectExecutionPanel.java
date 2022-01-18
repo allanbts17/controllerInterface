@@ -215,7 +215,7 @@ public class SelectExecutionPanel extends JPanel {
 			main.principalPane.reset(true);
 			
 		}
-		System.out.println("Selected message: "+main.message);
+		//System.out.println("Selected message: "+main.message);
 	}
 
 	public void cleanButtonList() {

@@ -168,7 +168,7 @@ public class Movement extends Thread {
 			pause(timeInterval);
 		}
 		long c = System.currentTimeMillis()-mil;
-		System.out.println("Duration: "+c);
+		//System.out.println("Duration: "+c);
 		objetiveElement.setLocation(componentX,(int)finalPosition);
 	}
 	
