@@ -51,9 +51,9 @@ public class SendExecution {
 		FileHandler melodies = new FileHandler();
 		melodies.setDirection("src/files/");
 		String[] files = melodies.searchFiles(".mp3");
-		for(String file: files) {
-			//System.out.println("Files: "+file);
-		}
+		/*for(String file: files) {
+			System.out.println("Files: "+file);
+		}*/
 		//System.out.println("melodyNumber: "+melodyNumber);
 		if(melodyNumber == 0) {
 			stopSong();
@@ -84,8 +84,6 @@ public class SendExecution {
 			String[] actualDateHourParts = actualDateHour.split(";");
 			boolean isDate = scheduledParts[0].contains("-");
 			if(isDate) {
-				//System.out.println("sheduledList: "+scheduledExecutionList.get(i));
-				//System.out.println("actualhour: "+actualDateHour);
 				dateCoincide = scheduledParts[0].equals(actualDateHourParts[1]);
 				hourCoincide = scheduledParts[1].equals(actualDateHourParts[2]);
 				coincide = dateCoincide && hourCoincide;
@@ -96,13 +94,8 @@ public class SendExecution {
 				coincide = dayCoincide && hourCoincide;
 			}
 			if(coincide) {
-				//System.out.println("it coincided");
 				prepareForExecution(scheduledParts[2]);
 				if(isDate) deleteExecution(i);
-				//System.out.println("Actual data:");
-				//System.out.println("executionToSend: "+executionToSend);
-				//System.out.println("extension: "+extension);
-				//System.out.println("File path: "+fl.getFilePath());
 				coincide=false;
 				break;
 			}
