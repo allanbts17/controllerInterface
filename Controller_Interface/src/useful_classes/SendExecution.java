@@ -17,6 +17,7 @@ public class SendExecution {
 	MainPane main;
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
+	FileHandler prevFl; 
 	public boolean playSong = false;
 	public boolean arduinoExecution = false;
 	String executionToSend;
@@ -28,6 +29,7 @@ public class SendExecution {
 	public boolean okMessage = false;
 	private boolean waitingForArduino = false;
 	ExecutionDurationHandler executionDurationHandler;
+	public boolean playPrev = true;
 	//ExecutionHandler executionHandler = new ExecutionHandler();
 	osChange os = new osChange();
 
@@ -139,7 +141,13 @@ public class SendExecution {
 				//System.out.println("Its gonna send to Arduino");
 				//if(!arduinoExecution) {
 					arduinoExecution = true;
-					sendToArduino();
+					if(main.principalPane.playPrev) {
+						prevFl = fl;
+						prevFl.setFilename("Ángelus.mp3");
+						playPrevSong();
+					} else {
+						sendToArduino();
+					}
 				//}
 			}
 	}
@@ -297,6 +305,27 @@ public class SendExecution {
 					try {						
 						while(playSong) {
 							musicFilePlayer.play(1);
+							if(musicFilePlayer.isComplete())
+								stopSong();
+						}	
+					} catch (JavaLayerException e) {
+					   e.printStackTrace();
+					}
+	          }
+	       }.start();      
+	}
+	
+	public void playPrevSong() throws FileNotFoundException, JavaLayerException {
+		FileInputStream relative = new FileInputStream(prevFl.getFilePath());
+		musicFilePlayer = new Player(relative);
+		playSong = true;
+	      new Thread() {
+	          public void run() {
+					try {						
+						while(playSong) {
+							musicFilePlayer.play(1);
+							if(musicFilePlayer.isComplete())
+								finishPrevSong();
 						}	
 					} catch (JavaLayerException e) {
 					   e.printStackTrace();
@@ -320,11 +349,11 @@ public class SendExecution {
 	}
 	
 	public void stopArduinoExecution() {
-			arduinoExecution = false; //
-        	main.principalPane.placeBtns(false);
-        if(arduinoExecution) {
+		arduinoExecution = false; //
+    	main.principalPane.placeBtns(false);
+        /*if(arduinoExecution) {
 			arduinoVerify();
-		}
+		}*/
 	}
 	
 	public void arduinoVerify() {
@@ -439,6 +468,17 @@ public class SendExecution {
 			playSong = false;
 			musicFilePlayer.close();
 			main.principalPane.placeBtns(false);
+		}
+	}
+	
+	public void finishPrevSong() {
+		//System.out.println("entré ");
+		System.out.print(playSong);
+		if(playSong) {
+			playSong = false;
+			musicFilePlayer.close();
+			sendToArduino();
+			//main.principalPane.placeBtns(false);
 		}
 	}
 

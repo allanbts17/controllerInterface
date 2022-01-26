@@ -1,8 +1,10 @@
 package visual_classes;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -22,6 +24,7 @@ public class PrincipalPanel extends JPanel {
 	JButton detenerEjecucionBtn = new JButton();
 	JButton eliminarBtn = new JButton();
 	JButton cambiarContrasenaBtn = new JButton();
+	JButton playPrevBtn = new JButton();
 	JPanel container = new JPanel();
 	JLabel base = new JLabel();
 	
@@ -47,6 +50,8 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon eliminarBtnIcoPressed = new ImageIcon(this.getClass().getResource("/icons/eliminar_btn_pressed.png"));	
 	ImageIcon cambiarContrasenaIcoUnpressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_unpressed.png"));
 	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_pressed.png"));
+	ImageIcon playPrevIco = new ImageIcon(this.getClass().getResource("/icons/play_prev.png"));
+	ImageIcon notPlayPrevIco = new ImageIcon(this.getClass().getResource("/icons/not_play_prev.png"));
 	int scale = 2;
 	boolean executionPressed = false;
 	boolean scrollBarPressed = false;
@@ -109,6 +114,13 @@ public class PrincipalPanel extends JPanel {
 	int individualLabelY;
 	int individualLabelWidth;
 	int individualLabelHeight;
+	//PlayPrevBtn
+	int playPrevX;
+	int playPrevY;
+	int playPrevWidth;
+	int playPrevHeight;
+	
+	public boolean playPrev = true;
 	
 	String mes[] = {"enero", "febrero", "marzo", "abril", 
 			"mayo", "junio", "julio", "agosto", "septiembre", 
@@ -276,6 +288,16 @@ public class PrincipalPanel extends JPanel {
 		cambiarContrasenaBtn.setContentAreaFilled(false);
 		cambiarContrasenaBtn.setBounds(buttonsX, cambiarContrasenaY, buttonsWidth, buttonsHeight);
 		add(cambiarContrasenaBtn);
+		
+		/*playPrevX = 740;//screenWidth - (this.main.squareButtonHorizontalGap - this.main.squareButtonSize)*2;
+		playPrevY = 458;//this.main.squareButtonVerticalGap;
+		playPrevIco = new ImageIcon(playPrevIco.getImage().getScaledInstance( 122,122,java.awt.Image.SCALE_SMOOTH));
+		notPlayPrevIco = new ImageIcon(notPlayPrevIco.getImage().getScaledInstance( 122,122,java.awt.Image.SCALE_SMOOTH));
+		playPrevBtn.setBounds(playPrevX,playPrevY,122,122);
+		playPrevBtn.setIcon(playPrevIco);
+		playPrevBtn.setBorder(null);
+		playPrevBtn.setContentAreaFilled(false);
+		add(playPrevBtn);*/
 
 				
 		add(container);
@@ -284,15 +306,35 @@ public class PrincipalPanel extends JPanel {
 		container.add(base);
 		scrollLabelsContainer.add(scrollBar);
 		scrollLabelsContainer.add(scrollLabels);
+		
+		
+		//System.out.println("adddd");
 	}
 	
 	public void setMainPane(MainPane main) {
 		this.main = main;
+		System.out.println("Set main pane");
 		fillNameList();
 		setActions();
+		setPlayPrevBtn();
 		//System.out.println("Principal pane components: ");
 		//this.main.addListenerToUpdate(this);
 		//System.out.println("End of Principal pane components: ");
+	}
+	
+	public void setPlayPrevBtn() {
+		playPrevX = screenWidth - (this.main.squareButtonHorizontalGap + this.main.squareButtonSize)*2;
+		playPrevY = this.main.squareButtonVerticalGap;
+		playPrevWidth = this.main.squareButtonSize;
+		playPrevHeight = this.main.squareButtonSize;
+		//System.out.println("x: "+playPrevX+", y: "+playPrevY+", width: "+playPrevWidth);
+		playPrevIco = new ImageIcon(playPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		notPlayPrevIco = new ImageIcon(notPlayPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		playPrevBtn.setBounds(playPrevX,playPrevY,playPrevWidth,playPrevHeight);
+		playPrevBtn.setIcon(playPrevIco);
+		playPrevBtn.setBorder(null);
+		playPrevBtn.setContentAreaFilled(false);
+		add(playPrevBtn);
 	}
 	
 	
@@ -615,6 +657,28 @@ public class PrincipalPanel extends JPanel {
 	}
 	
 	private void setActions() {
+		playPrevBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				playPrev = ! playPrev;
+				if(playPrev) {
+					playPrevBtn.setIcon(playPrevIco);
+				} else {
+					playPrevBtn.setIcon(notPlayPrevIco);
+				}
+				//System.out.println(playPrevBtn.getIcon());
+				/*Image im = playPrevIco.getImage();
+			    java.awt.Graphics2D g2 = (java.awt.Graphics2D) im.getGraphics();
+			    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+			    g2.drawImage(im,0, 0, null);
+			    g2.dispose();
+			    playPrevIco = new ImageIcon(im);
+			    playPrevBtn.setIcon(playPrevIco);
+			    System.out.println("click");*/
+			    //ImageIcon icon = ...
+			}
+		});
+		
 		nuevoBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
