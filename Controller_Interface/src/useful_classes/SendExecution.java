@@ -17,7 +17,7 @@ public class SendExecution {
 	MainPane main;
 	public ArrayList<String> scheduledExecutionList;
 	FileHandler fl = new FileHandler();
-	FileHandler prevFl; 
+	FileHandler prevFl = new FileHandler();
 	public boolean playSong = false;
 	public boolean arduinoExecution = false;
 	String executionToSend;
@@ -35,6 +35,8 @@ public class SendExecution {
 
 	public SendExecution(){
 		fl.setDirection("src/sav/");
+		prevFl.setDirection("src/files");
+		prevFl.setFilename("Ángelus.mp3");
 		try {
 			openSerialPort();
 			initArduinoDataReception();
@@ -142,8 +144,6 @@ public class SendExecution {
 				//if(!arduinoExecution) {
 					arduinoExecution = true;
 					if(main.principalPane.playPrev) {
-						prevFl = fl;
-						prevFl.setFilename("Ángelus.mp3");
 						playPrevSong();
 					} else {
 						sendToArduino();
@@ -184,22 +184,15 @@ public class SendExecution {
 	}
 	
 	private void openSerialPort() throws IOException{
-		String port = os.ifWindows()? "COM4":"/dev/ttyUSB0";
+		String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
 	    arduinoPort = SerialPort.getCommPort(port);
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
 		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
-		arduinoPort.openPort();
-	    if (arduinoPort.isOpen()) {
-	    	System.out.println("Port initialized!");
-			//startTimer(20000);
-	    } else {
-	    	System.out.println("Port not available");
-	    }
-	    
+		arduinoPort.openPort(); 
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 			//System.out.println("after sleep");
 			if(waitingForArduino){
 				sendToArduino();
@@ -207,7 +200,14 @@ public class SendExecution {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	    
+		}
+		
+		 if (arduinoPort.isOpen()) {
+	    	System.out.println("Port initialized!");
+			//startTimer(20000);
+	    } else {
+	    	System.out.println("Port not available");
+	    }
 	}
 	
 	private void initArduinoDataReception() {
@@ -255,6 +255,7 @@ public class SendExecution {
 			waitingForArduino = false;
 			String[] fileLines;
 			fileLines = fl.readFileLine();
+			System.out.println("Filename: "+fl.getFilePath());
 			//System.out.println("Sending to arduino");
 			executionDurationHandler = new ExecutionDurationHandler();
 			executionDurationHandler.setExecutionLines(fileLines);
@@ -274,9 +275,13 @@ public class SendExecution {
 		} else {
 			try {
 				waitingForArduino = true;
+				Thread.sleep(1000);
 				openSerialPort();
 				initArduinoDataReception();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

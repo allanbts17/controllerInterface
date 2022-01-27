@@ -52,6 +52,8 @@ public class PrincipalPanel extends JPanel {
 	ImageIcon cambiarContrasenaIcoPressed = new ImageIcon(this.getClass().getResource("/icons/cambiar_contrasena_btn_pressed.png"));
 	ImageIcon playPrevIco = new ImageIcon(this.getClass().getResource("/icons/play_prev.png"));
 	ImageIcon notPlayPrevIco = new ImageIcon(this.getClass().getResource("/icons/not_play_prev.png"));
+	ImageIcon pressedPlayPrevIco = new ImageIcon(this.getClass().getResource("/icons/pressed_play_prev.png"));
+	ImageIcon pressedNotPlayPrevIco = new ImageIcon(this.getClass().getResource("/icons/pressed_not_play_prev.png"));
 	int scale = 2;
 	boolean executionPressed = false;
 	boolean scrollBarPressed = false;
@@ -133,6 +135,7 @@ public class PrincipalPanel extends JPanel {
 	ArrayList<String> melodiasNames = new ArrayList<String>();
 	ArrayList<String> secuenciasNames = new ArrayList<String>();
 	FileHandler executions = new FileHandler();
+	FileHandler config = new FileHandler();
 	osChange os = new osChange();
 	Dialog dialog = new Dialog();
 	MainPane main;
@@ -146,6 +149,10 @@ public class PrincipalPanel extends JPanel {
 		Dimension screenSize = os.setDimension();
 		screenWidth = (int)screenSize.getWidth();
 		screenHeight = (int)screenSize.getHeight();
+		
+		config.setFilename("config.int");
+		playPrev = Boolean.valueOf(config.readFileLine()[0]); 
+		
 		//Panel
 		int panelWidth = screenWidth;
 		int panelHeight = screenHeight;
@@ -330,8 +337,17 @@ public class PrincipalPanel extends JPanel {
 		//System.out.println("x: "+playPrevX+", y: "+playPrevY+", width: "+playPrevWidth);
 		playPrevIco = new ImageIcon(playPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
 		notPlayPrevIco = new ImageIcon(notPlayPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		pressedPlayPrevIco = new ImageIcon(pressedPlayPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		pressedNotPlayPrevIco = new ImageIcon(pressedNotPlayPrevIco.getImage().getScaledInstance( this.main.squareButtonSize, this.main.squareButtonSize,java.awt.Image.SCALE_SMOOTH));
+		
 		playPrevBtn.setBounds(playPrevX,playPrevY,playPrevWidth,playPrevHeight);
-		playPrevBtn.setIcon(playPrevIco);
+		if(playPrev) {
+			playPrevBtn.setIcon(playPrevIco);
+			playPrevBtn.setPressedIcon(pressedPlayPrevIco);
+		} else {
+			playPrevBtn.setIcon(notPlayPrevIco);
+			playPrevBtn.setPressedIcon(pressedNotPlayPrevIco);
+		}
 		playPrevBtn.setBorder(null);
 		playPrevBtn.setContentAreaFilled(false);
 		add(playPrevBtn);
@@ -660,11 +676,14 @@ public class PrincipalPanel extends JPanel {
 		playPrevBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				playPrev = ! playPrev;
+				playPrev = !playPrev;
+				config.writeFile(Boolean.toString(playPrev),false);
 				if(playPrev) {
 					playPrevBtn.setIcon(playPrevIco);
+					playPrevBtn.setPressedIcon(pressedPlayPrevIco);
 				} else {
 					playPrevBtn.setIcon(notPlayPrevIco);
+					playPrevBtn.setPressedIcon(pressedNotPlayPrevIco);
 				}
 				//System.out.println(playPrevBtn.getIcon());
 				/*Image im = playPrevIco.getImage();
