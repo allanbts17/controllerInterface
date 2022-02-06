@@ -179,7 +179,7 @@ public class SendExecution {
 		main.principalPane.reset(false);
 		main.principalPane.repaint();
 		
-		for(String name: scheduledExecutionList){}
+		//for(String name: scheduledExecutionList){}
 			//System.out.println(name);
 	}
 	
@@ -301,8 +301,8 @@ public class SendExecution {
 			try {
 				waitingForArduino = true;
 				Thread.sleep(1000);
-				openSerialPort();
-				initArduinoDataReception();
+				reopenSerialPort();
+				//initArduinoDataReception();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
