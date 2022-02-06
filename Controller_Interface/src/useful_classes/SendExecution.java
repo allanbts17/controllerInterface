@@ -190,7 +190,8 @@ public class SendExecution {
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
 		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
-		arduinoPort.openPort(); 
+		boolean opened = arduinoPort.openPort(); 
+		System.out.println("Opened sucessfully: "+opened);
 		try {
 			Thread.sleep(200);
 			//System.out.println("after sleep");
