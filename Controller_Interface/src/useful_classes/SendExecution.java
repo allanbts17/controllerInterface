@@ -192,8 +192,32 @@ public class SendExecution {
 		
 		boolean opened = arduinoPort.openPort(); 
 		System.out.println("Opened sucessfully: "+opened);
+
+		 if (arduinoPort.isOpen()) {
+	    	System.out.println("Port initialized!");
+	    } else {
+	    	System.out.println("Port not available");
+	    }
+	    
 		try {
 			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void reopenSerialPort() throws IOException{
+		/*String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
+	    arduinoPort = SerialPort.getCommPort(port);
+		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
+		arduinoPort.setComPortParameters(9600, 8, 1, 0);
+		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);*/
+		
+		boolean opened = arduinoPort.openPort(); 
+		System.out.println("Reopened sucessfully: "+opened);
+		try {
+			Thread.sleep(3000);
 			//System.out.println("after sleep");
 			if(waitingForArduino){
 				sendToArduino();
@@ -204,7 +228,7 @@ public class SendExecution {
 		}
 		
 		 if (arduinoPort.isOpen()) {
-	    	System.out.println("Port initialized!");
+	    	System.out.println("Port reinitialized!");
 			//startTimer(20000);
 	    } else {
 	    	System.out.println("Port not available");
