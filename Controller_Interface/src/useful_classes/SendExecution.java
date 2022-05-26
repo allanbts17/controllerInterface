@@ -19,10 +19,10 @@ public class SendExecution {
 	FileHandler fl = new FileHandler();
 	FileHandler prevFl = new FileHandler();
 	public boolean playSong = false;
-	public boolean arduinoExecution = false;
+	public boolean bellExecution = false;
 	String executionToSend;
 	String extension;
-	SerialPort arduinoPort;
+	//SerialPort arduinoPort;
 	Player musicFilePlayer;
 	Timer timer;
 	Timer executionTimer;
@@ -30,20 +30,20 @@ public class SendExecution {
 	private boolean waitingForArduino = false;
 	ExecutionDurationHandler executionDurationHandler;
 	public boolean playPrev = true;
-	//ExecutionHandler executionHandler = new ExecutionHandler();
+	ExecutionHandler executionHandler = new ExecutionHandler();
 	osChange os = new osChange();
 
 	public SendExecution(){
 		fl.setDirection("src/sav/");
 		prevFl.setDirection("src/files");
 		prevFl.setFilename("Ángelus.mp3");
-		try {
+		/*try {
 			openSerialPort();
 			initArduinoDataReception();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		//executionHandler.setSerialPort(arduinoPort);
 	}
 	
@@ -134,15 +134,15 @@ public class SendExecution {
 
 	private void startExecution() throws FileNotFoundException, JavaLayerException{
 		main.principalPane.placeBtns(true);
-		if(!playSong && !arduinoExecution)
+		if(!playSong && !bellExecution)
 			if(extension.equals("mp3")){
 				//stopSong();
 				//if(!playSong)
 					playSong();
 			} else {
 				//System.out.println("Its gonna send to Arduino");
-				//if(!arduinoExecution) {
-					arduinoExecution = true;
+				//if(!bellExecution) {
+					bellExecution = true;
 					if(main.principalPane.playPrev) {
 						playPrevSong();
 					} else {
@@ -184,7 +184,7 @@ public class SendExecution {
 	}
 	
 	private void openSerialPort() throws IOException{
-		String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
+	/*	String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
 	    arduinoPort = SerialPort.getCommPort(port);
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
@@ -204,15 +204,15 @@ public class SendExecution {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
-	private void reopenSerialPort() throws IOException{
+	/*private void reopenSerialPort() throws IOException{
 		/*String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
 	    arduinoPort = SerialPort.getCommPort(port);
 		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
 		arduinoPort.setComPortParameters(9600, 8, 1, 0);
-		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);*/
+		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
 		boolean opened = arduinoPort.openPort(); 
 		System.out.println("Reopened sucessfully: "+opened);
@@ -233,9 +233,9 @@ public class SendExecution {
 	    } else {
 	    	System.out.println("Port not available");
 	    }
-	}
+	}*/
 	
-	private void initArduinoDataReception() {
+	/*private void initArduinoDataReception() {
 		arduinoPort.addDataListener(new SerialPortDataListener() {
 		      @Override
 		      public int getListeningEvents() {
@@ -251,7 +251,7 @@ public class SendExecution {
 		        
 		        System.out.println("Raw: "+new String(newData));
 		        if(newData[0]=='f') {
-		        	arduinoExecution = false;
+		        	bellExecution = false;
 		        	main.principalPane.placeBtns(false); 
 		        	System.out.println((char)newData[0]);
 		        	//testTimer(2000);
@@ -272,47 +272,29 @@ public class SendExecution {
 		        }
 		      }
 		    });
-	}
+	}*/
 	
 	private void sendToArduino() {
-		System.out.println("Is open: "+arduinoPort.isOpen());
-		if(arduinoPort.isOpen()){
-			waitingForArduino = false;
-			String[] fileLines;
-			fileLines = fl.readFileLine();
-			System.out.println("Filename: "+fl.getFilePath());
-			//System.out.println("Sending to arduino");
-			executionDurationHandler = new ExecutionDurationHandler();
-			executionDurationHandler.setExecutionLines(fileLines);
-			long executionDuration = executionDurationHandler.getDuration()+3000;
-			//System.out.println("Total duration: "+executionDuration);
-			startExecutionTimer(executionDuration);
-			for(String line: fileLines){
-				if(line.contains("#"))
-					line = line.replace("#","");
-				//System.out.print(line+" ");
-				byte[] byteArray = line.getBytes();
-				//System.out.println(line);
-				arduinoPort.writeBytes(byteArray,byteArray.length);
-				//arduinoVerify(byteArray);
-			}
 
-		} else {
-			try {
-				waitingForArduino = true;
-				Thread.sleep(1000);
-				openSerialPort();
-				initArduinoDataReception();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		
+		waitingForArduino = false; //lo necesito?
+		String[] fileLines;
+		fileLines = fl.readFileLine();
+		executionHandler.playExecution(fileLines);
+		/*System.out.println("Filename: "+fl.getFilePath());
+		executionDurationHandler = new ExecutionDurationHandler();
+		executionDurationHandler.setExecutionLines(fileLines);
+		long executionDuration = executionDurationHandler.getDuration()+3000;
+		//System.out.println("Total duration: "+executionDuration);
+		startExecutionTimer(executionDuration);
+		for(String line: fileLines){
+			if(line.contains("#"))
+				line = line.replace("#","");
+			//System.out.print(line+" ");
+			byte[] byteArray = line.getBytes();
+			//System.out.println(line);
+			arduinoPort.writeBytes(byteArray,byteArray.length);
+			//arduinoVerify(byteArray);
+		}*/		
 	}
 	
 	/*public void testArduino(String name) {
@@ -364,29 +346,30 @@ public class SendExecution {
 	       }.start();      
 	}
 	
-	public void buttonStopArduinoExecution() {
-		if(arduinoExecution) {
+	public void buttonStopBellExecution() {
+		if(bellExecution) {
 			byte[] byteArrray = new byte[1];
 			byteArrray[0] = 's';
-			arduinoExecution = false; //
+			bellExecution = false; //
         	main.principalPane.placeBtns(false);
+        	executionHandler.stopExecution();
 			//System.out.println(byteArrray[0]);
 			//arduinoVerify(byteArrray);
-			arduinoPort.writeBytes(byteArrray,byteArrray.length);
+			//arduinoPort.writeBytes(byteArrray,byteArrray.length);
 			//arduinoVerify();
 			//testTimer(2000);
 		}
 	}
 	
-	public void stopArduinoExecution() {
-		arduinoExecution = false; //
+	public void stopBellExecution() {
+		bellExecution = false; //
     	main.principalPane.placeBtns(false);
-        /*if(arduinoExecution) {
+        /*if(bellExecution) {
 			arduinoVerify();
 		}*/
 	}
 	
-	public void arduinoVerify() {
+	/*public void arduinoVerify() {
 		byte[] byteArray = new byte[1];
 		byteArray[0] = '?';
 		arduinoPort.writeBytes(byteArray,byteArray.length);
@@ -400,7 +383,7 @@ public class SendExecution {
 		arduinoPort.writeBytes(byteArray,byteArray.length);
 		System.out.println("Escribiendo ? al arduino");
 		startTimer(time);
-	}
+	}*/
 	
 	public void startTimer(long mili) {
 	    TimerTask task = new TimerTask() {
@@ -421,7 +404,7 @@ public class SendExecution {
 	    timer.schedule(task, delay);
 	}
 	
-	public void startTimer(long mili,byte[] byteArray) {
+	/*public void startTimer(long mili,byte[] byteArray) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	            if(okMessage) {
@@ -438,20 +421,20 @@ public class SendExecution {
 	    
 	    long delay = mili;
 	    timer.schedule(task, delay);
-	}
+	}*/
 	
 	public void startExecutionTimer(long mili) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
-	        	//stopArduinoExecution();
+	        	//stopbellExecution();
 	        	/*byte[] byteArrray = new byte[1];
 				byteArrray[0] = 's';
-				arduinoExecution = false; //
+				bellExecution = false; //
 	        	main.principalPane.placeBtns(false);
 				System.out.println(byteArrray[0]);
 				//arduinoVerify(byteArrray);
 				arduinoPort.writeBytes(byteArrray,byteArrray.length);*/
-	        	stopArduinoExecution();
+	        	stopBellExecution();
 	        }
 	    };
 	    timer = new Timer("Timer");
@@ -460,7 +443,7 @@ public class SendExecution {
 	    timer.schedule(task, delay);
 	}
 	
-	public void testTimer(long mili) {
+	/*public void testTimer(long mili) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	        	arduinoVerify();
@@ -470,25 +453,25 @@ public class SendExecution {
 	    
 	    long delay = mili;
 	    timer.schedule(task, delay);
-	}
+	}*/
 	
 	public void clockPulseA() {
 		byte[] byteArrray = new byte[1];
 		byteArrray[0] = 'A';
 		//System.out.println((char)byteArrray[0]);
-		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	}
 	
 	public void backlightOn() {
 		byte[] byteArrray = new byte[1];
 		byteArrray[0] = 'L';
-		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	}
 	
 	public void backlightOff() {
 		byte[] byteArrray = new byte[1];
 		byteArrray[0] = 'l';
-		arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
 	}
 	
 	public void stopSong() {

@@ -1,72 +1,82 @@
 package useful_classes;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import com.fazecast.jSerialComm.SerialPort;
 
 public class ExecutionHandler {
-	private SerialPort arduinoPort;
-	private String[] fileLines;
-	//private ArrayList<Object[]> fileData = new ArrayList();
 	private ArrayList<String> fileData = new ArrayList();
+	private GpioComm gpio = new GpioComm();
+	private String[] executionLines;
+	private Pattern toquePattern = Pattern.compile("([ABC])(\\d{6})");
+	private Pattern bandeoPattern = Pattern.compile("([ABC])(\\d{6})#(\\d{6})");
 	boolean isToques;
-	
-	public void setSerialPort(SerialPort port) {
-		this.arduinoPort = port;
-	}
-	
-	public void setFileLines(String[] fileLines) {
-		this.fileLines = fileLines;
-	}
-	
-	public void execute() {
-		defineType();
-		fillFileData();
-		send();
+	private Thread exe_thread;
+	private ArrayList<Timer> timer = new ArrayList();
+	private void setExecutionLines(String[] executionLines){
+		this.executionLines = executionLines;
 	}
 	
 	private void defineType() {
-		isToques = fileLines[0].equals("t");
+		isToques = executionLines[0].equals("t");
 	}
 	
-	private void fillFileData() {
-		fileData.clear();
-		for(String line: fileLines) {
-			if(!line.equals("t") && !line.equals("b")) {
-				/*System.out.println(line);
-				int time = Integer.parseInt(line.substring(1));
-				Object[] data = {line.charAt(0),time};
-				fileData.add(data);*/
-				fileData.add(line);
+	private void playingToques() {
+		
+	}
+	
+	private void newNote(String note,long delay,int duration) {
+		TimerTask task = new TimerTask() {
+			public void run() {
+				gpio.setPulse(note,duration);
 			}
+		};
+		timer.add(new Timer("Timer"));
+	    timer.get(timer.size()-1).schedule(task, delay);
+	}
+	
+	private void newNote(String note,long delay) {
+		int duration = 1000;
+		TimerTask task = new TimerTask() {
+			public void run() {
+				gpio.setPulse(note,duration);
+			}
+		};
+		timer.add(new Timer("Timer"));
+	    timer.get(timer.size()-1).schedule(task, delay);;
+	}
+	
+	public void stopExecution() {
+		if(timer.size() > 0) {
+			timer.forEach((t) -> t.cancel());
+			timer.forEach((t) -> t.purge());
 		}
 	}
 	
-	private void send() {
-		System.out.println("Execution: ");
-		for(String line: fileData) {
-			System.out.println(line);
-			byte[] noteBytes = line.getBytes();
-			arduinoPort.writeBytes(noteBytes,noteBytes.length);
+	public void playExecution(String[] executionLines) {
+		setExecutionLines(executionLines);
+		defineType();
+		int delay = 0;
+		char executionType = isToques? 'T':'B';
+		for(int i=1;i<executionLines.length-1;i++) {
+			Matcher match = toquePattern.matcher(executionLines[i]);
+			match.find();
+			int mili = Integer.parseInt(match.group(2));
+			delay += mili;
+			String note = executionType + match.group(1);
+			newNote(note,delay);
 		}
-		/*for(Object[] data: fileData) {
-			char note = (char)data[0];
-			int time = (int)data[1];
-			
-			//Time
-			try {
-				Thread.sleep(time);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			//Note
-			System.out.println(note);
-			byte noteByte[] = new byte[1];
-			noteByte[0] = (byte)note;
-			arduinoPort.writeBytes(noteByte,1);
-		}*/
 	}
+	
+	public void clockPulseA() {
+		
+	}
+	
+
+	
+
 
 }

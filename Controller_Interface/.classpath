@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="library/jlayer-1.0.1.4.jar" sourcepath="D:/JavaSource/JLayer-master"/>
 	<classpathentry kind="lib" path="library/junit-3.8.2.jar"/>
 	<classpathentry kind="lib" path="library/junit.jar"/>
-	<classpathentry kind="lib" path="library/pi4j-core.jar"/>
+	<classpathentry kind="lib" path="library/pi4j-core.jar" sourcepath="D:/JavaSource/pi4j-2.1.1"/>
 	<classpathentry kind="lib" path="library/pi4j-core-javadoc.jar"/>
 	<classpathentry kind="lib" path="library/pi4j-core-sources.jar"/>
 	<classpathentry kind="lib" path="library/pi4j-device.jar"/>
