@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
-import com.fazecast.jSerialComm.*;
 
 import visual_classes.MainPane;
 
@@ -22,12 +21,11 @@ public class SendExecution {
 	public boolean bellExecution = false;
 	String executionToSend;
 	String extension;
-	//SerialPort arduinoPort;
 	Player musicFilePlayer;
 	Timer timer;
 	Timer executionTimer;
 	public boolean okMessage = false;
-	private boolean waitingForArduino = false;
+	//private boolean waitingForArduino = false;
 	ExecutionDurationHandler executionDurationHandler;
 	public boolean playPrev = true;
 	ExecutionHandler executionHandler = new ExecutionHandler();
@@ -36,15 +34,7 @@ public class SendExecution {
 	public SendExecution(){
 		fl.setDirection("src/sav/");
 		prevFl.setDirection("src/files");
-		prevFl.setFilename("√Ångelus.mp3");
-		/*try {
-			openSerialPort();
-			initArduinoDataReception();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		//executionHandler.setSerialPort(arduinoPort);
+		prevFl.setFilename("¡ngelus.mp3");
 	}
 	
 	public void setScheduledExecutionList(ArrayList<String> executionList) {
@@ -52,13 +42,10 @@ public class SendExecution {
 	}
 	
 	private void playMelodiasByPhone(int melodyNumber) {
+		//Modificar cuando se habilite esta funciÛn
 		FileHandler melodies = new FileHandler();
 		melodies.setDirection("src/files/");
 		String[] files = melodies.searchFiles(".mp3");
-		/*for(String file: files) {
-			System.out.println("Files: "+file);
-		}*/
-		//System.out.println("melodyNumber: "+melodyNumber);
 		if(melodyNumber == 0) {
 			stopSong();
 		}
@@ -146,7 +133,7 @@ public class SendExecution {
 					if(main.principalPane.playPrev) {
 						playPrevSong();
 					} else {
-						sendToArduino();
+						playExecution();
 					}
 				//}
 			}
@@ -182,136 +169,18 @@ public class SendExecution {
 		for(String name: scheduledExecutionList){}
 			//System.out.println(name);
 	}
-	
-	private void openSerialPort() throws IOException{
-	/*	String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
-	    arduinoPort = SerialPort.getCommPort(port);
-		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
-		arduinoPort.setComPortParameters(9600, 8, 1, 0);
-		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 		
-		boolean opened = arduinoPort.openPort(); 
-		System.out.println("Opened sucessfully: "+opened);
-
-		 if (arduinoPort.isOpen()) {
-	    	System.out.println("Port initialized!");
-	    } else {
-	    	System.out.println("Port not available");
-	    }
-	    
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-	}
-
-	/*private void reopenSerialPort() throws IOException{
-		/*String port = os.ifWindows()? "COM3":"/dev/ttyUSB0";
-	    arduinoPort = SerialPort.getCommPort(port);
-		System.out.println("Selected port name: "+arduinoPort.getSystemPortName()+": "+arduinoPort.getDescriptivePortName());
-		arduinoPort.setComPortParameters(9600, 8, 1, 0);
-		arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
-		
-		boolean opened = arduinoPort.openPort(); 
-		System.out.println("Reopened sucessfully: "+opened);
-		try {
-			Thread.sleep(3000);
-			//System.out.println("after sleep");
-			if(waitingForArduino){
-				sendToArduino();
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		 if (arduinoPort.isOpen()) {
-	    	System.out.println("Port reinitialized!");
-			//startTimer(20000);
-	    } else {
-	    	System.out.println("Port not available");
-	    }
-	}*/
-	
-	/*private void initArduinoDataReception() {
-		arduinoPort.addDataListener(new SerialPortDataListener() {
-		      @Override
-		      public int getListeningEvents() {
-		        return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-		      }
-		      
-		      //Mensajes enviados por el arduino
-		      public void serialEvent(SerialPortEvent event) {
-		        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
-		        return;
-		        byte[] newData = new byte[arduinoPort.bytesAvailable()];
-		        int numRead = arduinoPort.readBytes(newData, newData.length);
-		        
-		        System.out.println("Raw: "+new String(newData));
-		        if(newData[0]=='f') {
-		        	bellExecution = false;
-		        	main.principalPane.placeBtns(false); 
-		        	System.out.println((char)newData[0]);
-		        	//testTimer(2000);
-		        }
-		        else if(newData[0]=='?'){
-		        	okMessage = true;
-		        	System.out.println("Received ? from arduino");
-		        }
-		        else if(newData[0]=='R') {
-		        	System.out.println("Arduino reseted");
-		        }
-		        else {
-			        int num=Character.getNumericValue(newData[0]);
-			        //System.out.println("Bytes number: "+numRead);
-			        //System.out.println("Data: "+num);
-			        
-			        playMelodiasByPhone(num);
-		        }
-		      }
-		    });
-	}*/
-	
-	private void sendToArduino() {
-
-		waitingForArduino = false; //lo necesito?
+	private void playExecution() {
 		String[] fileLines;
 		fileLines = fl.readFileLine();
 		executionHandler.playExecution(fileLines);
-		/*System.out.println("Filename: "+fl.getFilePath());
-		executionDurationHandler = new ExecutionDurationHandler();
-		executionDurationHandler.setExecutionLines(fileLines);
-		long executionDuration = executionDurationHandler.getDuration()+3000;
-		//System.out.println("Total duration: "+executionDuration);
-		startExecutionTimer(executionDuration);
-		for(String line: fileLines){
-			if(line.contains("#"))
-				line = line.replace("#","");
-			//System.out.print(line+" ");
-			byte[] byteArray = line.getBytes();
-			//System.out.println(line);
-			arduinoPort.writeBytes(byteArray,byteArray.length);
-			//arduinoVerify(byteArray);
-		}*/		
 	}
 	
-	/*public void testArduino(String name) {
-		
-		fl.setDirection("src/files");
-		fl.setFilename(name);
-		String[] fileLines = fl.readFileLine();
-		
-		executionHandler.setFileLines(fileLines);
-		executionHandler.execute();
-	}*/
-	
-
 	public void playSong() throws FileNotFoundException, JavaLayerException {
 		FileInputStream relative = new FileInputStream(fl.getFilePath());
 		musicFilePlayer = new Player(relative);
 		playSong = true;
+		executionHandler.carrillon(true);
 	      new Thread() {
 	          public void run() {
 					try {						
@@ -331,6 +200,7 @@ public class SendExecution {
 		FileInputStream relative = new FileInputStream(prevFl.getFilePath());
 		musicFilePlayer = new Player(relative);
 		playSong = true;
+		executionHandler.carrillon(true);
 	      new Thread() {
 	          public void run() {
 					try {						
@@ -369,22 +239,6 @@ public class SendExecution {
 		}*/
 	}
 	
-	/*public void arduinoVerify() {
-		byte[] byteArray = new byte[1];
-		byteArray[0] = '?';
-		arduinoPort.writeBytes(byteArray,byteArray.length);
-		System.out.println("Escribiendo ? al arduino");
-		startTimer(1000L);
-	}
-	
-	public void arduinoVerify(long time) {
-		byte[] byteArray = new byte[1];
-		byteArray[0] = '?';
-		arduinoPort.writeBytes(byteArray,byteArray.length);
-		System.out.println("Escribiendo ? al arduino");
-		startTimer(time);
-	}*/
-	
 	public void startTimer(long mili) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
@@ -404,74 +258,16 @@ public class SendExecution {
 	    timer.schedule(task, delay);
 	}
 	
-	/*public void startTimer(long mili,byte[] byteArray) {
-	    TimerTask task = new TimerTask() {
-	        public void run() {
-	            if(okMessage) {
-	            	okMessage = false;
-	            	arduinoPort.writeBytes(byteArray,byteArray.length);
-	            }
-	            else {
-	            	main.resetArduino();
-	            	startTimer(3000L,byteArray); //Por ahora no verifica
-	            }
-	        }
-	    };
-	    timer = new Timer("Timer");
-	    
-	    long delay = mili;
-	    timer.schedule(task, delay);
-	}*/
-	
-	public void startExecutionTimer(long mili) {
-	    TimerTask task = new TimerTask() {
-	        public void run() {
-	        	//stopbellExecution();
-	        	/*byte[] byteArrray = new byte[1];
-				byteArrray[0] = 's';
-				bellExecution = false; //
-	        	main.principalPane.placeBtns(false);
-				System.out.println(byteArrray[0]);
-				//arduinoVerify(byteArrray);
-				arduinoPort.writeBytes(byteArrray,byteArrray.length);*/
-	        	stopBellExecution();
-	        }
-	    };
-	    timer = new Timer("Timer");
-	    
-	    long delay = mili;
-	    timer.schedule(task, delay);
-	}
-	
-	/*public void testTimer(long mili) {
-	    TimerTask task = new TimerTask() {
-	        public void run() {
-	        	arduinoVerify();
-	        }
-	    };
-	    timer = new Timer("Timer");
-	    
-	    long delay = mili;
-	    timer.schedule(task, delay);
-	}*/
-	
 	public void clockPulseA() {
-		byte[] byteArrray = new byte[1];
-		byteArrray[0] = 'A';
-		//System.out.println((char)byteArrray[0]);
-		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		executionHandler.clockPulseA();
 	}
 	
 	public void backlightOn() {
-		byte[] byteArrray = new byte[1];
-		byteArrray[0] = 'L';
-		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		executionHandler.backlight(true);
 	}
 	
 	public void backlightOff() {
-		byte[] byteArrray = new byte[1];
-		byteArrray[0] = 'l';
-		//arduinoPort.writeBytes(byteArrray,byteArrray.length);
+		executionHandler.backlight(false);
 	}
 	
 	public void stopSong() {
@@ -481,6 +277,7 @@ public class SendExecution {
 			playSong = false;
 			musicFilePlayer.close();
 			main.principalPane.placeBtns(false);
+			executionHandler.carrillon(false);
 		}
 	}
 	
@@ -490,7 +287,8 @@ public class SendExecution {
 		if(playSong) {
 			playSong = false;
 			musicFilePlayer.close();
-			sendToArduino();
+			executionHandler.carrillon(false);
+			playExecution();
 			//main.principalPane.placeBtns(false);
 		}
 	}

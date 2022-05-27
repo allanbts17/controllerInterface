@@ -7,8 +7,8 @@ import com.pi4j.io.gpio.RaspiPin;
 
 public class GpioComm {
 	// crear controlador gpio
-	final GpioController gpio = GpioFactory.getInstance();
-	/*
+	/*final GpioController gpio = GpioFactory.getInstance();
+	
 	// provisionar pin #01 como output y encenderlo como estado inicial
 	final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
 
@@ -51,19 +51,19 @@ public class GpioComm {
 		default:
 			return null;
 		}
-	}
+	}*/
 	
 	public void setHigh(String sys_pin) {
-		selectPin(sys_pin).high();
+		//selectPin(sys_pin).high();
 	}
 	
 	public void setLow(String sys_pin) {
-		selectPin(sys_pin).low();
+		//selectPin(sys_pin).low();
 	}
 	
 	public void setToggle(String sys_pin) {
-		selectPin(sys_pin).toggle();
-	}*/
+		//selectPin(sys_pin).toggle();
+	}
 	
 	public void setPulse(String sys_pin, int miliseconds) {
 		//selectPin(sys_pin).pulse(miliseconds);

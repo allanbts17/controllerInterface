@@ -372,9 +372,9 @@ public class ChangePasswordPanel extends JPanel {
 		}
 		else {
 			show_password_img.setIcon(off);
-			current_password_fld.setEchoChar('â€¢');
-			password_fld.setEchoChar('â€¢');
-			confirmation_fld.setEchoChar('â€¢');
+			current_password_fld.setEchoChar('•');
+			password_fld.setEchoChar('•');
+			confirmation_fld.setEchoChar('•');
 		}
 	}
 	

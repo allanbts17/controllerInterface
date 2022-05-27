@@ -72,11 +72,35 @@ public class ExecutionHandler {
 	}
 	
 	public void clockPulseA() {
-		
+		gpio.setPulse("RA",1000);
 	}
 	
-
+	public void clockPulseB(int duration) {
+		gpio.setPulse("RB",duration);
+	}
 	
-
+	public void carrillon(boolean state) {
+		if(state) {
+			gpio.setHigh("CARRILLON");
+		} else {
+			gpio.setLow("CARRILLON");
+		}
+	}
+	
+	public void ground(boolean state) {
+		if(state) {
+			gpio.setHigh("GND");
+		} else {
+			gpio.setLow("GND");
+		}
+	}
+	
+	public void backlight(boolean state) {
+		if(state) {
+			gpio.setHigh("BACKLIGHT");
+		} else {
+			gpio.setLow("BACKLIGHT");
+		}
+	}
 
 }
