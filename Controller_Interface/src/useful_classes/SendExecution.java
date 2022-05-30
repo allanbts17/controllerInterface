@@ -218,8 +218,8 @@ public class SendExecution {
 	
 	public void buttonStopBellExecution() {
 		if(bellExecution) {
-			byte[] byteArrray = new byte[1];
-			byteArrray[0] = 's';
+			//byte[] byteArrray = new byte[1];
+			//byteArrray[0] = 's';
 			bellExecution = false; //
         	main.principalPane.placeBtns(false);
         	executionHandler.stopExecution();
@@ -234,12 +234,13 @@ public class SendExecution {
 	public void stopBellExecution() {
 		bellExecution = false; //
     	main.principalPane.placeBtns(false);
+    	executionHandler.stopExecution();
         /*if(bellExecution) {
 			arduinoVerify();
 		}*/
 	}
 	
-	public void startTimer(long mili) {
+	/*public void startTimer(long mili) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	            if(okMessage) {
@@ -256,7 +257,7 @@ public class SendExecution {
 	    
 	    long delay = mili;
 	    timer.schedule(task, delay);
-	}
+	}*/
 	
 	public void clockPulseA() {
 		executionHandler.clockPulseA();

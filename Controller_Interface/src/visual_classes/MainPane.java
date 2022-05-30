@@ -259,7 +259,7 @@ public class MainPane extends JPanelBackground {
         return ch;
 	}
 	
-	public void resetArduino() {
+	/*public void resetArduino() {
 		String openFileCmd = "python3 GPIOLedPulse.py";
 		Process p;
 		try{
@@ -267,7 +267,7 @@ public class MainPane extends JPanelBackground {
 			p.waitFor();
 			p.destroy();
 		} catch(Exception e){}
-	}
+	}*/
 	
 	public void setUpdateAdapter() {
 		updateAdapter = new MouseAdapter() {

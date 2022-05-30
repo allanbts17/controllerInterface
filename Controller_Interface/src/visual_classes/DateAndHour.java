@@ -38,9 +38,11 @@ public class DateAndHour extends JPanel {
 	Date date = new Date();
 	boolean minuteChange = false;
 	boolean testOnce = true;
+	boolean backlight = false;
 	osChange os = new osChange();
 	SendExecution sendExecution = new SendExecution();
 	MainPane main;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -81,7 +83,7 @@ public class DateAndHour extends JPanel {
 		this.main = main;
 		//startTimer(time);
 		timeDateUpdate();
-		resetArduinoUpdate();
+		//resetArduinoUpdate();
 
 		//this.main.addListenerToUpdate(this);
 	}
@@ -145,7 +147,7 @@ public class DateAndHour extends JPanel {
 	    timer.schedule(task, delay);
 	}*/
 	
-	public void arduinoClockPulseDaley(int seg) {
+	/*public void arduinoClockPulseDaley(int seg) {
 	    TimerTask task = new TimerTask() {
 	        public void run() {
 	        	//Clock pulse
@@ -157,17 +159,13 @@ public class DateAndHour extends JPanel {
         		else if(texto_hora.equals("06:05 a.m.")) {
         			main.sendExecution.backlightOff();
         		}
-        		else if(texto_hora.equals("06:04 p.m.")) {
-        			main.resetArduino();
-        		}
-        		
 	        }
 	    };
 	    arduinoDelayTimer = new Timer("Timer");
 	    
 	    long delay = seg*1000L;
 	    arduinoDelayTimer.schedule(task, delay);
-	}
+	}*/
 	
 	public void update() {
 		//System.out.println("update");
@@ -186,13 +184,13 @@ public class DateAndHour extends JPanel {
                 break;
             case 3: letraD = "Martes";
                 break;
-            case 4: letraD = "MiÃ©rcoles";
+            case 4: letraD = "Miércoles";
                 break;
             case 5: letraD = "Jueves";
                 break;
             case 6: letraD = "Viernes";
                 break;
-            case 7: letraD = "SÃ¡bado";
+            case 7: letraD = "Sábado";
                 break;
         }
         return letraD;
@@ -222,7 +220,17 @@ public class DateAndHour extends JPanel {
 						e.printStackTrace();
 					}
 					//To handle to clock and backlight by arduino
-					arduinoClockPulseDaley(30);
+					//arduinoClockPulseDaley(30);
+					main.sendExecution.clockPulseA();
+	        		
+	        		if(texto_hora.equals("06:05 p.m.") && !backlight) {
+	        			main.sendExecution.backlightOn();
+	        			backlight = !backlight;
+	        		}
+	        		else if(texto_hora.equals("06:05 a.m.") && backlight) {
+	        			main.sendExecution.backlightOff();
+	        			backlight = !backlight;
+	        		}
 				
 	        	}
 	        	String date = text_date+", "+texto_dia+" de "+mes[Integer.parseInt(texto_mes)-1];
@@ -240,7 +248,7 @@ public class DateAndHour extends JPanel {
 	    timer.scheduleAtFixedRate(repeatedTask, delay, period);
 	}
 	
-	public void resetArduinoUpdate() {
+	/*public void resetArduinoUpdate() {
 		 TimerTask repeatedTask = new TimerTask() {
 		        public void run() {
 		        	main.resetArduino();
@@ -254,6 +262,6 @@ public class DateAndHour extends JPanel {
 		long day = hour * 24;
 		long period = day * 1;
 		timer.scheduleAtFixedRate(repeatedTask, delay, period);
-	}
+	}*/
 
 }

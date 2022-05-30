@@ -4,9 +4,13 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import useful_classes.GpioComm;
 import useful_classes.osChange;
 import java.awt.Point;
 /*
@@ -18,11 +22,15 @@ public class window extends JFrame {
 	osChange os = new osChange();
 	MainPane mainPane; 
 	private JPanel contentPane;
+	private static GpioComm gpio = new GpioComm(); //For test
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		testGpio();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -33,6 +41,19 @@ public class window extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public static void testGpio() {
+		 TimerTask repeatedTask = new TimerTask() {
+		        public void run() {
+		        	gpio.setPulse("RA",1000);
+		        }
+		 };
+		 Timer timer = new Timer("Timer");
+		
+		long period = 3000L;
+		long delay = 1000L;
+		timer.scheduleAtFixedRate(repeatedTask, delay, period);
 	}
 
 	/**
