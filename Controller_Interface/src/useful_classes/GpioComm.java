@@ -1,39 +1,39 @@
 package useful_classes;
 
 import com.pi4j.Pi4J;
+import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalInput;
 import com.pi4j.io.gpio.digital.DigitalOutput;
+import com.pi4j.io.gpio.digital.DigitalOutputConfigBuilder;
 import com.pi4j.io.gpio.digital.DigitalState;
 import com.pi4j.io.gpio.digital.PullResistance;
 import com.pi4j.util.Console;
 
-/* 
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;*/
+import java.util.concurrent.TimeUnit;
+
+import com.pi4j.*;
 
 public class GpioComm {
 	// crear controlador gpio
-	/*final GpioController gpio = GpioFactory.getInstance();
-	
-	// provisionar pin #01 como output y encenderlo como estado inicial
-	final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
+	Context pi4j = Pi4J.newAutoContext();
+	DigitalOutputConfigBuilder config = DigitalOutput.newConfigBuilder(pi4j)
+	        .provider("linuxfs-digital-output")
+	        .shutdown(DigitalState.LOW)
+	        .initial(DigitalState.LOW);
 
-	final GpioPinDigitalOutput io4 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io5 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io6 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io12 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_12, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io17 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_17, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io18 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_18, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io22 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_22, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io23 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io24 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_24, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io25 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, "MyLED", PinState.HIGH);
-	final GpioPinDigitalOutput io27 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "MyLED", PinState.HIGH);
+	DigitalOutput io4 = pi4j.dout().create(config.address(4));
+	DigitalOutput io5 = pi4j.dout().create(config.address(5));
+	DigitalOutput io6 = pi4j.dout().create(config.address(6));
+	DigitalOutput io12 = pi4j.dout().create(config.address(12));
+	DigitalOutput io17 = pi4j.dout().create(config.address(17));
+	DigitalOutput io18 = pi4j.dout().create(config.address(18));
+	DigitalOutput io22 = pi4j.dout().create(config.address(22));
+	DigitalOutput io23 = pi4j.dout().create(config.address(23));
+	DigitalOutput io24 = pi4j.dout().create(config.address(24));
+	DigitalOutput io25 = pi4j.dout().create(config.address(25));
+	DigitalOutput io27 = pi4j.dout().create(config.address(27));
 	
-	private GpioPinDigitalOutput selectPin(String sys_pin){
+	private DigitalOutput selectPin(String sys_pin){
 		switch(sys_pin) {
 		case "BACKLIGHT":
 			return io4;
@@ -60,31 +60,26 @@ public class GpioComm {
 		default:
 			return null;
 		}
-	}*/
+	}
 	
 	public void setHigh(String sys_pin) {
-		//selectPin(sys_pin).high();
+		selectPin(sys_pin).high();
 	}
 	
 	public void setLow(String sys_pin) {
-		//selectPin(sys_pin).low();
+		selectPin(sys_pin).low();
 	}
 	
 	public void setToggle(String sys_pin) {
-		//selectPin(sys_pin).toggle();
+		selectPin(sys_pin).toggle();
 	}
 	
 	public void setPulse(String sys_pin, int miliseconds) {
-		//selectPin(sys_pin).pulse(miliseconds);
-		System.out.println(sys_pin+" "+miliseconds+" pulse");
-	}
-	
-	public void setPulse(String sys_pin, int miliseconds,boolean blocking) {
-		//selectPin(sys_pin).pulse(miliseconds,blocking);
+		selectPin(sys_pin).pulse(miliseconds, TimeUnit.MILLISECONDS);
 		System.out.println(sys_pin+" "+miliseconds+" pulse");
 	}
 	
 	public void shutdown() {
-	//	gpio.shutdown();
+		pi4j.shutdown();
 	}
 }
