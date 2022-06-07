@@ -32,6 +32,8 @@ module com.pi4j.example {
     // SLF4J MODULES
     requires org.slf4j;
     requires org.slf4j.simple;
+    requires java.desktop;
+    requires jlayer;
 
     uses com.pi4j.extension.Extension;
     uses com.pi4j.provider.Provider;
